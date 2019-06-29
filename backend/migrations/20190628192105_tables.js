@@ -26,6 +26,8 @@ exports.up = async function (knex, Promise) {
     table.integer('vk');
     table.text('logo');
     table.text('email');
+    table.text('photo');
+    table.integer('admin');
     table.timestamps(true, true);
   });
 

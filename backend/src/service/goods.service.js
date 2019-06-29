@@ -31,7 +31,14 @@ const update = async ({ id, url, title, logo, price, discount_price }) => {
   return result.rows[0];
 };
 
+const ALL_GOODS = `SELECT * FROM goods`;
+const getAll = async () => {
+  const result = await db.query(ALL_GOODS);
+  return result.rows;
+};
+
 module.exports = {
+  getAll,
   search,
   update
 };

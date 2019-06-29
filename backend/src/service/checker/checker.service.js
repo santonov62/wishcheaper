@@ -21,15 +21,59 @@ const refresh = async (goodId) => {
     ...parsedGood,
     id: goodId
   });
-  log(`[refresh] ${goodId}`, good);
+  log(`[refresh] goodId: ${goodId}`, good);
   return good;
 };
 
+const parseAll = async () => {
+  const goods = await goodsService.getAll();
+  while (goods.length !== 0) {
+    const tasks = [];
+    for (let i = 0; goods.length > 0 && i < 5; i++) {
+      const { id } = goods.shift();
+      tasks.push(refresh(id));
+    }
+    await Promise.all(tasks);
+  }
+  log(`[parseAll]`, 'done');
+};
+
+let activateInterval = null;
+const state = {
+  isActive: false,
+  time: null,
+  delay: 20000
+};
+const start = () => {
+  clearInterval(activateInterval);
+  parseAll();
+  activateInterval = setInterval(async () => {
+    await parseAll();
+  }, state.delay);
+  state.isActive = true;
+  state.time = Date.now();
+  return state
+};
+
+const stop = () => {
+  clearInterval(activateInterval);
+  state.isActive = false;
+  state.time = Date.now();
+  return state;
+};
+
+const status = () => {
+  return state;
+};
+
 const log = (text, params = '') => {
-  console.log(`[checker] ${text}`, params);
+  console.log(`[checker.service] ${text}`, params);
 };
 
 module.exports = {
   parse,
-  refresh
+  refresh,
+  start,
+  stop,
+  status
 };

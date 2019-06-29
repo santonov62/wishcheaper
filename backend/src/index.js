@@ -4,6 +4,7 @@ const path = require('path');
 
 const routes = require('./routes');
 const checkerController = require('./controller/checker.controller');
+const authContoller = require('./controller/auth.controller');
 const authMiddleware = require('./middleware/auth.middleware');
 const sslRedirect = require('heroku-ssl-redirect');
 
@@ -24,7 +25,7 @@ app.use('/checker', checkerController);
 // app.use('/promoChecker', promoCheckerController);
 // app.use('/shops', shopContoller);
 // app.use('/currency', currencyContoller);
-// app.use('/auth', authContoller);
+app.use('/auth', authContoller);
 // app.use('/pay', payContoller);
 // app.use('/users', usersContoller);
 // app.use('/payments', paymentsContoller);

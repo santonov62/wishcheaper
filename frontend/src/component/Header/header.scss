@@ -1,0 +1,17 @@
+.headerMenu.ui.inverted.menu {
+  margin: 0;
+  height: 55px;
+  border-radius: 0;
+  box-shadow: 0 2px 18px -4px #000000;
+  background: #000 url(../../assets/images/stock-vector-seamless-background-with-percent-symbol-51756157.jpg) repeat-x top center;
+  .item {
+    background-color: rgba(0, 0, 0, 0.58);
+    &:hover {
+      text-shadow: #fff 0 0 10px;
+      background-color: rgba(0, 0, 0, 0.78);
+    }
+    &:before {
+      background: #505050;
+    }
+  }
+}

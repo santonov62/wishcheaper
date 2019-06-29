@@ -4,7 +4,7 @@ const TIMEOUT_DELAY = 30000;
 const SHOP_URL = 'pandao.ru';
 
 const log = (text, params = '') => {
-  console.log(`[pandaoChecker] ${text}`, params);
+  console.log(`[pandaoChecker.service] ${text}`, params);
 };
 
 const parse = async (url) => {
@@ -43,7 +43,7 @@ const parse = async (url) => {
       url,
       title,
       price: !!oldPrice ? oldPrice : currentPrice,
-      discount_price: oldPrice,
+      discount_price: !!oldPrice? currentPrice : oldPrice,
       logo
     };
 
