@@ -66,6 +66,12 @@ const status = () => {
   return state;
 };
 
+const add = async (url) => {
+  const parsedGood = await parse(url);
+  const good = await goodsService.save(parsedGood);
+  return good
+};
+
 const log = (text, params = '') => {
   console.log(`[checker.service] ${text}`, params);
 };
@@ -75,5 +81,6 @@ module.exports = {
   refresh,
   start,
   stop,
-  status
+  status,
+  add
 };

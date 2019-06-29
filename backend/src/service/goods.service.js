@@ -37,8 +37,20 @@ const getAll = async () => {
   return result.rows;
 };
 
+const SAVE_GOOD = `INSERT INTO goods (
+    url, title, logo, price, discount_price
+) VALUES (
+    $1, $2, 
+    $3, $4, $5
+) RETURNING *`;
+const save = async ({ url, title, logo, price, discount_price }) => {
+  const result = await db.query(SAVE_GOOD, [url, title, logo, price, discount_price]);
+  return result.rows[0];
+};
+
 module.exports = {
   getAll,
   search,
-  update
+  update,
+  save
 };

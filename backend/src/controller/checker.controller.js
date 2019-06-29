@@ -43,6 +43,17 @@ const status = async (req, res) => {
   }
 };
 
+const add = async (req, res) => {
+  try {
+    const {url} = res.body;
+    const good = await checkerService.add(url);
+    log(`[add]`);
+    res.json(good);
+  } catch (e) {
+    res.status(500).json({error: e.message});
+  }
+};
+
 const log = (text, params = '') => {
   console.log(`[checker.controller] ${text}`, params);
 };
@@ -51,5 +62,6 @@ app.get('/refresh', refresh);
 app.get('/start', start);
 app.get('/stop', stop);
 app.get('/status', status);
+app.post('/add', add);
 
 module.exports = app;
