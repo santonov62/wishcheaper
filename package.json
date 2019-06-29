@@ -1,0 +1,26 @@
+{
+  "name": "promo",
+  "version": "1.0.0",
+  "description": "Share promocodes",
+  "engines": {
+    "node": "9.2.x"
+  },
+  "scripts": {
+    "dev-backend-start": "cd backend && npm run dev",
+    "dev-frontend-start": "cd frontend && npm start",
+    "start": "cd backend && npm start",
+    "postinstall": "cd frontend && npm install && cd ../backend && npm install && npm run db-latest",
+    "heroku-postbuild": "cd frontend && npm run build"
+  },
+  "cacheDirectories": [
+    "backend/node_modules",
+    "frontend/node_modules"
+  ],
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/santonov62/promo"
+  },
+  "license": "MIT",
+  "devDependencies": {}
+}

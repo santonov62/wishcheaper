@@ -1,0 +1,38 @@
+{
+  "name": "promoback",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "crypto": "^1.0.1",
+    "express": "^4.16.2",
+    "express-busboy": "^6.0.1",
+    "foreman": "^2.0.0",
+    "heroku-ssl-redirect": "^0.0.4",
+    "iconv-lite": "^0.4.19",
+    "jsonwebtoken": "^8.1.1",
+    "knex": "^0.13.0",
+    "moment": "^2.22.2",
+    "nodemailer": "^4.6.2",
+    "pg": "^7.3.0",
+    "puppeteer": "^1.10.0",
+    "socket.io": "^2.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "scripts": {
+    "start": "node_modules/.bin/nf start",
+    "dev": "node_modules/.bin/nf start --procfile Procfile_dev",
+    "test": "node_modules/.bin/mocha && exit 1",
+    "db-rollback": "node_modules/.bin/nf run node_modules/.bin/knex migrate:rollback",
+    "db-latest": "node_modules/.bin/nf run node_modules/.bin/knex migrate:latest",
+    "db-change": "node_modules/.bin/nf run node_modules/.bin/knex migrate:make",
+    "db-change-data": "node_modules/.bin/nf run node_modules/.bin/knex seed:make",
+    "db-latest-data": "node_modules/.bin/nf run node_modules/.bin/knex seed:run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
