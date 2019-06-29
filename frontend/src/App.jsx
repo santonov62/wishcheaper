@@ -66,7 +66,7 @@ const App = () => {
                     <Route path="/login" component={LoginPage}/>
                     {/*<Route exact path="/promos" component={PromoListPage}/>*/}
                     {/*<Route exact path="/promos/:id" component={PromoDetailPage}/>*/}
-                    <AuthRoute path="/scanner" component={ScannerPage}/>
+                    <AuthRoute adminRequired path="/scanner" component={ScannerPage}/>
                     {/*<AuthRoute path="/user" component={UserPage}/>*/}
                     {/*<AuthRoute path="/admin" component={AdminPage}/>*/}
                   </UserContextProvider>

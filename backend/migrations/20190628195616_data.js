@@ -4,6 +4,7 @@ exports.up = async function(knex, Promise) {
     .returning(['id', 'url', 'title'])
     .insert([{
       title: 'Pandao',
+      name: 'pandao.ru',
       url: 'https://www.pandao.ru/'
     }]);
 

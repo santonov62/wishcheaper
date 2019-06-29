@@ -6,7 +6,7 @@ const AuthRoute = ({component: Component, ...rest}) => (
   <UserContext.Consumer>
     {user => (
       <Route {...rest} render={props => {
-        const redirect = <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+        const redirect = <Redirect to={{pathname: '/', state: {from: props.location}}}/>;
         try {
           const isAdminRequired = rest.adminRequired;
           const {withoutRedirect} = rest;

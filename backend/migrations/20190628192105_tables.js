@@ -4,6 +4,7 @@ exports.up = async function (knex, Promise) {
   const shops = await knex.schema.createTable('shops', table => {
     table.increments();
     table.text('title');
+    table.text('name');
     table.text('url');
     table.text('logo');
   });
@@ -14,7 +15,7 @@ exports.up = async function (knex, Promise) {
     table.text('title');
     table.text('logo');
     table.float('price');
-    table.float('discount_price');
+    table.float('old_price');
     table.integer('shop_id').notNullable()
       .references('id').inTable('shops');
     table.timestamps(true, true);

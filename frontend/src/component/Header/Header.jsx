@@ -1,18 +1,48 @@
 import React from 'react';
-import { Menu, Image } from 'semantic-ui-react';
+import { Menu, Image, Icon, Input } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import './header.css';
 import ProfileButton from '../ProfileButton';
+import {authHeader} from "../../helpers/auth-header";
+import { connect } from 'react-redux';
+import * as Constants from "../../constants";
 
-export default class Header extends React.Component {
+class Header extends React.Component {
   state = {
-    activeItem: 'main'
+    activeItem: 'main',
+    value: '',
+    isLoading: false
   };
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
-
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name });
+  };
+  handleChange = (e, { name, value }) => {
+    this.setState({ value });
+  };
+  addUrl = () => {
+    const {value} = this.state;
+    this.setState({isLoading: true});
+    fetch(`checker/add`, {
+      method: 'POST',
+      body: JSON.stringify({
+        url: value
+      }),
+      headers: {
+        ...Constants.REQUEST_JSON_HEADERS,
+        ...authHeader(this.props.user)
+      }
+    })
+      .then(res => res.json())
+      .then(good => {
+        this.setState({
+          value: '',
+          isLoading: false
+        });
+      })
+  };
   render() {
-    const { activeItem } = this.state;
+    const { activeItem, value, isLoading } = this.state;
 
     return (
       <Menu inverted className='headerMenu'>
@@ -35,6 +65,17 @@ export default class Header extends React.Component {
           Мои товары
         </Menu.Item>
 
+        <Menu.Item style={{display: 'flex', flexGrow: 1}}>
+          <Input
+            loading={isLoading}
+            value={value}
+            name='value'
+            icon={<Icon name='add' link onClick={this.addUrl}/>}
+            placeholder='Товар или ссылку для отслеживания...'
+            onChange={this.handleChange}/>
+        </Menu.Item>
+
+
         <Menu.Menu position='right'>
           <ProfileButton/>
         </Menu.Menu>
@@ -43,3 +84,5 @@ export default class Header extends React.Component {
     )
   }
 }
+export default connect(({user}) => ({user}))(Header);
+

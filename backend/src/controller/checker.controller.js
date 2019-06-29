@@ -1,13 +1,15 @@
 const express = require('express');
+const authMiddleware = require('../middleware/auth.middleware');
 const checkerService = require('../service/checker/checker.service');
+const goodsService = require('../service/goods.service');
 const app = express();
 
 const refresh = async (req, res) => {
   try {
     const { goodId } = req.query;
-    const good = await checkerService.refresh(goodId);
-    log(`[refresh] goodId: ${goodId}`, good);
-    res.json(good);
+    const good = await goodsService.search({ id: goodId });
+    const refreshedGood = await checkerService.refresh(good);
+    res.json(refreshedGood);
   } catch (e) {
     res.status(500).json({error: e.message});
   }
@@ -16,7 +18,6 @@ const refresh = async (req, res) => {
 const start = async (req, res) => {
   try {
     const checker = await checkerService.start();
-    log(`[start]`);
     res.json(checker);
   } catch (e) {
     res.status(500).json({error: e.message});
@@ -26,7 +27,6 @@ const start = async (req, res) => {
 const stop = async (req, res) => {
   try {
     const checker = await checkerService.stop();
-    log(`[stop]`);
     res.json(checker);
   } catch (e) {
     res.status(500).json({error: e.message});
@@ -36,7 +36,6 @@ const stop = async (req, res) => {
 const status = async (req, res) => {
   try {
     const checker = await checkerService.status();
-    log(`[status]`);
     res.json(checker);
   } catch (e) {
     res.status(500).json({error: e.message});
@@ -45,10 +44,14 @@ const status = async (req, res) => {
 
 const add = async (req, res) => {
   try {
-    const {url} = res.body;
-    const good = await checkerService.add(url);
-    log(`[add]`);
-    res.json(good);
+    const {url} = req.body;
+    const good = await goodsService.search({url});
+    if (good)
+      return res.json(good);
+
+    const addedGood = await checkerService.addByUrl({url});
+
+    res.json(addedGood);
   } catch (e) {
     res.status(500).json({error: e.message});
   }
@@ -58,10 +61,10 @@ const log = (text, params = '') => {
   console.log(`[checker.controller] ${text}`, params);
 };
 
-app.get('/refresh', refresh);
-app.get('/start', start);
-app.get('/stop', stop);
-app.get('/status', status);
-app.post('/add', add);
+app.get('/refresh', authMiddleware.authRequired, refresh);
+app.get('/start', authMiddleware.adminAuthRequired, start);
+app.get('/stop', authMiddleware.adminAuthRequired, stop);
+app.get('/status', authMiddleware.adminAuthRequired, status);
+app.post('/add', authMiddleware.authRequired, add);
 
 module.exports = app;

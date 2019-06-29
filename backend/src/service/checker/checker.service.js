@@ -14,35 +14,47 @@ const parse = async (url) => {
   return checker.parse(url);
 };
 
-const refresh = async (goodId) => {
-  const { url } = await goodsService.search({ id: goodId });
+// const refreshById = async (goodId) => {
+//   const good = await goodsService.search({ id: goodId });
+//   const refreshedGood = refresh(good);
+//   log(`[refreshById]`, refreshedGood);
+//   return good;
+// };
+
+const refresh = async ({url, id}) => {
+  if (!url)
+    throw new Error(`Good url required.`);
+  if (!id)
+    throw new Error(`Good id required.`);
+
   const parsedGood = await parse(url);
   const good = await goodsService.update({
     ...parsedGood,
-    id: goodId
+    id
   });
-  log(`[refresh] goodId: ${goodId}`, good);
+  log(`[refresh] done`, good);
   return good;
 };
 
 const parseAll = async () => {
   const goods = await goodsService.getAll();
+  let result = [];
   while (goods.length !== 0) {
     const tasks = [];
     for (let i = 0; goods.length > 0 && i < 5; i++) {
-      const { id } = goods.shift();
-      tasks.push(refresh(id));
+      let good = goods.shift();
+      tasks.push(refresh(good));
     }
-    await Promise.all(tasks);
+    result = result.concat(await Promise.all(tasks));
   }
-  log(`[parseAll]`, 'done');
+  log(`[parseAll] done`, result);
 };
 
 let activateInterval = null;
 const state = {
   isActive: false,
-  time: null,
-  delay: 20000
+  time: Date.now(),
+  delay: 900000
 };
 const start = () => {
   clearInterval(activateInterval);
@@ -52,6 +64,7 @@ const start = () => {
   }, state.delay);
   state.isActive = true;
   state.time = Date.now();
+  log(`[start] done`, state);
   return state
 };
 
@@ -59,17 +72,20 @@ const stop = () => {
   clearInterval(activateInterval);
   state.isActive = false;
   state.time = Date.now();
+  log(`[stop] done`, state);
   return state;
 };
 
 const status = () => {
+  log(`[status] done`, state);
   return state;
 };
 
-const add = async (url) => {
+const addByUrl = async ({url}) => {
   const parsedGood = await parse(url);
-  const good = await goodsService.save(parsedGood);
-  return good
+  const addedGood = await goodsService.add(parsedGood);
+  log(`[add] done`, addedGood);
+  return addedGood;
 };
 
 const log = (text, params = '') => {
@@ -78,9 +94,9 @@ const log = (text, params = '') => {
 
 module.exports = {
   parse,
-  refresh,
+  // refreshById,
   start,
   stop,
   status,
-  add
+  addByUrl
 };

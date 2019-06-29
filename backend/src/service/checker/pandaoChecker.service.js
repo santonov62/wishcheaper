@@ -20,7 +20,7 @@ const parse = async (url) => {
 
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
-    log(`done`);
+    // log(`done`);
 
     log(`parse elements: `, url);
     const [title, currentPrice, logo] = await Promise.all([
@@ -32,9 +32,9 @@ const parse = async (url) => {
     try {
       oldPrice = await page.$eval('.block-content .old-price', node => parseInt(node.innerText));
     } catch (e) {
-      log(`No old price`);
+      // log(`No old price`);
     }
-    log(`done`);
+    log(`[parse] done`);
 
     if (!isDebugMode)
       await browser.close();
@@ -42,8 +42,8 @@ const parse = async (url) => {
     return {
       url,
       title,
-      price: !!oldPrice ? oldPrice : currentPrice,
-      discount_price: !!oldPrice? currentPrice : oldPrice,
+      price: currentPrice,
+      old_price: oldPrice,
       logo
     };
 
