@@ -32,7 +32,8 @@ SET
   "title" = $3, 
   "logo" = $4, 
   "price" = $5, 
-  "old_price" = $6
+  "old_price" = $6,
+  "updated_at" = $7
 WHERE 
   id = $1
 RETURNING *`;
@@ -43,7 +44,8 @@ const update = async ({ id, url, title, logo, price, old_price }) => {
     title,
     logo,
     price,
-    old_price
+    old_price,
+    new Date()
   ]);
   const good = result.rows[0];
   log('[update] done', good);
