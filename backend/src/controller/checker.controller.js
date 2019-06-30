@@ -2,15 +2,19 @@ const express = require('express');
 const authMiddleware = require('../middleware/auth.middleware');
 const checkerService = require('../service/checker/checker.service');
 const goodsService = require('../service/goods.service');
+const subscriptionService = require('../service/subscriptions.service');
 const vkService = require('../service/vk.service');
 const app = express();
 
-const refresh = async (req, res) => {
+const check = async (req, res) => {
   try {
     const { goodId } = req.query;
-    const good = await goodsService.search({ id: goodId });
-    const refreshedGood = await checkerService.refresh(good);
-    res.json(refreshedGood);
+    if (!goodId)
+      throw new Error(`goodId required.`);
+
+    const {url} = await goodsService.search({ id: goodId });
+    const good = await checkerService.refresh({url});
+    res.json(good);
   } catch (e) {
     res.status(500).json({error: e.message});
   }
@@ -46,10 +50,20 @@ const status = async (req, res) => {
 const add = async (req, res) => {
   try {
     const {url} = req.body;
+    const {user} = req;
     let good = await goodsService.search({url});
     if (!good)
       good = await checkerService.addByUrl({url});
-    await vkService.notify({url, userVk: 2758589});
+    let subscriptions = await subscriptionService.search({
+      good_id: good.id,
+      user_vk: user.vk
+    });
+    if (subscriptions.length === 0)
+      await subscriptionService.add({
+        good_id: good.id,
+        user_id: user.id,
+        user_vk: user.vk
+      });
     res.json(good);
   } catch (e) {
     res.status(500).json({error: e.message});
@@ -60,7 +74,7 @@ const log = (text, params = '') => {
   console.log(`[checker.controller] ${text}`, params);
 };
 
-app.get('/refresh', authMiddleware.authRequired, refresh);
+app.get('/check', authMiddleware.authRequired, check);
 app.get('/start', authMiddleware.adminAuthRequired, start);
 app.get('/stop', authMiddleware.adminAuthRequired, stop);
 app.get('/status', authMiddleware.adminAuthRequired, status);

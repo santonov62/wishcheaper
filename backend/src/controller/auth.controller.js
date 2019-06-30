@@ -67,7 +67,8 @@ function generateToken(user) {
     firstName: user.firstName,
     lastName: user.lastName,
     id: user.id.toString(),
-    admin: user.admin && user.admin.toString()
+    admin: user.admin && user.admin.toString(),
+    vk: user.vk && user.vk.toString()
   };
   return jwt.sign(u, process.env.JWT_SECRET, {
     expiresIn: 60 * 60 * 24 // expires in 24 hours

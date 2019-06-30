@@ -1,7 +1,6 @@
 const db = require('./db.service');
 const shopsService = require('./shops.service');
 
-
 const log = (text, params = '') => {
   console.log(`[goods.service]: ${text}`, params)
 };

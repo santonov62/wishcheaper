@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const FormData = require('form-data');
+const subscriptionService = require('./subscriptions.service');
 
 const apiVersion = process.env.VK_API_VERSION;
 if (!apiVersion) {
@@ -16,12 +17,11 @@ const log = (text, params) => {
   console.log(`[vk.service] ${text}`, params);
 };
 
-notify = async ({url, userVk}) => {
-
+notify = async ({url, usersVk}) => {
   const formData = new FormData();
   formData.append('message', `Снижение цены!
    ${url}`);
-  formData.append('user_ids', userVk);
+  formData.append('user_ids', usersVk);
   formData.append('access_token', accessToken);
   formData.append('v', apiVersion);
   return fetch(`https://api.vk.com/method/messages.send`, {
@@ -34,30 +34,24 @@ notify = async ({url, userVk}) => {
       if (!!error)
         throw new Error(error.error_msg);
       log(`[notify] done`, json);
+      return json;
     });
+};
 
-  // const message = `Изменилась цена на товар ${url}`;
-  // return fetch(`https://api.vk.com/method/messages.send`, {
-  //   method: 'POST',
-  //   body: {
-  //     message,
-  //     user_ids: userVk,
-  //     access_token: accessToken,
-  //     v: apiVersion
-  //   },
-  //   headers: {
-  //     'Content-Type': 'multipart/form-data'
-  //   }
-  // })
-  //   .then(res => res.json())
-  //   .then((json) => {
-  //     const {error} = json;
-  //     if (!!error)
-  //       throw new Error(error.error_msg);
-  //     log(`[notify] done`, json);
-  //   });
+const notifyAll = async ({id, url}) => {
+  if (!id)
+    throw new Error(`Good id required.`);
+  const subscriptions = await subscriptionService.search({good_id: id});
+
+  while (subscriptions.length > 0) {
+    const chunk = subscriptions.splice(0, 100);
+    const usersVk = chunk.map(subscription => subscription.user_vk).join(',');
+    const result = await notify({url, usersVk});
+    log(`[notifyAll] [chunk] done`, result);
+  }
 };
 
 module.exports = {
-  notify
+  notify,
+  notifyAll
 };

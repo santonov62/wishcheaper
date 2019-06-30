@@ -66,6 +66,7 @@ NODE_ENV=dev
 JWT_SECRET=secret_key
 VK_SECRET_KEY=zNrFM3EPU9nmqA4g8UQs vk application secret key
 VK_COMMUNITY_KEY=zdf809d2adf809d2adf809d243ad936aa1aadf8adf809d2f0ef7a04987feb44c538a699 vk community access tocken(key)
+VK_API_VERSION=5.87
 
 ```
 * /frontend/.env.local

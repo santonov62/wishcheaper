@@ -1,5 +1,7 @@
 const pandaoChecker = require('./pandaoChecker.service');
 const goodsService = require('../goods.service');
+const subscriptionService = require('../subscriptions.service');
+const vkService = require('../vk.service');
 const checkerList = [pandaoChecker];
 
 const getCheckerForUrl = (url) => {
@@ -21,7 +23,7 @@ const parse = async (url) => {
 //   return good;
 // };
 
-const refresh = async ({url, id}) => {
+const refresh = async ({url, id, price}) => {
   if (!url)
     throw new Error(`Good url required.`);
   if (!id)
@@ -32,6 +34,12 @@ const refresh = async ({url, id}) => {
     ...parsedGood,
     id
   });
+
+  const isNotificationsRequired = good.price < price;
+  if (isNotificationsRequired) {
+    vkService.notifyAll(good);
+  }
+
   log(`[refresh] done`, good);
   return good;
 };
