@@ -57,10 +57,10 @@ const parseAll = async () => {
   let result = [];
   while (goods.length !== 0) {
     const tasks = [];
-    for (let i = 0; goods.length > 0 && i < 5; i++) {
+    // for (let i = 0; goods.length > 0 && i < 5; i++) {
       let good = goods.shift();
       tasks.push(refresh(good));
-    }
+    // }
     result = result.concat(await Promise.all(tasks));
   }
   state.lastParseTime = Date.now();
@@ -69,6 +69,9 @@ const parseAll = async () => {
 };
 
 const start = () => {
+  if (state.isActive)
+    return state;
+
   clearInterval(activateInterval);
   parseAll();
   activateInterval = setInterval(async () => {
@@ -101,6 +104,9 @@ const addByUrl = async ({url}) => {
 };
 
 const scan = () => {
+  if (state.isActive)
+    return state;
+
   parseAll().then(() => {
     state.time = Date.now();
     state.isActive = false;

@@ -79,14 +79,7 @@ class ScannerPage extends React.Component {
         <Header as='h1'>Сканер</Header>
         <Grid columns={2} >
           <Grid.Row>
-            <Grid.Column width={7} textAlign='right'>
-              {isActive ?
-                <Button secondary onClick={this.stop}>Остановить</Button>
-                :
-                <Button primary onClick={this.start}>Запустить</Button>
-              }
-            </Grid.Column>
-            <Grid.Column>
+            <Grid.Column width={6}>
               <Header as='h2'>
                 <Icon name='searchengin' />
                 <Header.Content>
@@ -95,13 +88,17 @@ class ScannerPage extends React.Component {
                 </Header.Content>
               </Header>
             </Grid.Column>
+            <Grid.Column>
+              {isActive ?
+                <Button secondary onClick={this.stop}>Остановить</Button>
+                :
+                <Button primary onClick={this.start}>Запустить</Button>
+              }
+            </Grid.Column>
           </Grid.Row>
 
           <Grid.Row>
-            <Grid.Column width={7} textAlign='right'>
-                <Button onClick={this.scan}>Сканировать</Button>
-            </Grid.Column>
-            <Grid.Column>
+            <Grid.Column width={6}>
               <Header as='h2'>
                 <Icon name='history' />
                 <Header.Content>
@@ -109,6 +106,9 @@ class ScannerPage extends React.Component {
                   <Header.Subheader>{lastParseText}</Header.Subheader>
                 </Header.Content>
               </Header>
+            </Grid.Column>
+            <Grid.Column>
+                <Button onClick={this.scan}>Сканировать</Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>
