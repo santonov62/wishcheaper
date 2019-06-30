@@ -18,27 +18,6 @@ class ProfileButton extends React.Component {
     const vk_community_id = process.env.REACT_APP_VK_COMMUNITY_ID;
     vk.Widgets.AllowMessagesFromCommunity("vk_allow_messages_from_community", {height: 30}, vk_community_id);
     this.setState({isVkWidgetInited: true});
-
-    const message = `Изменилась цена на товар`;
-    return fetch(`https://api.vk.com/method/messages.send`, {
-      method: 'POST',
-      payload: {
-        message,
-        user_ids: 2758589,
-        access_token: `2ecc890bce9d8ce27b17c06bf4e8dc40f5785c44d43abceaa8cc44d2172495de4cada705c73c2d5bd6461`,
-        v: '5.87'
-      },
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-      .then(res => res.json())
-      .then((json) => {
-        const {error} = json;
-        if (!!error)
-          throw new Error(error.error_msg);
-      });
-
   };
   render() {
     const { id, name, photo, signInHandler, signOutHandler, isAdmin, isApiInited } = this.props;
