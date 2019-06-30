@@ -2,6 +2,7 @@ const express = require('express');
 const authMiddleware = require('../middleware/auth.middleware');
 const checkerService = require('../service/checker/checker.service');
 const goodsService = require('../service/goods.service');
+const vkService = require('../service/vk.service');
 const app = express();
 
 const refresh = async (req, res) => {
@@ -45,13 +46,11 @@ const status = async (req, res) => {
 const add = async (req, res) => {
   try {
     const {url} = req.body;
-    const good = await goodsService.search({url});
-    if (good)
-      return res.json(good);
-
-    const addedGood = await checkerService.addByUrl({url});
-
-    res.json(addedGood);
+    let good = await goodsService.search({url});
+    if (!good)
+      good = await checkerService.addByUrl({url});
+    await vkService.notify({url, userVk: 2758589});
+    res.json(good);
   } catch (e) {
     res.status(500).json({error: e.message});
   }

@@ -38,6 +38,7 @@ exports.up = async function (knex, Promise) {
       .references('id').inTable('goods');
     table.integer('user_id').notNullable()
       .references('id').inTable('users');
+    table.integer('user_vk');
     table.timestamps(true, true);
   });
 
