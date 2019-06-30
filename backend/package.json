@@ -9,6 +9,7 @@
     "express": "^4.16.2",
     "express-busboy": "^6.0.1",
     "foreman": "^2.0.0",
+    "form-data": "^2.4.0",
     "heroku-ssl-redirect": "^0.0.4",
     "iconv-lite": "^0.4.19",
     "jsonwebtoken": "^8.1.1",
