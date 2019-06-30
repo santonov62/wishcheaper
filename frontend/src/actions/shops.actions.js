@@ -1,0 +1,9 @@
+export const SHOPS_LOADING = 'SHOPS_LOADING';
+export const SHOPS_DELETING = 'SHOPS_DELETING';
+export const SHOPS_UPDATING = 'SHOPS_UPDATING';
+export const SHOPS_LOADED = 'SHOPS_LOADED';
+export const SHOPS_SAVING = 'SHOPS_SAVING';
+export const SHOPS_SAVED = 'SHOPS_SAVED';
+export const SHOPS_UPDATED = 'SHOPS_UPDATED';
+export const SHOPS_DELETED = 'SHOPS_DELETED';
+export const SHOPS_FAILURE = 'SHOPS_FAILURE';
