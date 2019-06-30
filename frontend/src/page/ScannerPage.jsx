@@ -9,7 +9,7 @@ class ScannerPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isActive: false,
+      isStarted: false,
       time: null,
       lastParseTime: null,
       isLoading: false
@@ -27,8 +27,8 @@ class ScannerPage extends React.Component {
         }
       })
       .then(res => res.json())
-      .then(({isActive, time, lastParseTime}) => {
-        this.setState({isActive, time, lastParseTime, isLoading: false});
+      .then(({isStarted, time, lastParseTime}) => {
+        this.setState({isStarted, time, lastParseTime, isLoading: false});
       })
   };
   start = () => {
@@ -39,8 +39,8 @@ class ScannerPage extends React.Component {
         }
       })
       .then(res => res.json())
-      .then(({isActive, time}) => {
-        this.setState({isActive, time});
+      .then(({isStarted, time}) => {
+        this.setState({isStarted, time});
       })
   };
   stop = () => {
@@ -51,8 +51,8 @@ class ScannerPage extends React.Component {
         }
       })
       .then(res => res.json())
-      .then(({isActive, time, lastParseTime}) => {
-        this.setState({isActive, time, lastParseTime});
+      .then(({isStarted, time, lastParseTime}) => {
+        this.setState({isStarted, time, lastParseTime});
       })
   };
   scan = () => {
@@ -63,12 +63,12 @@ class ScannerPage extends React.Component {
         }
       })
       .then(res => res.json())
-      .then(({isActive, time, lastParseTime}) => {
-        this.setState({isActive, time, lastParseTime});
+      .then(({isStarted, time, lastParseTime}) => {
+        this.setState({isStarted, time, lastParseTime});
       })
   };
   render() {
-    const {time, isActive, isLoading, lastParseTime} = this.state;
+    const {time, isStarted, isLoading, lastParseTime} = this.state;
     const addedRange = moment(time).fromNow(true);
     const addedRangeText = `${addedRange} назад`;
     const lastParseRange = moment(lastParseTime).fromNow(true);
@@ -83,13 +83,13 @@ class ScannerPage extends React.Component {
               <Header as='h2'>
                 <Icon name='searchengin' />
                 <Header.Content>
-                  {isActive ? `Сканер запущен` : `Сканер остановлен`}
+                  {isStarted ? `Сканер запущен` : `Сканер остановлен`}
                   <Header.Subheader>{addedRangeText}</Header.Subheader>
                 </Header.Content>
               </Header>
             </Grid.Column>
             <Grid.Column>
-              {isActive ?
+              {isStarted ?
                 <Button secondary onClick={this.stop}>Остановить</Button>
                 :
                 <Button primary onClick={this.start}>Запустить</Button>

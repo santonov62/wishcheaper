@@ -6,19 +6,19 @@ const subscriptionService = require('../service/subscriptions.service');
 const vkService = require('../service/vk.service');
 const app = express();
 
-const check = async (req, res) => {
-  try {
-    const { goodId } = req.query;
-    if (!goodId)
-      throw new Error(`goodId required.`);
-
-    const {url} = await goodsService.search({ id: goodId });
-    const good = await checkerService.refresh({url});
-    res.json(good);
-  } catch (e) {
-    res.status(500).json({error: e.message});
-  }
-};
+// const check = async (req, res) => {
+//   try {
+//     const { goodId } = req.query;
+//     if (!goodId)
+//       throw new Error(`goodId required.`);
+//
+//     const {url} = (await goodsService.search({ id: goodId }))[0];
+//     const good = await checkerService.refresh({url});
+//     res.json(good);
+//   } catch (e) {
+//     res.status(500).json({error: e.message});
+//   }
+// };
 
 const start = async (req, res) => {
   try {
@@ -51,7 +51,7 @@ const add = async (req, res) => {
   try {
     const {url} = req.body;
     const {user} = req;
-    let good = await goodsService.search({url});
+    let good = (await goodsService.search({url}))[0];
     if (!good)
       good = await checkerService.addByUrl({url});
     let subscriptions = await subscriptionService.search({
@@ -83,7 +83,7 @@ const log = (text, params = '') => {
   console.log(`[checker.controller] ${text}`, params);
 };
 
-app.get('/check', authMiddleware.authRequired, check);
+// app.get('/check', authMiddleware.authRequired, check);
 app.get('/start', authMiddleware.adminAuthRequired, start);
 app.get('/stop', authMiddleware.adminAuthRequired, stop);
 app.get('/status', authMiddleware.adminAuthRequired, status);

@@ -15,15 +15,16 @@ const search = async (params) => {
   const SELECT = `SELECT * FROM goods`;
   let WHERE = ``;
   if (Object.keys(params).length > 0) {
-    const {url} = params;
+    const {url, expireDate} = params;
     WHERE = ` WHERE true`;
     if (url) WHERE += ` AND "url" = ${statementForSql(url)}`;
+    if (expireDate) WHERE += ` AND "updated_at" < ${statementForSql(expireDate)}`;
   }
   const SEARCH_QUERY = SELECT + WHERE;
   const result = await db.query(SEARCH_QUERY, statementForSqlParams);
-  const good = result && result.rows[0];
-  log('[search] done', good);
-  return good;
+  const goods = result && result.rows;
+  log('[search] done', goods);
+  return goods;
 };
 
 const UPDATE_GOOD = `UPDATE goods 
