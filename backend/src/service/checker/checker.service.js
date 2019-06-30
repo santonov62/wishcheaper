@@ -8,6 +8,14 @@ const getCheckerForUrl = (url) => {
   return checkerList.find(checker => checker.isMyUrl(url));
 };
 
+let activateInterval = null;
+const state = {
+  isActive: false,
+  time: Date.now(),
+  delay: 15 * 60000,
+  lastParseTime: null
+};
+
 const parse = async (url) => {
   const checker = getCheckerForUrl(url);
   if (!checker)
@@ -55,15 +63,10 @@ const parseAll = async () => {
     }
     result = result.concat(await Promise.all(tasks));
   }
+  state.lastParseTime = Date.now();
   log(`[parseAll] done`, result);
 };
 
-let activateInterval = null;
-const state = {
-  isActive: false,
-  time: Date.now(),
-  delay: 900000
-};
 const start = () => {
   clearInterval(activateInterval);
   parseAll();

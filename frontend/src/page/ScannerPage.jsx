@@ -1,6 +1,6 @@
 import React from 'react';
 import './scannerPage.css'
-import { Button, Header, Icon, Dimmer, Loader } from 'semantic-ui-react';
+import { Button, Header, Icon, Dimmer, Loader, Grid, Image } from 'semantic-ui-react';
 import moment from 'moment';
 import {authHeader} from "../helpers/auth-header";
 import { connect } from 'react-redux';
@@ -11,6 +11,7 @@ class ScannerPage extends React.Component {
     this.state = {
       isActive: false,
       time: null,
+      lastParseTime: null,
       isLoading: false
     }
   }
@@ -26,8 +27,8 @@ class ScannerPage extends React.Component {
         }
       })
       .then(res => res.json())
-      .then(({isActive, time}) => {
-        this.setState({isActive, time, isLoading: false});
+      .then(({isActive, time, lastParseTime}) => {
+        this.setState({isActive, time, lastParseTime, isLoading: false});
       })
   };
   start = () => {
@@ -50,29 +51,68 @@ class ScannerPage extends React.Component {
         }
       })
       .then(res => res.json())
+      .then(({isActive, time, lastParseTime}) => {
+        this.setState({isActive, time, lastParseTime});
+      })
+  };
+  scan = () => {
+    fetch(`checker/scan`, {
+        method: 'GET',
+        headers: {
+          ...authHeader(this.props.user)
+        }
+      })
+      .then(res => res.json())
       .then(({isActive, time}) => {
-        this.setState({isActive, time});
+        // this.setState({isActive, time});
       })
   };
   render() {
-    const {time, isActive, isLoading} = this.state;
+    const {time, isActive, isLoading, lastParseTime} = this.state;
     const addedRange = moment(time).fromNow(true);
     const addedRangeText = `${addedRange} назад`;
+    const lastParseRange = moment(lastParseTime).fromNow(true);
+    const lastParseText = `производилось ${lastParseRange} назад`;
     return (
       <div className='scannerPage'>
         <Loader size='large' active={isLoading} content='Loading' />
-        <Header as='h2'>
-          <Icon name='settings' />
-          <Header.Content>
-            {isActive ? `Сканер запущен` : `Сканер остановлен`}
-            <Header.Subheader>{addedRangeText}</Header.Subheader>
-          </Header.Content>
-        </Header>
-        {isActive ?
-          <Button secondary onClick={this.stop}>Остановить</Button>
-          :
-          <Button primary onClick={this.start}>Запустить</Button>
-        }
+        <Header as='h1'>Сканер</Header>
+        <Grid columns={2} >
+          <Grid.Row>
+            <Grid.Column width={7} textAlign='right'>
+              {isActive ?
+                <Button secondary onClick={this.stop}>Остановить</Button>
+                :
+                <Button primary onClick={this.start}>Запустить</Button>
+              }
+            </Grid.Column>
+            <Grid.Column>
+              <Header as='h2'>
+                <Icon name='searchengin' />
+                <Header.Content>
+                  {isActive ? `Сканер запущен` : `Сканер остановлен`}
+                  <Header.Subheader>{addedRangeText}</Header.Subheader>
+                </Header.Content>
+              </Header>
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row>
+            <Grid.Column width={7} textAlign='right'>
+                <Button onClick={this.scan}>Сканировать</Button>
+            </Grid.Column>
+            <Grid.Column>
+              <Header as='h2'>
+                <Icon name='history' />
+                <Header.Content>
+                  Последнее сканирование
+                  <Header.Subheader>{lastParseText}</Header.Subheader>
+                </Header.Content>
+              </Header>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+
       </div>
     )
   }
