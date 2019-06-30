@@ -1,10 +1,8 @@
 import React from 'react';
 import {Image, Form, Dropdown, Icon, Button} from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import ShopDropdown from "../component/Shop/ShopDropdown";
 import './mainPage.css';
 import {connect} from 'react-redux';
-import * as Constants from "../constants";
 import SignInWithVkButton from '../component/SignInWithVkButton';
 import {authWithVk, signOut} from "../actionCreators/user.actionCreators";
 
