@@ -9,7 +9,7 @@ const log = (text, params = '') => {
 
 const parse = async (url) => {
 
-  let launchParams = { args: [ `--no-sandbox` ] };
+  let launchParams = { args: [ `--no-sandbox` ], headless: true };
   if (isDebugMode)
     launchParams = { ...launchParams, headless: false };
 
