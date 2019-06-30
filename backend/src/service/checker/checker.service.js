@@ -30,15 +30,12 @@ const backgroundProcess = async () => {
 }
 
 const scan = async () => {
-  state.isStarted = true;
   const expireDate = moment().subtract(INTERVAL_TIME_MINUTES, "minutes");
   const goods = await goodsService.search({expireDate});
   if (goods.length > 0) {
     push(goods);
     if (!state.isParsing) {
-      backgroundProcess().then(() => {
-        state.isStarted = false;
-      });
+      backgroundProcess();
     }
   }
   log(`[scan] done`, state);
