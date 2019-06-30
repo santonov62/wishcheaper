@@ -65,6 +65,7 @@ const parseAll = async () => {
   }
   state.lastParseTime = Date.now();
   log(`[parseAll] done`, result);
+  return result;
 };
 
 const start = () => {
@@ -99,6 +100,17 @@ const addByUrl = async ({url}) => {
   return addedGood;
 };
 
+const scan = () => {
+  parseAll().then(result => {
+    state.time = Date.now();
+    state.isActive = false;
+  });
+  state.time = Date.now();
+  state.isActive = true;
+  log(`[scan] done`, state);
+  return state
+};
+
 const log = (text, params = '') => {
   console.log(`[checker.service] ${text}`, params);
 };
@@ -108,6 +120,7 @@ module.exports = {
   // refreshById,
   start,
   stop,
+  scan,
   status,
-  addByUrl
+  addByUrl,
 };

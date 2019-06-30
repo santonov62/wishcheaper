@@ -70,6 +70,15 @@ const add = async (req, res) => {
   }
 };
 
+const scan = async (req, res) => {
+  try {
+    const checker = await checkerService.scan();
+    res.json(checker);
+  } catch (e) {
+    res.status(500).json({error: e.message});
+  }
+};
+
 const log = (text, params = '') => {
   console.log(`[checker.controller] ${text}`, params);
 };
@@ -79,5 +88,6 @@ app.get('/start', authMiddleware.adminAuthRequired, start);
 app.get('/stop', authMiddleware.adminAuthRequired, stop);
 app.get('/status', authMiddleware.adminAuthRequired, status);
 app.post('/add', authMiddleware.authRequired, add);
+app.get('/scan', authMiddleware.authRequired, scan);
 
 module.exports = app;

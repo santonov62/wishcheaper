@@ -63,8 +63,8 @@ class ScannerPage extends React.Component {
         }
       })
       .then(res => res.json())
-      .then(({isActive, time}) => {
-        // this.setState({isActive, time});
+      .then(({isActive, time, lastParseTime}) => {
+        this.setState({isActive, time, lastParseTime});
       })
   };
   render() {
