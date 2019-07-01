@@ -10,7 +10,7 @@ const checkerList = [
 
 let processGoods = [];
 let interval;
-const INTERVAL_TIME_MINUTES = 10;
+const CHECKER_INTERVAL_MIN = process.env.CHECKER_INTERVAL_MIN || 10;
 
 const state = {
   isStarted: false,
@@ -47,7 +47,7 @@ const backgroundProcess = async () => {
 }
 
 const scan = async () => {
-  const expireDate = moment().subtract(INTERVAL_TIME_MINUTES, "minutes");
+  const expireDate = moment().subtract(CHECKER_INTERVAL_MIN, "minutes");
   const goods = await goodsService.search({expireDate});
   if (goods.length > 0) {
     push(goods);
@@ -65,7 +65,7 @@ const start = () => {
   scan();
   interval = setInterval(() => {
     scan();
-  }, INTERVAL_TIME_MINUTES / 3 * 60000);
+  }, CHECKER_INTERVAL_MIN / 3 * 60000);
   state.isStarted = true;
   state.time = Date.now();
   log(`[start] done`, state);
