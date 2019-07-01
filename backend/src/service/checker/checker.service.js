@@ -99,7 +99,7 @@ const parse = async (url) => {
   return await checkerInstance.parse(url);
 };
 
-const refresh = async ({url, id, price = 0}) => {
+const refresh = async ({url, id, price: prevPrice}) => {
   if (!url)
     throw new Error(`Good url required.`);
   if (!id)
@@ -117,8 +117,7 @@ const refresh = async ({url, id, price = 0}) => {
     good = await goodsService.inactive({ id });
   }
 
-  const prevPrice = parsedGood.price
-  const isNotificationsRequired = prevPrice < price;
+  const isNotificationsRequired = parsedGood.price < prevPrice;
   if (isNotificationsRequired) {
     vkService.notifyAll({...good, prevPrice});
   }

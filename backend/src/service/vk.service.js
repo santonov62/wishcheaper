@@ -51,7 +51,7 @@ const notifyAll = async ({id, url, price, old_price, title, prevPrice}) => {
   while (subscriptions.length > 0) {
     const chunk = subscriptions.splice(0, 100);
     const usersVk = chunk.map(subscription => subscription.user_vk).join(',');
-    const result = await notify({url, usersVk, price, old_price, title});
+    const result = await notify({url, usersVk, price, old_price, title, prevPrice});
     log(`[notifyAll] [chunk] done`, result);
   }
 };
