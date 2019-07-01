@@ -10,26 +10,25 @@ const MainPage = ({ signedIn, signInHandler, user }) => (
   <div className='mainPage'>
     <div className='statistic'>
 
-      <div className='title'>Покупайте любимые товары выгоднее</div>
+      <div className='title'>Покупайте любимые товары дешевле</div>
       <div className='stats'>
         <div className='number'>
-          <div className='decorHeader'>123</div>
+          <div className='decorHeader'>1234</div>
           отслеживаемых товаров
+        </div>
+        <div className='number'>
+          <div className='decorHeader'>15</div>
+          Новых за месяц
         </div>
         {/*<div className='number'>*/}
           {/*<div className='decorHeader'>123123</div>*/}
-          {/*Сейчас Доступно*/}
+          {/*Пользователей*/}
         {/*</div>*/}
-        <div className='saved common number'>
-          <div className='decorHeader'>578678 ₽</div>
-          Уже сэкономили
-        </div>
-        <div className='number'>
-          <div className='decorHeader'>4535</div>
-          Новых за месяц
-        </div>
       </div>
-      
+      <div className='saved common number'>
+        <div className='decorHeader'>468</div>
+        Пользователей
+      </div>
       <br/>
       < br />
       {!user.id &&

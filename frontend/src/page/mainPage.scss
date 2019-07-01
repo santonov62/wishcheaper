@@ -143,8 +143,11 @@
       text-align: center;
     }
     .title {
+      font-size: 50px;
+      /* width: 60%; */
+      line-height: 80px;
+      padding: 60px 20px;
       text-align: center;
-      padding: 45px 0 25px 0;
       text-transform: uppercase;
       font-weight: bold;
     }
@@ -159,11 +162,11 @@
           font-size: 3.2em;
         }
       }
-      .common {
-        //padding: 35px 0;
-        div {
-          font-size: 4em;
-        }
+    }
+    .common {
+      padding: 35px 0;
+      div {
+        font-size: 4em;
       }
     }
   }
