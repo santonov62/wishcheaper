@@ -97,8 +97,6 @@ const parse = async (url) => {
   if (!isShopSupported(url))
     throw new Error(`Shop doesn't supported.`);
   const checkerInstance = getCheckerForUrl(url);
-  // if (!checkerInstance)
-  //   throw new Error(`Checker for url doesn't supported. Url: ${url}`);
   return await checkerInstance.parse(url);
 };
 
@@ -107,13 +105,18 @@ const refresh = async ({url, id, price = 0}) => {
     throw new Error(`Good url required.`);
   if (!id)
     throw new Error(`Good id required.`);
-
+  
   const parsedGood = await parse(url);
-
-  const good = await goodsService.update({
-    ...parsedGood,
-    id
-  });
+  
+  let good;
+  if (isValid(parsedGood)) {
+    good = await goodsService.update({
+      ...parsedGood,
+      id
+    });
+  } else {
+    good = await goodsService.inactive({ id });
+  }
 
   const isNotificationsRequired = parsedGood.price < price;
   if (isNotificationsRequired) {
@@ -122,6 +125,10 @@ const refresh = async ({url, id, price = 0}) => {
 
   log(`[refresh] done`, good);
   return good;
+};
+
+const isValid = ({url, title, price}) => {
+  return !!url && !!title && !!price;
 };
 
 const status = () => {
@@ -139,6 +146,13 @@ const addUrl = async (url) => {
   return good;
 };
 
+// const addByUrl = async (url) => {
+//   if (!isShopSupported(url))
+//     throw new Error(`Shop doesn't supported.`);
+//   const parsedGood = await parse(url);
+//   if ()
+// };
+
 const log = (text, params = '') => {
   console.log(`[checker.service] -> ${text}`, params);
 };
@@ -150,4 +164,5 @@ module.exports = {
   scan,
   status,
   addUrl,
+  isShopSupported
 };

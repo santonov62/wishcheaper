@@ -22,7 +22,7 @@ const codesReducer = (state = initialState, action) => {
       const savedGood = action.payload.goods;
       const isExist = state.value.find(({id}) => savedGood.id === id);
       if (!isExist)
-        goods.push(savedGood);
+        goods.unshift(savedGood);
       return {
         isLoading: false,
         value: goods

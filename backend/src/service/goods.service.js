@@ -104,11 +104,24 @@ const userGoods = async ({user_vk}) => {
   return result.rows;
 };
 
+const INACTIVE_GOODS = `UPDATE goods
+SET
+  inactive_at = $2
+WHERE
+  id = $1
+RETURNING *`;
+const inactive = async ({id}) => {
+  const result = await db.query(INACTIVE_GOODS, [id, new Date()]);
+  log('[inactive] done', result.rows[0]);
+  return result.rows[0];
+};
+
 module.exports = {
   getAll,
   search,
   update,
   add,
   addUrl,
-  userGoods
+  userGoods,
+  inactive
 };

@@ -4,15 +4,15 @@ import {Dimmer, Transition, Loader} from 'semantic-ui-react';
 
 class LoadingTracking extends React.Component {
   render() {
-    const {isDataLoading} = this.props;
+    const {isLoading} = this.props;
     return (
-        <Loader size='large' active={isDataLoading} content='Loading' />
+        <Loader size='large' active={isLoading} content='Loading' />
     );
   }
 }
 
 const mapState = (state) => ({
-  isDataLoading: state.goods.isLoading || state.user.isLoading
+  isLoading: state.goods.isLoading || state.user.isLoading
 });
 
 export default connect(mapState)(LoadingTracking);
