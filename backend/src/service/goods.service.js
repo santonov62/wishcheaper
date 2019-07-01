@@ -18,7 +18,10 @@ const search = async (params) => {
     const {url, expireDate} = params;
     WHERE = ` WHERE true`;
     if (url) WHERE += ` AND "url" = ${statementForSql(url)}`;
-    if (expireDate) WHERE += ` AND "updated_at" < ${statementForSql(expireDate)}`;
+    if (expireDate) {
+      const paramIndex = statementForSql(expireDate);
+      WHERE += ` AND "updated_at" < ${paramIndex} AND ("inactive_at" IS NULL OR "inactive_at" < ${paramIndex})`;
+    }
   }
   const SEARCH_QUERY = SELECT + WHERE;
   const result = await db.query(SEARCH_QUERY, statementForSqlParams);
@@ -34,7 +37,8 @@ SET
   "logo" = $4, 
   "price" = $5, 
   "old_price" = $6,
-  "updated_at" = $7
+  "updated_at" = $7,
+  "inactive_at" = NULL
 WHERE 
   id = $1
 RETURNING *`;

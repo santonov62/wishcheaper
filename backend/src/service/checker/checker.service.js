@@ -43,22 +43,17 @@ const backgroundProcess = async () => {
 }
 
 const scan = async () => {
-    // try {
-        const expireDate = moment().subtract(INTERVAL_TIME_MINUTES, "minutes");
-        const goods = await goodsService.search({expireDate});
-        if (goods.length > 0) {
-            push(goods);
-            if (!state.isParsing) {
-                backgroundProcess();
-            }
-            log(`[scan] done`, state);
-        } else {
-            log(`[scan] nothing to parse`, state);
-        }
-    // } catch (e) {
-    //     log(`[scan] error`, e.message);
-    //     return state;
-    // }
+  const expireDate = moment().subtract(INTERVAL_TIME_MINUTES, "minutes");
+  const goods = await goodsService.search({expireDate});
+  if (goods.length > 0) {
+    push(goods);
+    if (!state.isParsing) {
+      backgroundProcess();
+    }
+    log(`[scan] done`, state);
+  } else {
+    log(`[scan] nothing to parse`, state);
+  }
   return state;
 }
 
