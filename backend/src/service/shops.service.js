@@ -1,15 +1,16 @@
 const db = require('./db.service');
 
 const SAVE_SHOP = `INSERT INTO shops (
-  title, url, logo
+  title, url, logo, name
 ) VALUES (
-  $1, $2, $3
+  $1, $2, $3, $4
 ) RETURNING *`;
-const save = async ({title, url, logo}) => {
+const save = async ({title, url, logo, name}) => {
   const result = await db.query(SAVE_SHOP, [
     title,
     url,
-    logo
+    logo,
+    name
   ]);
   return result.rows[0];
 };

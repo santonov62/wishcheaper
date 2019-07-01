@@ -1,8 +1,12 @@
 const pandaoChecker = require('./pandaoChecker.service');
+const avitoChecker = require('./avitoChecker.service');
 const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
 const moment = require('moment');
-const checkerList = [pandaoChecker];
+const checkerList = [
+  pandaoChecker,
+  avitoChecker
+];
 
 let processGoods = [];
 let interval;
@@ -113,9 +117,10 @@ const refresh = async ({url, id, price = 0}) => {
     good = await goodsService.inactive({ id });
   }
 
-  const isNotificationsRequired = parsedGood.price < price;
+  const prevPrice = parsedGood.price
+  const isNotificationsRequired = prevPrice < price;
   if (isNotificationsRequired) {
-    vkService.notifyAll(good);
+    vkService.notifyAll({...good, prevPrice});
   }
 
   log(`[refresh] done`, good);

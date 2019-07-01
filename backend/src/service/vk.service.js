@@ -17,13 +17,13 @@ const log = (text, params) => {
   console.log(`[vk.service] -> ${text}`, params);
 };
 
-notify = async ({id, url, price, old_price, title, usersVk}) => {
+notify = async ({id, url, price, old_price, title, usersVk, prevPrice}) => {
   const formData = new FormData();
-  const priceDiff = old_price - price;
+  const priceDiff = prevPrice - price;
   formData.append('message', `${title}
   
-  Снижение цены на ${priceDiff}
-  цена ${price}/${old_price}
+  Снижение цены на ${priceDiff} р
+  ${prevPrice} р -> ${price} р
   
    ${url}`);
   formData.append('user_ids', usersVk);
@@ -43,7 +43,7 @@ notify = async ({id, url, price, old_price, title, usersVk}) => {
     });
 };
 
-const notifyAll = async ({id, url, price, old_price, title}) => {
+const notifyAll = async ({id, url, price, old_price, title, prevPrice}) => {
   if (!id)
     throw new Error(`Good id required.`);
   const subscriptions = await subscriptionService.search({good_id: id});
