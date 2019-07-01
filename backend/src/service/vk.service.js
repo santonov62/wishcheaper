@@ -17,9 +17,14 @@ const log = (text, params) => {
   console.log(`[vk.service] -> ${text}`, params);
 };
 
-notify = async ({url, usersVk}) => {
+notify = async ({id, url, price, old_price, title}) => {
   const formData = new FormData();
-  formData.append('message', `Снижение цены!
+  const priceDiff = old_price - price;
+  formData.append('message', `${title}
+  
+  Снижение цены на ${priceDiff}
+  цена ${price}/${old_price}
+  
    ${url}`);
   formData.append('user_ids', usersVk);
   formData.append('access_token', accessToken);
@@ -38,7 +43,7 @@ notify = async ({url, usersVk}) => {
     });
 };
 
-const notifyAll = async ({id, url}) => {
+const notifyAll = async ({id, url, price, old_price, title}) => {
   if (!id)
     throw new Error(`Good id required.`);
   const subscriptions = await subscriptionService.search({good_id: id});
@@ -46,7 +51,7 @@ const notifyAll = async ({id, url}) => {
   while (subscriptions.length > 0) {
     const chunk = subscriptions.splice(0, 100);
     const usersVk = chunk.map(subscription => subscription.user_vk).join(',');
-    const result = await notify({url, usersVk});
+    const result = await notify({url, usersVk, price, old_price, title});
     log(`[notifyAll] [chunk] done`, result);
   }
 };

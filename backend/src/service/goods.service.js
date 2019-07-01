@@ -94,10 +94,21 @@ const addUrl = async ({ url }) => {
   return good;
 };
 
+const SEARCH_WITH_GOODS =   `SELECT * FROM
+  subscriptions s
+LEFT JOIN goods g ON (g.id = s."good_id")
+WHERE
+    s.user_vk = $1`;
+const userGoods = async ({user_vk}) => {
+  const result = await db.query(SEARCH_WITH_GOODS, [user_vk]);
+  return result.rows;
+};
+
 module.exports = {
   getAll,
   search,
   update,
   add,
-  addUrl
+  addUrl,
+  userGoods
 };

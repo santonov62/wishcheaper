@@ -1,0 +1,9 @@
+export const GOODS_LOADING = 'GOODS_LOADING';
+export const GOODS_LOADED = 'GOODS_LOADED';
+export const GOODS_SAVING = 'GOODS_SAVING';
+export const GOODS_SAVED = 'GOODS_SAVED';
+export const GOODS_UPDATING = 'GOODS_UPDATING';
+export const GOODS_UPDATED = 'GOODS_UPDATED';
+export const GOODS_DELETING = 'GOODS_DELETING';
+export const GOODS_DELETED = 'GOODS_DELETED';
+export const GOODS_FAILURE = 'GOODS_FAILURE';

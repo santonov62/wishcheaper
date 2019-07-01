@@ -6,7 +6,7 @@ const checkerList = [pandaoChecker];
 
 let processGoods = [];
 let interval;
-const INTERVAL_TIME_MINUTES = 15;
+const INTERVAL_TIME_MINUTES = 10;
 
 const state = {
   isStarted: false,
@@ -26,7 +26,7 @@ const isShopSupported = (url) => {
 const backgroundProcess = async () => {
   state.isParsing = true;
   const result = [];
-  while (processGoods.length > 0 && state.isStarted) {
+  while (processGoods.length > 0) {
     try {
       const good = processGoods.shift();
       result.push(await refresh(good));
@@ -110,7 +110,7 @@ const refresh = async ({url, id, price = 0}) => {
     id
   });
 
-  const isNotificationsRequired = good.price < price;
+  const isNotificationsRequired = parsedGood.price < price;
   if (isNotificationsRequired) {
     vkService.notifyAll(good);
   }
