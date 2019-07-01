@@ -1,7 +1,7 @@
 const db = require('./db.service');
 
 const log = (text, params = '') => {
-  console.log(`[subscriptions.service]: ${text}`, params)
+  console.log(`[subscriptions.service] -> ${text}`, params)
 };
 
 const ADD_SUBSCRIPTION = `INSERT INTO subscriptions (

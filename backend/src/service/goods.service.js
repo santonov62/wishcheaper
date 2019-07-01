@@ -2,7 +2,7 @@ const db = require('./db.service');
 const shopsService = require('./shops.service');
 
 const log = (text, params = '') => {
-  console.log(`[goods.service]: ${text}`, params)
+  console.log(`[goods.service] -> ${text}`, params)
 };
 
 const search = async (params) => {
@@ -90,7 +90,7 @@ const addUrl = async ({ url }) => {
   const shop_id = await getShopIdByUrl(url);
   const result = await db.query(ADD_URL, [url, shop_id]);
   const good = result.rows[0];
-  log('[save] done', good);
+  log('[addUrl] done', good);
   return good;
 };
 

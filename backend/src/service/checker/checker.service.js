@@ -4,7 +4,6 @@ const vkService = require('../vk.service');
 const moment = require('moment');
 const checkerList = [pandaoChecker];
 
-
 let processGoods = [];
 let interval;
 const INTERVAL_TIME_MINUTES = 15;
@@ -16,16 +15,30 @@ const state = {
   lastParseTime: null
 };
 
+const getCheckerForUrl = (url) => {
+  return checkerList.find(checker => checker.isMyUrl(url));
+};
+
+const isShopSupported = (url) => {
+  return checkerList.some(checker => checker.isMyUrl(url));
+};
+
 const backgroundProcess = async () => {
   state.isParsing = true;
   const result = [];
   while (processGoods.length > 0 && state.isStarted) {
-    const good = processGoods.shift();
-    result.push(await refresh(good));
+    try {
+      const good = processGoods.shift();
+      result.push(await refresh(good));
+    } catch (e) {
+      state.isParsing = false;
+      log(`[backgroundProcess] error`, e.message);
+      return result;
+    }
   }
   state.lastParseTime = Date.now();
   state.isParsing = false;
-  log(`[backgroundProcess] done`, result);
+  log(`[backgroundProcess] done parsed: `, result.length);
   return result;
 }
 
@@ -37,8 +50,10 @@ const scan = async () => {
     if (!state.isParsing) {
       backgroundProcess();
     }
+    log(`[scan] done`, state);
+  } else {
+    log(`[scan] nothing to parse`, state);
   }
-  log(`[scan] done`, state);
   return state;
 }
 
@@ -73,21 +88,13 @@ const push = (goods) => {
   return processGoods;
 }
 
-
-
-const getCheckerForUrl = (url) => {
-  return checkerList.find(checker => checker.isMyUrl(url));
-};
-
 const parse = async (url) => {
+  if (!isShopSupported(url))
+    throw new Error(`Shop doesn't supported.`);
   const checkerInstance = getCheckerForUrl(url);
-  if (!checkerInstance)
-    throw new Error(`Checker for url doesn't supported. Url: ${url}`);
-  try {
-    return await checkerInstance.parse(url);
-  } catch (e) {
-    return null;
-  }
+  // if (!checkerInstance)
+  //   throw new Error(`Checker for url doesn't supported. Url: ${url}`);
+  return await checkerInstance.parse(url);
 };
 
 const refresh = async ({url, id, price = 0}) => {
@@ -97,10 +104,6 @@ const refresh = async ({url, id, price = 0}) => {
     throw new Error(`Good id required.`);
 
   const parsedGood = await parse(url);
-  if (!parsedGood) {
-    log(`[refresh] done`, `no parsed data`);
-    return parsedGood;
-  }
 
   const good = await goodsService.update({
     ...parsedGood,
@@ -121,32 +124,25 @@ const status = () => {
   return state;
 };
 
-addUrl = async (url) => {
+const addUrl = async (url) => {
+  if (!isShopSupported(url))
+    throw new Error(`Shop doesn't supported.`);
+  
   const addedGood = await goodsService.addUrl({url});
   const good = await refresh(addedGood);
   log(`[addUrl] done`, good);
   return good;
 };
 
-// const addByUrl = async ({url}) => {
-//   const parsedGood = await parse(url);
-//   if (!parsedGood)
-//     throw new Error(`Good doesn't parsed`);
-//   const addedGood = await goodsService.add(parsedGood);
-//   log(`[addByUrl] done`, addedGood);
-//   return addedGood;
-// };
-
 const log = (text, params = '') => {
-  console.log(`[checker.service] ${text}`, params);
+  console.log(`[checker.service] -> ${text}`, params);
 };
 
 module.exports = {
-  parse,
+  // parse,
   start,
   stop,
   scan,
   status,
-  // addByUrl,
   addUrl,
 };

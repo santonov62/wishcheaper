@@ -7,6 +7,7 @@ const checkerController = require('./controller/checker.controller');
 const authContoller = require('./controller/auth.controller');
 const authMiddleware = require('./middleware/auth.middleware');
 const sslRedirect = require('heroku-ssl-redirect');
+const checkerService = require('./service/checker/checker.service');
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -36,5 +37,7 @@ app.use(routes.app.frontend, express.static(routes.fs.frontend));
 app.get('/*', (req, res) => res.sendFile(path.join(routes.fs.frontend, 'index.html')));
 
 const server = app.listen(PORT, () => console.log(`Running at ${PORT}`));
+
+checkerService.start();
 
 module.exports = app;

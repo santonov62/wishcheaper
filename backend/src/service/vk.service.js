@@ -14,7 +14,7 @@ if (!accessToken) {
 }
 
 const log = (text, params) => {
-  console.log(`[vk.service] ${text}`, params);
+  console.log(`[vk.service] -> ${text}`, params);
 };
 
 notify = async ({url, usersVk}) => {

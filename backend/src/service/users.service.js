@@ -46,7 +46,7 @@ const save = async ({name, vk, photo, email}) => {
   return result.rows[0];
 };
 const log = (text, params) => {
-  console.log(`[user.service] ${text}`, params);
+  console.log(`[user.service] -> ${text}`, params);
 };
 module.exports = {
   search: search,

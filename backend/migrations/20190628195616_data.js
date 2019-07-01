@@ -18,20 +18,21 @@ exports.up = async function(knex, Promise) {
       price: '76127',
     }]);
 
-  const users = await knex('users')
-    .returning(['id', 'name'])
-    .insert([{
-      name: 'SergeiA',
-      email: 'flex62ryz@ya.ru',
-    }]);
+  // const users = await knex('users')
+  //   .returning(['id', 'name'])
+  //   .insert([{
+  //     name: 'SergeiA',
+  //     email: 'flex62ryz@ya.ru',
+  //   }]);
 
-  const subscriptions = await knex('subscriptions')
-    .insert([{
-      user_id: users.find(user => user.name === 'SergeiA').id,
-      good_id: goods.find(good => good.price === 76127).id,
-    }]);
+  // const subscriptions = await knex('subscriptions')
+  //   .insert([{
+  //     user_id: users.find(user => user.name === 'SergeiA').id,
+  //     good_id: goods.find(good => good.price === 76127).id,
+  //   }]);
 
-  return Promise.all([shops, goods, users, subscriptions]);
+  // return Promise.all([shops, goods, users, subscriptions]);
+  return Promise.all([shops, goods]);
 };
 
 exports.down = function(knex, Promise) {

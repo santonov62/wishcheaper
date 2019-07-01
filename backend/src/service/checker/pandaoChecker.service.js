@@ -4,72 +4,17 @@ const TIMEOUT_DELAY = 30000;
 const SHOP_URL = 'pandao.ru';
 
 const log = (text, params = '') => {
-  console.log(`[pandaoChecker.service] ${text}`, params);
+  console.log(`[pandaoChecker.service] -> ${text}`, params);
 };
 
-let browser = null;
-
-// const getBrowser = async() => {
-//   if (!!browser)
-//     return browser;
-//   let launchParams = { args: [ `--no-sandbox` ], headless: true };
-//   if (isDebugMode)
-//     launchParams = { ...launchParams, headless: false };
-//
-//   return puppeteer.launch(launchParams)
-// };
-//
-// const parse = async (url) => {
-//
-//   const browser = await getBrowser();
-//   const page = await browser.newPage();
-//
-//   try {
-//
-//     log(`goto: `, url);
-//     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
-//     // log(`done`);
-//
-//     log(`parse elements: `, url);
-//     const [title, currentPrice, logo] = await Promise.all([
-//       page.$eval('.block-content .product-title', node => node.innerText),
-//       page.$eval('.block-content .current-price', node => parseInt(node.innerText)),
-//       page.$eval('.photo[data-img]', node => node.getAttribute('data-img'))
-//     ]);
-//     let oldPrice;
-//     try {
-//       oldPrice = await page.$eval('.block-content .old-price', node => parseInt(node.innerText));
-//     } catch (e) {
-//       // log(`No old price`);
-//     }
-//     log(`[parse] done`);
-//
-//     if (!isDebugMode)
-//       await page.close();
-//
-//     return {
-//       url,
-//       title,
-//       price: currentPrice,
-//       old_price: oldPrice,
-//       logo
-//     };
-//
-//   } catch (e) {
-//     if (!isDebugMode)
-//       await page.close();
-//     throw new Error(e);
-//   }
-// };
-
 const parse = async (url) => {
+  
+  if (!url)
+    throw new Error(`Url required.`);
 
   let launchParams = { args: [ `--no-sandbox` ], headless: true };
   if (isDebugMode)
     launchParams = { ...launchParams, headless: false };
-
-  // if (!!browser)
-  //   browser.close();
 
   const browser = await puppeteer.launch(launchParams);
 
@@ -85,30 +30,48 @@ const parse = async (url) => {
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     // log(`done`);
 
-    log(`parse elements: `, url);
-    const [title, currentPrice, logo] = await Promise.all([
-      page.$eval('.block-content .product-title', node => node.innerText),
-      page.$eval('.block-content .current-price', node => parseInt(node.innerText)),
-      page.$eval('.photo[data-img]', node => node.getAttribute('data-img'))
-    ]);
-    let oldPrice;
+    let title, currentPrice, logo, oldPrice;
+    log(`$eval .block-content .product-title`);
+    try {
+      title = await page.$eval('.block-content .product-title', node => node.innerText);
+    } catch (e) {
+    
+    }
+    
+    log(`$eval .block-content .current-price`);
+    try {
+      currentPrice = await page.$eval('.block-content .current-price', node => parseInt(node.innerText));
+    } catch (e) {
+    
+    }
+  
+    log(`$eval .block-content .old-price`);
     try {
       oldPrice = await page.$eval('.block-content .old-price', node => parseInt(node.innerText));
     } catch (e) {
-      // log(`No old price`);
+    
     }
-    log(`[parse] done`);
+    
+    log(`$eval .photo[data-img]`);
+    try {
+      logo = await page.$eval('.photo[data-img]', node => node.getAttribute('data-img'))
+    } catch (e) {
+    
+    }
+    const parsedData = {
+        url,
+        title,
+        price: currentPrice,
+        old_price: oldPrice,
+        logo
+    };
+    
+    log(`[parse] done`, parsedData);
 
     if (!isDebugMode)
       await browser.close();
 
-    return {
-      url,
-      title,
-      price: currentPrice,
-      old_price: oldPrice,
-      logo
-    };
+    return parsedData;
 
   } catch (e) {
     if (!isDebugMode)
