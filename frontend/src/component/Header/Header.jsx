@@ -32,9 +32,9 @@ class Header extends React.Component {
         </Menu.Item>
 
         <Menu.Item
-          name='goods'
+          name='mylist'
           as={Link}
-          to="/goods"
+          to="/mylist"
           active={activeItem === 'list'}
           onClick={this.handleItemClick}>
           Мои товары

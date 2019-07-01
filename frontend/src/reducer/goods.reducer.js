@@ -27,13 +27,13 @@ const codesReducer = (state = initialState, action) => {
         isLoading: false,
         value: goods
       };
-    // case Actions.GOODS_SAVING:
+    case Actions.GOODS_SAVING:
     // case Actions.GOODS_UPDATING:
     // case Actions.GOODS_DELETING:
-    //   return {
-    //     isLoading: true,
-    //     value: state.value,
-    //   };
+      return {
+        isLoading: true,
+        value: state.value,
+      };
     // case Actions.GOODS_UPDATED:
     //   const promoList = state.value.slice();
     //   const promo = action.payload.goods;

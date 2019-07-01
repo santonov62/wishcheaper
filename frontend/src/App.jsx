@@ -9,7 +9,7 @@ import logger from 'redux-logger';
 import reducers from './reducer/index.reducer';
 import Header from './component/Header/Header';
 import AppLoader from './component/AppLoader';
-// import LoadingTracking from './component/LoadingTracking/LoadingTracking';
+import LoadingTracking from './component/LoadingTracking/LoadingTracking';
 // import ErrorsTracking from './component/ErrorsTracking/ErrorsTracking';
 import LoginPage from './page/LoginPage';
 import MainPage from './page/MainPage';
@@ -56,20 +56,16 @@ const App = () => {
                 }
               ]}
             />
-            {/*<LoadingTracking/>*/}
+            <LoadingTracking/>
             <AppLoader>
               <Router>
                 <Fragment>
                   <UserContextProvider>
                     <AuthRoute withoutRedirect path="/" component={Header}/>
                     <Route exact path="/" component={MainPage}/>
-                    {/*<Route path="/add" component={AddPromoPage}/>*/}
                     <Route path="/login" component={LoginPage}/>
-                    <Route exact path="/goods" component={GoodsPage}/>
-                    {/*<Route exact path="/promos/:id" component={PromoDetailPage}/>*/}
+                    <Route exact path="/mylist" component={GoodsPage}/>
                     <AuthRoute adminRequired path="/scanner" component={ScannerPage}/>
-                    {/*<AuthRoute path="/user" component={UserPage}/>*/}
-                    {/*<AuthRoute path="/admin" component={AdminPage}/>*/}
                   </UserContextProvider>
                 </Fragment>
               </Router>

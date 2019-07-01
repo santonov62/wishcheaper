@@ -43,7 +43,7 @@ const backgroundProcess = async () => {
 }
 
 const scan = async () => {
-    try {
+    // try {
         const expireDate = moment().subtract(INTERVAL_TIME_MINUTES, "minutes");
         const goods = await goodsService.search({expireDate});
         if (goods.length > 0) {
@@ -55,10 +55,10 @@ const scan = async () => {
         } else {
             log(`[scan] nothing to parse`, state);
         }
-    } catch (e) {
-        log(`[scan] error`, e.message);
-        return state;
-    }
+    // } catch (e) {
+    //     log(`[scan] error`, e.message);
+    //     return state;
+    // }
   return state;
 }
 
