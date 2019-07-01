@@ -24,36 +24,41 @@ const isShopSupported = (url) => {
 };
 
 const backgroundProcess = async () => {
-  state.isParsing = true;
-  const result = [];
-  while (processGoods.length > 0) {
+    const result = [];
     try {
-      const good = processGoods.shift();
-      result.push(await refresh(good));
+        state.isParsing = true;
+        while (processGoods.length > 0) {
+            const good = processGoods.shift();
+            result.push(await refresh(good));
+        }
+        state.lastParseTime = Date.now();
+        state.isParsing = false;
+        log(`[backgroundProcess] done parsed: `, result.length);
+        return result;
     } catch (e) {
-      state.isParsing = false;
-      log(`[backgroundProcess] error`, e.message);
-      return result;
+        state.isParsing = false;
+        log(`[backgroundProcess] error`, e.message);
+        return result;
     }
-  }
-  state.lastParseTime = Date.now();
-  state.isParsing = false;
-  log(`[backgroundProcess] done parsed: `, result.length);
-  return result;
 }
 
 const scan = async () => {
-  const expireDate = moment().subtract(INTERVAL_TIME_MINUTES, "minutes");
-  const goods = await goodsService.search({expireDate});
-  if (goods.length > 0) {
-    push(goods);
-    if (!state.isParsing) {
-      backgroundProcess();
+    try {
+        const expireDate = moment().subtract(INTERVAL_TIME_MINUTES, "minutes");
+        const goods = await goodsService.search({expireDate});
+        if (goods.length > 0) {
+            push(goods);
+            if (!state.isParsing) {
+                backgroundProcess();
+            }
+            log(`[scan] done`, state);
+        } else {
+            log(`[scan] nothing to parse`, state);
+        }
+    } catch (e) {
+        log(`[scan] error`, e.message);
+        return state;
     }
-    log(`[scan] done`, state);
-  } else {
-    log(`[scan] nothing to parse`, state);
-  }
   return state;
 }
 
