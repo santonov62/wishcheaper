@@ -17,7 +17,7 @@ const log = (text, params) => {
   console.log(`[vk.service] -> ${text}`, params);
 };
 
-notify = async ({id, url, price, old_price, title}) => {
+notify = async ({id, url, price, old_price, title, usersVk}) => {
   const formData = new FormData();
   const priceDiff = old_price - price;
   formData.append('message', `${title}
