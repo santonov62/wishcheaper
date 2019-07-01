@@ -53,7 +53,8 @@ const add = async (req, res) => {
     const {user} = req;
     let good = (await goodsService.search({url}))[0];
     if (!good)
-      good = await checkerService.addByUrl({url});
+      // good = await checkerService.addByUrl({url});
+      good = await checkerService.addUrl(url);
     let subscriptions = await subscriptionService.search({
       good_id: good.id,
       user_vk: user.vk

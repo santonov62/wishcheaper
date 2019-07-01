@@ -59,6 +59,11 @@ const getAll = async () => {
   return result.rows;
 };
 
+const getShopIdByUrl = async (url) => {
+  const shop = await shopsService.getShopByUrl(url);
+  return shop.id;
+}
+
 const SAVE_GOOD = `INSERT INTO goods (
     url, title, logo, price, old_price, shop_id
 ) VALUES (
@@ -67,11 +72,23 @@ const SAVE_GOOD = `INSERT INTO goods (
     $5, $6
 ) RETURNING *`;
 const add = async ({ url, title, logo, price, old_price, shop_id }) => {
-  if (!shop_id) {
-    const shop = await shopsService.getShopByUrl(url);
-    shop_id = shop.id;
-  }
+  if (!shop_id)
+    shop_id = await getShopIdByUrl(url);
+
   const result = await db.query(SAVE_GOOD, [url, title, logo, price, old_price, shop_id]);
+  const good = result.rows[0];
+  log('[save] done', good);
+  return good;
+};
+
+const ADD_URL = `INSERT INTO goods (
+    url, shop_id
+) VALUES (
+    $1, $2
+) RETURNING *`;
+const addUrl = async ({ url }) => {
+  const shop_id = await getShopIdByUrl(url);
+  const result = await db.query(ADD_URL, [url, shop_id]);
   const good = result.rows[0];
   log('[save] done', good);
   return good;
@@ -81,5 +98,6 @@ module.exports = {
   getAll,
   search,
   update,
-  add
+  add,
+  addUrl
 };

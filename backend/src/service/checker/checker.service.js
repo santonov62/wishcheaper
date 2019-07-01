@@ -46,7 +46,7 @@ const start = () => {
   scan();
   interval = setInterval(() => {
     scan();
-  }, INTERVAL_TIME_MINUTES * 60000);
+  }, INTERVAL_TIME_MINUTES / 3 * 60000);
   state.isStarted = true;
   state.time = Date.now();
   log(`[start] done`, state);
@@ -80,20 +80,28 @@ const getCheckerForUrl = (url) => {
 };
 
 const parse = async (url) => {
-  const checker = getCheckerForUrl(url);
-  if (!checker)
+  const checkerInstance = getCheckerForUrl(url);
+  if (!checkerInstance)
     throw new Error(`Checker for url doesn't supported. Url: ${url}`);
-
-  return checker.parse(url);
+  try {
+    return await checkerInstance.parse(url);
+  } catch (e) {
+    return null;
+  }
 };
 
-const refresh = async ({url, id, price}) => {
+const refresh = async ({url, id, price = 0}) => {
   if (!url)
     throw new Error(`Good url required.`);
   if (!id)
     throw new Error(`Good id required.`);
 
   const parsedGood = await parse(url);
+  if (!parsedGood) {
+    log(`[refresh] done`, `no parsed data`);
+    return parsedGood;
+  }
+
   const good = await goodsService.update({
     ...parsedGood,
     id
@@ -113,12 +121,21 @@ const status = () => {
   return state;
 };
 
-const addByUrl = async ({url}) => {
-  const parsedGood = await parse(url);
-  const addedGood = await goodsService.add(parsedGood);
-  log(`[add] done`, addedGood);
-  return addedGood;
+addUrl = async (url) => {
+  const addedGood = await goodsService.addUrl({url});
+  const good = await refresh(addedGood);
+  log(`[addUrl] done`, good);
+  return good;
 };
+
+// const addByUrl = async ({url}) => {
+//   const parsedGood = await parse(url);
+//   if (!parsedGood)
+//     throw new Error(`Good doesn't parsed`);
+//   const addedGood = await goodsService.add(parsedGood);
+//   log(`[addByUrl] done`, addedGood);
+//   return addedGood;
+// };
 
 const log = (text, params = '') => {
   console.log(`[checker.service] ${text}`, params);
@@ -130,5 +147,6 @@ module.exports = {
   stop,
   scan,
   status,
-  addByUrl,
+  // addByUrl,
+  addUrl,
 };
