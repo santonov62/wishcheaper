@@ -23,9 +23,10 @@ notify = async ({id, url, price, old_price, title, usersVk, prevPrice}) => {
   formData.append('message', `${title}
   
   Снижение цены на ${priceDiff} р
-  ${prevPrice} р -> ${price} р
+  (${old_price} р) ${prevPrice} р -> ${price} р
   
    ${url}`);
+
   formData.append('user_ids', usersVk);
   formData.append('access_token', accessToken);
   formData.append('v', apiVersion);
