@@ -3,9 +3,8 @@ import { Menu, Image, Icon, Input } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import './header.css';
 import ProfileButton from '../ProfileButton';
-import {authHeader} from "../../helpers/auth-header";
 import { connect } from 'react-redux';
-import * as Constants from "../../constants";
+import AddGoodField from '../Goods/AddGoodField';
 
 class Header extends React.Component {
   state = {
@@ -16,30 +15,6 @@ class Header extends React.Component {
 
   handleItemClick = (e, { name }) => {
     this.setState({ activeItem: name });
-  };
-  handleChange = (e, { name, value }) => {
-    this.setState({ value });
-  };
-  addUrl = () => {
-    const {value} = this.state;
-    this.setState({isLoading: true});
-    fetch(`checker/add`, {
-      method: 'POST',
-      body: JSON.stringify({
-        url: value
-      }),
-      headers: {
-        ...Constants.REQUEST_JSON_HEADERS,
-        ...authHeader(this.props.user)
-      }
-    })
-      .then(res => res.json())
-      .then(good => {
-        this.setState({
-          value: '',
-          isLoading: false
-        });
-      })
   };
   render() {
     const { activeItem, value, isLoading } = this.state;
@@ -57,22 +32,16 @@ class Header extends React.Component {
         </Menu.Item>
 
         <Menu.Item
-          name='promos'
+          name='goods'
           as={Link}
-          to="/promos"
+          to="/goods"
           active={activeItem === 'list'}
           onClick={this.handleItemClick}>
           Мои товары
         </Menu.Item>
 
         <Menu.Item style={{display: 'flex', flexGrow: 1}}>
-          <Input
-            loading={isLoading}
-            value={value}
-            name='value'
-            icon={<Icon name='add' link onClick={this.addUrl}/>}
-            placeholder='Товар или ссылку для отслеживания...'
-            onChange={this.handleChange}/>
+          <AddGoodField />
         </Menu.Item>
 
 
@@ -84,5 +53,5 @@ class Header extends React.Component {
     )
   }
 }
-export default connect(({user}) => ({user}))(Header);
+export default Header;
 

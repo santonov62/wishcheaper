@@ -14,6 +14,7 @@ import AppLoader from './component/AppLoader';
 import LoginPage from './page/LoginPage';
 import MainPage from './page/MainPage';
 import ScannerPage from './page/ScannerPage';
+import GoodsPage from './page/GoodsPage';
 import AuthRoute from './component/AuthRoute';
 import UserContextProvider from './component/UserContextProvider';
 import { loadUser, saveUser } from './storage/user.storage';
@@ -64,7 +65,7 @@ const App = () => {
                     <Route exact path="/" component={MainPage}/>
                     {/*<Route path="/add" component={AddPromoPage}/>*/}
                     <Route path="/login" component={LoginPage}/>
-                    {/*<Route exact path="/promos" component={PromoListPage}/>*/}
+                    <Route exact path="/goods" component={GoodsPage}/>
                     {/*<Route exact path="/promos/:id" component={PromoDetailPage}/>*/}
                     <AuthRoute adminRequired path="/scanner" component={ScannerPage}/>
                     {/*<AuthRoute path="/user" component={UserPage}/>*/}

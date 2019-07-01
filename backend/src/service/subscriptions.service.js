@@ -39,7 +39,18 @@ const search = async (params) => {
   return subscriptions;
 };
 
+const SEARCH_WITH_GOODS =   `SELECT * FROM
+  subscriptions s
+LEFT JOIN goods g ON (g.id = s."good_id")
+WHERE
+    s.user_vk = $1`;
+const searchWithGoods = async ({user_vk}) => {
+  const result = await db.query(SEARCH_WITH_GOODS, [user_vk]);
+  return result.rows;
+};
+
 module.exports = {
   add,
-  search
+  search,
+  searchWithGoods
 };

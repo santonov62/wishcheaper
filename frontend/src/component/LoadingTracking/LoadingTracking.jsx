@@ -17,7 +17,7 @@ class LoadingTracking extends React.Component {
 }
 
 const mapState = (state) => ({
-  isDataLoading: state.promo.isLoading || state.shops.isLoading || state.currency.isLoading || state.user.isLoading
+  isDataLoading: state.goods.isLoading || state.shops.isLoading || state.currency.isLoading || state.user.isLoading
 });
 
 export default connect(mapState)(LoadingTracking);
