@@ -1,5 +1,5 @@
 import React from 'react';
-import './scannerPage.css'
+import './goodsPage.css'
 import { Button, Header, Icon, Dimmer, Loader, Grid, Image, Item } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -21,7 +21,7 @@ class GoodsPage extends React.Component {
     render() {
         const {isLoading} = this.state;
         const {goods = []} = this.props;
-        const goodsElements = goods.map(({logo, id, title, url, price, old_price}, index) => <Item key={index}>
+        const goodsElements = goods.map(({logo, id, title, url, price, old_price, inactive_at}, index) => <Item key={index} className={inactive_at ? 'inactive' : ''}>
             <Item.Image size='tiny' src={logo} />
     
             <Item.Content>
@@ -35,7 +35,7 @@ class GoodsPage extends React.Component {
             </Item.Content>
         </Item>);
         return (
-            <div className='scannerPage'>
+            <div className='goodsPage'>
                 <Loader size='large' active={isLoading} content='Loading' />
                 <Header as='h1'>Мои товары</Header>
                 <Item.Group>

@@ -52,7 +52,7 @@ const parse = async (url) => {
     
     log(`$eval price`);
     try {
-      currentPrice = await page.$eval('.js-item-price', node => parseInt(node.innerText));
+      currentPrice = await page.$eval('.js-item-price', node => node.getAttribute('content'));
     } catch (e) {
     
     }

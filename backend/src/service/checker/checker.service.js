@@ -47,6 +47,7 @@ const backgroundProcess = async () => {
 }
 
 const scan = async () => {
+  console.group(`[checker.service] -> [scan]`);
   const expireDate = moment().subtract(GOOD_EXPIRED_MIN, "minutes");
   const goods = await goodsService.search({expireDate});
   if (goods.length > 0) {
@@ -58,6 +59,7 @@ const scan = async () => {
   } else {
     log(`[scan] nothing to parse`, state);
   }
+  console.groupEnd();
   return state;
 }
 
@@ -93,13 +95,18 @@ const push = (goods) => {
 }
 
 const parse = async (url) => {
+  console.group(`[checker.service] -> [parse]`);
   if (!isShopSupported(url))
     throw new Error(`Shop doesn't supported.`);
   const checkerInstance = getCheckerForUrl(url);
-  return await checkerInstance.parse(url);
+  const parsedGood = await checkerInstance.parse(url);
+  log(`[parse] done`, parsedGood);
+  console.groupEnd();
+  return parsedGood
 };
 
 const refresh = async ({url, id, price: prevPrice}) => {
+  console.group(`[checker.service] -> [refresh] good_id: ${id}`);
   if (!url)
     throw new Error(`Good url required.`);
   if (!id)
@@ -123,6 +130,7 @@ const refresh = async ({url, id, price: prevPrice}) => {
   }
 
   log(`[refresh] done`, good);
+  console.groupEnd();
   return good;
 };
 
