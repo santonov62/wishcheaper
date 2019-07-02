@@ -31,18 +31,19 @@ const search = async (params) => {
 };
 
 const UPDATE_GOOD = `UPDATE goods 
-SET 
+SET
+  "inactive_at" = NULL,
   "url" = $2,
   "title" = $3, 
   "logo" = $4, 
   "price" = $5, 
   "old_price" = $6,
   "updated_at" = $7,
-  "inactive_at" = NULL
-WHERE 
+  "prev_price" = $8
+WHERE
   id = $1
 RETURNING *`;
-const update = async ({ id, url, title, logo, price, old_price }) => {
+const update = async ({ id, url, title, logo, price, old_price, prev_price }) => {
   const result = await db.query(UPDATE_GOOD, [
     id,
     url,
@@ -50,7 +51,8 @@ const update = async ({ id, url, title, logo, price, old_price }) => {
     logo,
     price,
     old_price,
-    new Date()
+    new Date(),
+    prev_price
   ]);
   const good = result.rows[0];
   log('[update] done', good);

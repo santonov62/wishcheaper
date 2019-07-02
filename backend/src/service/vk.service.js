@@ -20,10 +20,10 @@ const log = (text, params) => {
 notify = async ({id, url, price, old_price, title, usersVk, prevPrice}) => {
   const formData = new FormData();
   const priceDiff = prevPrice - price;
-  formData.append('message', `${title}
+  formData.append('message', `${title} ${price}р
   
-  Снижение цены на ${priceDiff} р
-  (${old_price} р) ${prevPrice} р -> ${price} р
+  Снижение цены на ${priceDiff}р
+  ${prevPrice}р -> ${price}р
   
    ${url}`);
 

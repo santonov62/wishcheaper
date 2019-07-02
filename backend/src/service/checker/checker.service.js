@@ -118,6 +118,7 @@ const refresh = async ({url, id, price: prevPrice}) => {
   if (isValid(parsedGood)) {
     good = await goodsService.update({
       ...parsedGood,
+      prev_price: prevPrice,
       id
     });
   } else {
