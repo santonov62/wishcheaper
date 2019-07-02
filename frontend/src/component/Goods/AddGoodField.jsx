@@ -27,7 +27,7 @@ class AddGoodField extends React.Component {
         const { value, isLoading } = this.state;
     
         return (
-            <Input
+            <Input fluid
                 loading={isLoading}
                 value={value}
                 name='value'
