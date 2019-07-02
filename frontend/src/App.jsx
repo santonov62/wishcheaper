@@ -64,7 +64,7 @@ const App = () => {
                     <AuthRoute withoutRedirect path="/" component={Header}/>
                     <Route exact path="/" component={MainPage}/>
                     <Route path="/login" component={LoginPage}/>
-                    <Route exact path="/mylist" component={GoodsPage}/>
+                    <AuthRoute exact path="/mylist" component={GoodsPage}/>
                     <AuthRoute adminRequired path="/scanner" component={ScannerPage}/>
                   </UserContextProvider>
                 </Fragment>

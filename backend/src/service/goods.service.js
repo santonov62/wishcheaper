@@ -100,13 +100,18 @@ const addUrl = async ({ url }) => {
   return good;
 };
 
-const SEARCH_WITH_GOODS =   `SELECT * FROM
+const SEARCH_USER_GOODS = `SELECT
+   s.user_vk, s.good_id,
+   g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price,
+   sh.title shop_title, sh.name shop_name, sh.url shop_url
+FROM
   subscriptions s
-LEFT JOIN goods g ON (g.id = s."good_id")
+    LEFT JOIN goods g ON (g.id = s."good_id")
+    LEFT JOIN shops sh ON (sh.id = g."shop_id")
 WHERE
     s.user_vk = $1`;
 const userGoods = async ({user_vk}) => {
-  const result = await db.query(SEARCH_WITH_GOODS, [user_vk]);
+  const result = await db.query(SEARCH_USER_GOODS, [user_vk]);
   return result.rows;
 };
 

@@ -9,7 +9,7 @@ const isGoodInvalid = ({title, price, url}) => {
   return !isGoodValid;
 };
 
-export const GoodItem = ({id, url, title, logo, price, old_price, shop_id,
+export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_name,
                            updated_at, created_at, inactive_at, prev_price}) => {
   const invalidGoodProps = {id, url, updated_at, created_at, inactive_at};
 
@@ -17,7 +17,6 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id,
   if (isValid) {
     return <InvalidGoodItem {...invalidGoodProps}/>;
   }
-  const diffPrice = !!old_price && price - old_price;
   const diffPrevPrice = !!prev_price && price - prev_price;
 
   const isInactive = !!inactive_at;
@@ -42,17 +41,15 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id,
                 </Label>
               </Fragment>
           }
-          {/*{(!diffPrice || !diffPrevPrice) &&*/}
-          
-          {/*}*/}
+          <br />
+          {shop_name}
         </Item.Meta>
       </Item.Content>
     </Item>
   )
 };
 
-const InvalidGoodItem = ({id, url, title, logo, price, old_price, shop_id,
-                           updated_at, created_at, inactive_at}) => {
+const InvalidGoodItem = ({id, url}) => {
   return (
     <Item className='goodItem invalid'>
       <Item.Image className='logo' size='tiny'>
