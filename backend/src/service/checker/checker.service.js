@@ -149,7 +149,18 @@ const status = () => {
   return state;
 };
 
+const getClippedUrl = (url) => {
+  const match = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#//=]*)/g);
+  return match && match[0];
+};
+
 const addUrl = async (url) => {
+
+  if (!url)
+    throw new Error(`url required`);
+
+  url = getClippedUrl(url);
+
   if (!isShopSupported(url))
     throw new Error(`Shop doesn't supported.`);
   
