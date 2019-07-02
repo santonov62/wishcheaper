@@ -20,14 +20,10 @@ const MainPage = ({ signedIn, signInHandler, user }) => (
           <div className='decorHeader'>15</div>
           Новых за месяц
         </div>
-        {/*<div className='number'>*/}
-          {/*<div className='decorHeader'>123123</div>*/}
-          {/*Пользователей*/}
-        {/*</div>*/}
-      </div>
-      <div className='saved common number'>
-        <div className='decorHeader'>468</div>
-        Пользователей
+        <div className='number'>
+          <div className='decorHeader'>468</div>
+          Пользователей
+        </div>
       </div>
       <br/>
       < br />
