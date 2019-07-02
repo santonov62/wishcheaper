@@ -18,12 +18,14 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id,
     return <InvalidGoodItem {...invalidGoodProps}/>;
   }
   const diffPrice = !!old_price && price - old_price;
+  const diffPrevPrice = !!prev_price && price - prev_price;
 
   const isInactive = !!inactive_at;
   return (
     <Item className={`goodItem ${isInactive ? 'inactive' : ''}`}>
       <Item.Image className='logo' size='tiny' src={logo}/>
-
+  
+  
       <Item.Content>
         <Item.Header as='a' href={url} target='_blank'>
           {title}
@@ -34,20 +36,20 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id,
           
           {!!diffPrice && diffPrice !== 0 &&
               <Fragment>
-                {diffPrice > 0 &&
-                <span className='rise'>
-                  <Icon name='caret up'/>{price} ₽
+                {diffPrevPrice > 0 &&
+                <span className='rise' title={`Повышение на ${prev_price}`}>
+                  {price}₽<Icon name='caret up'/>
                 </span>
                 }
-                {diffPrice < 0 &&
-                <span className='cheaper'>
-                  <Icon name='caret down'/>{price} ₽
+                {diffPrevPrice < 0 &&
+                <span className='cheaper' title={`Снижение на ${prev_price}`}>
+                  {price}₽<Icon name='caret down'/>
                 </span>
                 }
-                  &nbsp;&nbsp;&nbsp;
-                  <Label as='a' tag>
-                    {diffPrice} ₽
-                  </Label>
+                  {/*&nbsp;&nbsp;*/}
+                  {/*<Label as='a' tag>*/}
+                    {/*{diffPrice} ₽*/}
+                  {/*</Label>*/}
               </Fragment>
           }
           {!diffPrice &&
