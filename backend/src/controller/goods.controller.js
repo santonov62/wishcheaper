@@ -28,6 +28,15 @@ const user = async (req, res) => {
   }
 };
 
+const statistic = async (req, res) => {
+  try {
+    const statistic = await goodsService.statistic();
+    res.json(statistic);
+  } catch (e) {
+    res.status(500).json({error: e.message});
+  }
+};
+
 const log = (text, params) => {
   console.log(`[goods.controller] -> ${text}`, params);
 };
@@ -35,5 +44,6 @@ const log = (text, params) => {
 app.get('/', getAll);
 app.get('/search', search);
 app.get('/user', user);
+app.get('/statistic', statistic);
 
 module.exports = app;
