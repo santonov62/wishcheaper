@@ -17,7 +17,7 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id,
   if (isValid) {
     return <InvalidGoodItem {...invalidGoodProps}/>;
   }
-  const diffPrice = price - prev_price;
+  const diffPrice = !!old_price && price - old_price;
 
   const isInactive = !!inactive_at;
   return (
@@ -30,17 +30,28 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id,
         </Item.Header>
 
         <Item.Meta>
-          {!!old_price && <span><strike>{old_price}₽</strike> -> </span>} {!!price && `${price} ₽`}
-          &nbsp;&nbsp;&nbsp;
-          {diffPrice < 0 &&
-            <Label as='a' color='teal' tag>
-              ${diffPrice} ₽
-            </Label>
+          {!!old_price && <span><strike>{old_price}₽</strike></span>}
+          
+          {!!diffPrice && diffPrice !== 0 &&
+              <Fragment>
+                {diffPrice > 0 &&
+                <span className='rise'>
+                  <Icon name='caret up'/>{price} ₽
+                </span>
+                }
+                {diffPrice < 0 &&
+                <span className='cheaper'>
+                  <Icon name='caret down'/>{price} ₽
+                </span>
+                }
+                  &nbsp;&nbsp;&nbsp;
+                  <Label as='a' tag>
+                    {diffPrice} ₽
+                  </Label>
+              </Fragment>
           }
-          {diffPrice > 0 &&
-            <Label as='a' color='red' tag>
-              +{diffPrice} ₽
-            </Label>
+          {!diffPrice &&
+            <span>{price} ₽</span>
           }
         </Item.Meta>
       </Item.Content>
