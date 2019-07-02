@@ -1,6 +1,7 @@
 import * as Actions from '../actions/user.actions';
 import {ADD_ERROR} from '../actions/errors.actions';
 import * as Constants from "../constants";
+import {clearUser, saveUser} from "../storage/user.storage";
 
 const loadAuthData = async (session) => {
   return await fetch('/auth/vk', {
@@ -46,7 +47,7 @@ const loadVkSession = () => {
   })
 };
 
-export const authWithVk = () => async dispatch => {
+export const authWithVk = () => async (dispatch, getState) => {
   try {
     dispatch({ type: Actions.USER_LOADING });
     const session = await loadVkSession();
@@ -60,6 +61,9 @@ export const authWithVk = () => async dispatch => {
         ...authData.user,
         token: authData.token
       }
+    });
+    saveUser({
+      user: getState().user
     });
 
   } catch (ex) {
@@ -75,15 +79,12 @@ export const authWithVk = () => async dispatch => {
 };
 
 export const signOut = () => dispatch => {
-  try {
     dispatch({type: Actions.USER_LOADING});
-  
+
     const vk = window.VK;
     if (!!vk)
-      vk.Auth.logout(() => dispatch({type: Actions.USER_SIGNED_OUT}));
-    else
-      dispatch({type: Actions.USER_SIGNED_OUT});
-  } catch (e) {
+      vk.Auth.logout()
+
     dispatch({type: Actions.USER_SIGNED_OUT});
-  }
+    clearUser();
 };

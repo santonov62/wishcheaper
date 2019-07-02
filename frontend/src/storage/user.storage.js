@@ -9,6 +9,15 @@ export const saveUser = (user) => {
   }
 };
 
+export const clearUser = () => {
+  try {
+    sessionStorage.removeItem(AUTH_DATA);
+  }
+  catch (error) {
+    console.log('clearUser', error);
+  }
+};
+
 export const loadUser = () => {
   try {
     const serializedUser = sessionStorage.getItem(AUTH_DATA);

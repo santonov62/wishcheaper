@@ -34,12 +34,6 @@ const App = () => {
     )
   );
 
-  store.subscribe(() => {
-    saveUser({
-      user: store.getState().user
-    })
-  });
-
   return (
         <Provider store={store}>
           <Fragment>
