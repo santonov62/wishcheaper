@@ -6,6 +6,7 @@ import moment from 'moment';
 import {authHeader} from "../helpers/auth-header";
 import { connect } from 'react-redux';
 import { userGoods } from '../actionCreators/goods.actionCreators';
+import {GoodItem} from "../component/GoodItem/GoodItem";
 
 class GoodsPage extends React.Component {
     constructor(props) {
@@ -21,19 +22,7 @@ class GoodsPage extends React.Component {
     render() {
         const {isLoading} = this.state;
         const {goods = []} = this.props;
-        const goodsElements = goods.map(({logo, id, title, url, price, old_price, inactive_at}, index) => <Item key={index} className={inactive_at ? 'inactive' : ''}>
-            <Item.Image size='tiny' src={logo} />
-    
-            <Item.Content>
-                <Item.Header as='a' href={url} target='_blank'>{title}</Item.Header>
-    
-                <Item.Meta>
-                    {price} ₽
-                    <br />
-                    <strike>{old_price} {!!old_price && '₽'}</strike>
-                </Item.Meta>
-            </Item.Content>
-        </Item>);
+        const goodsElements = goods.map((good, index) => <GoodItem key={index} {...good}/>);
         return (
             <div className='goodsPage'>
                 <Loader size='large' active={isLoading} content='Loading' />

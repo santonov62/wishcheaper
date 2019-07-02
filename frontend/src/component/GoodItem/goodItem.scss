@@ -1,0 +1,9 @@
+.goodItem {
+  &.inactive,
+  &.invalid {
+    opacity: 0.2
+  }
+  .logo {
+    text-align: center;
+  }
+}
