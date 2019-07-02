@@ -105,7 +105,7 @@ const parse = async (url) => {
   return parsedGood
 };
 
-const refresh = async ({url, id, price: prevPrice}) => {
+const refresh = async ({url, id, price, prev_price}) => {
   console.group(`[checker.service] -> [refresh] good_id: ${id}`);
   if (!url)
     throw new Error(`Good url required.`);
@@ -116,15 +116,19 @@ const refresh = async ({url, id, price: prevPrice}) => {
   
   let good;
   if (isValid(parsedGood)) {
+    const newPrice = parsedGood.price;
+    if (!prev_price || newPrice !== price)
+      prev_price = price;
+    
     good = await goodsService.update({
       ...parsedGood,
-      prev_price: prevPrice,
+      prev_price,
       id
     });
   
-    const isNotificationsRequired = parsedGood.price < prevPrice;
+    const isNotificationsRequired = newPrice < prev_price;
     if (isNotificationsRequired) {
-      vkService.notifyAll({...good, prevPrice});
+      vkService.notifyAll({...good, prev_price});
     }
     
   } else {

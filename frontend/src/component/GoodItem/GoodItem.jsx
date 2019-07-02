@@ -32,25 +32,19 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id,
         </Item.Header>
 
         <Item.Meta>
-          {!!old_price && <span><strike>{old_price}₽</strike></span>}
+          {!!old_price && <span><strike>{old_price}₽</strike> -> </span>}
+          <span>{price} ₽</span>
           
-          {!!diffPrice && diffPrice !== 0 &&
+          {!!diffPrevPrice &&
               <Fragment>
-                {diffPrevPrice > 0 &&
-                <span className='rise' title={`Повышение на ${prev_price}`}>
-                  {price}₽<Icon name='caret up'/>
-                </span>
-                }
-                {diffPrevPrice < 0 &&
-                <span className='cheaper' title={`Снижение на ${prev_price}`}>
-                  {price}₽<Icon name='caret down'/>
-                </span>
-                }
+                <Label as='a' color={diffPrevPrice > 0 ? 'red' : 'green'}>
+                  {diffPrevPrice > 0 && '+'}{diffPrevPrice} ₽
+                </Label>
               </Fragment>
           }
-          {(!diffPrice || !diffPrevPrice) &&
-            <span>{price} ₽</span>
-          }
+          {/*{(!diffPrice || !diffPrevPrice) &&*/}
+          
+          {/*}*/}
         </Item.Meta>
       </Item.Content>
     </Item>
