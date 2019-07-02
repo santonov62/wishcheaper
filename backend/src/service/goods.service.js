@@ -127,6 +127,16 @@ const inactive = async ({id}) => {
   return result.rows[0];
 };
 
+const GOODS_STATISTIC = `SELECT count(*) as "goods_count",
+       (SELECT count(*) FROM goods WHERE created_at > NOW() - interval '30 day') as "month_goods_count",
+       (SELECT count(*) FROM users) as "users_count"
+FROM goods`;
+
+const statistic = async () => {
+  const result = await db.query(GOODS_STATISTIC);
+  return result && result.rows[0];
+};
+
 module.exports = {
   getAll,
   search,
@@ -134,5 +144,6 @@ module.exports = {
   add,
   addUrl,
   userGoods,
-  inactive
+  inactive,
+  statistic
 };
