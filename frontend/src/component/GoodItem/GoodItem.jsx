@@ -46,13 +46,9 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id,
                   {price}₽<Icon name='caret down'/>
                 </span>
                 }
-                  {/*&nbsp;&nbsp;*/}
-                  {/*<Label as='a' tag>*/}
-                    {/*{diffPrice} ₽*/}
-                  {/*</Label>*/}
               </Fragment>
           }
-          {!diffPrice &&
+          {(!diffPrice || !diffPrevPrice) &&
             <span>{price} ₽</span>
           }
         </Item.Meta>

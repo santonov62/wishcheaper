@@ -121,13 +121,14 @@ const refresh = async ({url, id, price: prevPrice}) => {
       prev_price: prevPrice,
       id
     });
+  
+    const isNotificationsRequired = parsedGood.price < prevPrice;
+    if (isNotificationsRequired) {
+      vkService.notifyAll({...good, prevPrice});
+    }
+    
   } else {
     good = await goodsService.inactive({ id });
-  }
-
-  const isNotificationsRequired = parsedGood.price < prevPrice;
-  if (isNotificationsRequired) {
-    vkService.notifyAll({...good, prevPrice});
   }
 
   log(`[refresh] done`, good);
