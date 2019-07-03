@@ -10,9 +10,9 @@ class MainPage extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      goods_count: 0,
-      month_goods_count: 0,
-      users_count: 0
+      goods_count: '--',
+      month_goods_count: '--',
+      users_count: '--'
     }
   }
   componentDidMount() {
