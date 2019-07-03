@@ -109,7 +109,8 @@ FROM
     LEFT JOIN goods g ON (g.id = s."good_id")
     LEFT JOIN shops sh ON (sh.id = g."shop_id")
 WHERE
-    s.user_vk = $1`;
+    s.user_vk = $1
+ORDER BY g.created_at DESC`;
 const userGoods = async ({user_vk}) => {
   const result = await db.query(SEARCH_USER_GOODS, [user_vk]);
   return result.rows;
