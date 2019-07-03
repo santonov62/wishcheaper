@@ -44,6 +44,8 @@ export const GoodItem = ({id: good_id, url, title, logo, price, old_price, shop_
   
   const diffPrevPrice = !!prev_price && price - prev_price;
   const isInactive = !!inactive_at;
+  const updatedRange = moment(updated_at).fromNow(true);
+  const updatedRangeText = `Обновлено ${updatedRange} назад`;
   return (
       <Item className={`goodItem ${isInactive ? 'inactive' : ''}`}>
         
@@ -68,10 +70,12 @@ export const GoodItem = ({id: good_id, url, title, logo, price, old_price, shop_
               </Label>
             </Fragment>
             }
-            <br/>
-            {shop_name}
+            
           </Item.Meta>
-        
+          <Item.Extra>
+            <Label floated='right' size='small'><Icon name='shop' />{shop_name}</Label>
+            <Label size='small' style={{float: 'right'}}><Icon name='history' />{updatedRangeText}</Label>
+          </Item.Extra>
         </Item.Content>
       </Item>
   )

@@ -1,9 +1,13 @@
 .goodItem {
+  .extra {
+    opacity: 0.7;
+  }
   &.inactive,
   &.invalid {
     .logo,
     .header,
-    .meta {
+    .meta,
+    .extra {
       opacity: 0.2
     }
   }
