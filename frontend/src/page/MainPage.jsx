@@ -49,8 +49,6 @@ class MainPage extends React.Component{
             <SignInWithVkButton size='massive' text='Авторизироваться'/>
           </Fragment>
           }
-          <br/>
-          <br/>
         </div>
       </div>
     );

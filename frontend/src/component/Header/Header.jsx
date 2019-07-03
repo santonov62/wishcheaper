@@ -37,8 +37,8 @@ class Header extends React.Component {
           to="/mylist"
           active={activeItem === 'list'}
           onClick={this.handleItemClick}>
-          <Icon size='large' name='favorite'/>
-          Мои товары
+          &nbsp;&nbsp;&nbsp;<Icon size='large' name='favorite'/>
+          {/*Мои товары*/}
         </Menu.Item>
 
         <Menu.Item style={{display: 'flex', flexGrow: 1}}>
