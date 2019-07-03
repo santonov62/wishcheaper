@@ -30,7 +30,7 @@ const search = async (params) => {
   return goods;
 };
 
-const UPDATE_GOOD = `UPDATE goods 
+const UPDATE_GOOD = `UPDATE goods as g
 SET
   "inactive_at" = NULL,
   "url" = $2,
@@ -41,8 +41,9 @@ SET
   "updated_at" = $7,
   "prev_price" = $8
 WHERE
-  id = $1
-RETURNING *`;
+  g.id = $1
+RETURNING 
+  g.id, g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price`;
 const update = async ({ id, url, title, logo, price, old_price, prev_price }) => {
   const result = await db.query(UPDATE_GOOD, [
     id,
@@ -101,7 +102,7 @@ const addUrl = async ({ url }) => {
 };
 
 const SEARCH_USER_GOODS = `SELECT
-   s.user_vk, s.good_id as id,
+   s.user_vk, s.good_id as id, s.id as subscription_id,
    g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price,
    sh.title shop_title, sh.name shop_name, sh.url shop_url
 FROM
