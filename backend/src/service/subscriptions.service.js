@@ -1,4 +1,5 @@
 const db = require('./db.service');
+const goodsService = require('./goods.service');
 
 const log = (text, params = '') => {
   console.log(`[subscriptions.service] -> ${text}`, params)
@@ -49,8 +50,22 @@ const searchWithGoods = async ({user_vk}) => {
   return result.rows;
 };
 
+const SUBSCRIPTIONS_REMOVE = `DELETE FROM subscriptions
+WHERE
+  good_id = $1 AND user_vk = $2
+RETURNING *`;
+const remove = async({goodId, userVk}) => {
+  const result = await db.query(SUBSCRIPTIONS_REMOVE, [goodId, userVk]);
+  const otherSubscriptions = await search({good_id: goodId});
+  if (!!otherSubscriptions && !otherSubscriptions[0]) {
+    const good = await goodsService.remove({id: goodId});
+  }
+  return result.rows && result.rows[0];
+};
+
 module.exports = {
   add,
   search,
-  searchWithGoods
+  searchWithGoods,
+  remove
 };

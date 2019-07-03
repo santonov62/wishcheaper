@@ -18,16 +18,6 @@ const processError = (message, dispatch) => {
   });
 };
 
-// export const fetchPromo = () => (dispatch) => {
-//   dispatch({ type: Actions.GOODS_LOADING });
-//   return fetch('/promo/')
-//     .then(response => response.json())
-//     .then(promo => dispatch({
-//       type: Actions.GOODS_LOADED,
-//       payload: {promo}
-//     }));
-// };
-
 export const userGoods = (params) => async (dispatch) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
@@ -74,28 +64,6 @@ export const searchGoods = (params) => async (dispatch) => {
     processError(e.message, dispatch);
   }
 };
-
-// export const claimedPromo = ({ used } = {}) => async (dispatch, getState) => {
-//   try {
-//     dispatch({type: Actions.GOODS_LOADING});
-//     const result = await fetch(`/promo/claimed?used=${used}`, {
-//       method: 'GET',
-//       headers: {
-//         ...authHeader(getState().user)
-//       }
-//     }).then(response => response.json());
-//     console.log('claimedPromo: ', result);
-//     if (result.error)
-//       throw new Error(`${result.error}`);
-//     dispatch({
-//       type: Actions.GOODS_LOADED,
-//       payload: result
-//     });
-//     return result;
-//   } catch (e) {
-//     processError(e.message, dispatch);
-//   }
-// };
 
 export const saveGood = ({url}) => async (dispatch) => {
   dispatch({type: Actions.GOODS_SAVING});
@@ -159,125 +127,31 @@ export const updatePromo = (params) => (dispatch) => {
     })
 };
 
-export const freePromo = (params) => async(dispatch) => {
-  try {
-    dispatch({type: Actions.GOODS_UPDATING});
-    const result = await fetch('/promo/free', {
-      method: 'POST',
-      body: JSON.stringify(params),
-      headers: {...Constants.REQUEST_JSON_HEADERS}
-    }).then(res => res.json());
-    if (result.error)
-      throw new Error(`${result.error}`);
-    dispatch({
-      type: Actions.GOODS_UPDATED,
-      payload: {promo: result}
-    });
-    return result;
-  } catch (e) {
-    processError(e.message, dispatch);
-  }
-};
-
-export const deletePromo = ({ id }) => async (dispatch, getState) => {
-  console.log('Delete promo item: ', {id});
+export const removeGood = ({ id }) => async (dispatch, getState) => {
+  console.log('Delete good item: ', {id});
   try {
     dispatch({type: Actions.GOODS_DELETING});
-    const result = await fetch('/promo', {
+    const subscription = await fetch('/subscriptions', {
       method: 'DELETE',
-      body: JSON.stringify({id}),
+      body: JSON.stringify({goodId: id}),
       headers: {
         ...Constants.REQUEST_JSON_HEADERS,
-        ...authHeader((getState().user))
+        ...authHeader(getState().user)
       }
     }).then(res => res.json());
-    if (result.error)
-      throw new Error(`${result.error}`);
+    
+    if (!!subscription.error)
+      throw new Error(`${subscription.error}`);
+    
     dispatch({
       type: Actions.GOODS_DELETED,
-      payload: {promo: result}
+      payload: {goods: {
+        id: subscription.good_id
+        }}
     });
-    return result;
+    return subscription;
+    
   } catch (e) {
     processError(e.message, dispatch);
   }
-};
-
-export const feedbackPromo = ({ id, valid = null, invalid = null }) => async (dispatch, getState) => {
-  console.log('feedbackPromo: ', {id});
-  try {
-    dispatch({type: Actions.GOODS_UPDATING});
-    const result = await fetch(`/promo/feedback`, {
-      method: 'POST',
-      body: JSON.stringify({id, valid, invalid}),
-      headers: {
-        ...authHeader(getState().user),
-        ...Constants.REQUEST_JSON_HEADERS
-      }
-    }).then(res => res.json());
-
-    if (result.error)
-      throw new Error(`${result.error}`);
-
-    dispatch({
-      type: Actions.GOODS_UPDATED,
-      payload: {
-        promo: result
-      }
-    });
-    return result;
-  } catch (e) {
-    processError(e.message, dispatch);
-  }
-};
-
-export const buyPromo = ({promoId}) => async (dispatch) => {
-  return new Promise((resolve, reject) => {
-    const ws = window.ws;
-    ws.once('onBuyPromo', ({promoItem, error}) => {
-      console.log('onBuyPromo: ', promoItem);
-      dispatch({
-        type: Actions.GOODS_UPDATED,
-        payload: {
-          promo: promoItem
-        }
-      });
-      if (error) {
-        dispatch({
-          type: ADD_ERROR,
-          payload: {
-            message: `buyPromo: ${error}`
-          }
-        });
-        reject({error});
-      } else {
-        resolve({promoItem});
-      }
-    });
-    ws.emit('buyPromo', {promoId});
-  });
-};
-
-export const checkPromo = ({url, promoId}) => async(dispatch) => {
-  console.log('checkPromo', {url, promoId});
-
-  return new Promise((resolve, reject) => {
-    const ws = window.ws;
-    ws.once('onCheckPromo', ({error, success, incorrect, promoItem}) => {
-      if (!!promoItem)
-        dispatch({
-          type: Actions.GOODS_UPDATED,
-          payload: {
-            promo: promoItem
-          }
-        });
-      if (!!success || !!incorrect)
-        resolve({success, incorrect});
-      else
-        reject({message: error});
-      console.log('onCheckPromo: ', {error, success, incorrect});
-    });
-
-    ws.emit('checkPromo', {url, promoId});
-  });
 };

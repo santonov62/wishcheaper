@@ -2,20 +2,32 @@ const express = require('express');
 const app = express();
 const subscriptionsService = require('../service/subscriptions.service');
 
-// const goods = async (req, res) => {
-//   try {
-//     const {userVk} = req.query;
-//     const subscriptionGoods = await subscriptionsService.searchWithGoods({user_vk: userVk});
-//     res.json(subscriptionGoods);
-//   } catch (e) {
-//     res.status(500).json({error: e.message});
-//   }
-// };
-//
-// const log = (text, params) => {
-//   console.log(`[subscriptions.controller] -> ${text}`, params);
-// };
-//
-// app.get('/goods', goods);
+const log = (text, params) => {
+  console.log(`[subscription.controller] -> ${text}`, params);
+};
+
+const remove = async (req, res) => {
+  console.group(`[subscriptions.controller] [delete]`);
+  try {
+    const {goodId} = req.body;
+    if (!goodId) {
+      throw new Error(`id required`);
+    }
+    const {vk} = req.user;
+    if (!vk) {
+      throw new Error(`userVk required`);
+    }
+  
+    const subscription = await subscriptionsService.remove({goodId, userVk: vk});
+    log(`[remove] done`, subscription);
+    console.groupEnd();
+    res.json(subscription);
+  } catch (e) {
+    console.groupEnd();
+    res.status(500).json({error: e.message});
+  }
+};
+
+app.delete('/', remove);
 
 module.exports = app;

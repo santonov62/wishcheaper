@@ -1,7 +1,11 @@
 .goodItem {
   &.inactive,
   &.invalid {
-    opacity: 0.2
+    .logo,
+    .header,
+    .meta {
+      opacity: 0.2
+    }
   }
   .logo {
     text-align: center;
@@ -11,5 +15,9 @@
   }
   .cheaper {
     color: green;
+  }
+  .menuButton {
+    float: right;
+    margin-right: 20px;
   }
 }

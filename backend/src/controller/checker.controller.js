@@ -47,9 +47,19 @@ const status = async (req, res) => {
   }
 };
 
+
+const getClippedUrl = (url) => {
+  const match = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#//=]*)/g);
+  return match && match[0];
+};
+
 const add = async (req, res) => {
   try {
-    const {url} = req.body;
+    let {url} = req.body;
+    url = getClippedUrl(url);
+    if (!url) {
+      throw new Error(`incorrect url`)
+    }
     const {user} = req;
     let good = (await goodsService.search({url}))[0];
     if (!good) {

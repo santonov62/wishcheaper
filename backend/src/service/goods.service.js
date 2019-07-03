@@ -101,7 +101,7 @@ const addUrl = async ({ url }) => {
 };
 
 const SEARCH_USER_GOODS = `SELECT
-   s.user_vk, s.good_id,
+   s.user_vk, s.good_id as id,
    g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price,
    sh.title shop_title, sh.name shop_name, sh.url shop_url
 FROM
@@ -137,6 +137,16 @@ const statistic = async () => {
   return result && result.rows[0];
 };
 
+const REMOVE_GOOD = `DELETE FROM goods
+WHERE
+  id = $1
+RETURNING *`;
+const remove = async({id}) => {
+  
+  const result = await db.query(REMOVE_GOOD, [id]);
+  return result && result.rows[0];
+};
+
 module.exports = {
   getAll,
   search,
@@ -145,5 +155,6 @@ module.exports = {
   addUrl,
   userGoods,
   inactive,
-  statistic
+  statistic,
+  remove
 };

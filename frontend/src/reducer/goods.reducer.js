@@ -29,7 +29,7 @@ const codesReducer = (state = initialState, action) => {
       };
     case Actions.GOODS_SAVING:
     // case Actions.GOODS_UPDATING:
-    // case Actions.GOODS_DELETING:
+    case Actions.GOODS_DELETING:
       return {
         isLoading: true,
         value: state.value,
@@ -43,12 +43,12 @@ const codesReducer = (state = initialState, action) => {
     //     isLoading: false,
     //     value: promoList,
     //   };
-    // case Actions.GOODS_DELETED:
-    //   const filteredPromoList = state.value.filter(item => item.id !== action.payload.goods.id);
-    //   return {
-    //     isLoading: false,
-    //     value: filteredPromoList,
-    //   };
+    case Actions.GOODS_DELETED:
+      const filteredGoods = state.value.filter(good => good.id !== action.payload.goods.id);
+      return {
+        isLoading: false,
+        value: filteredGoods,
+      };
     case Actions.GOODS_FAILURE:
       return {
         value: state.value,

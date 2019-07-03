@@ -21,8 +21,8 @@ notify = async ({id, url, price, old_price, title, usersVk, prev_price}) => {
   const formData = new FormData();
   const priceDiff = prev_price - price;
   formData.append('message', `
-  ___-${priceDiff}р___
-  ${price}р за ${title}
+  =========
+  -${priceDiff}р на ${title} ${price}р
   ${prev_price}р -> ${price}р
    ${url}`);
 
