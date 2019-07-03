@@ -14,13 +14,17 @@ class GoodItemTemplate extends React.Component {
   constructor(props) {
     super(props);
   }
+  configureNotifications = () => {
+  
+  };
   render() {
-    const {direction, good_id} = this.props;
+    const {direction, good_id, subscription_id} = this.props;
     return (
         <Dropdown className='menuButton' direction={direction} icon='ellipsis horizontal'>
           <Dropdown.Menu>
             <Dropdown.Menu scrolling>
-              <Dropdown.Item icon='delete' text='Отписаться' onClick={() => this.props.removeGood(good_id)}/>
+              <Dropdown.Item icon='trash alternate outline' text='Удалить' onClick={() => this.props.removeGood(good_id)}/>
+              <Dropdown.Item icon='bell outline' text='Настроить уведомление' onClick={() => this.props.configureNotifications(subscription_id)}/>
             </Dropdown.Menu>
           </Dropdown.Menu>
         </Dropdown>);
@@ -45,11 +49,20 @@ export const GoodItem = ({id: good_id, url, title, logo, price, old_price, shop_
   const diffPrevPrice = !!prev_price && price - prev_price;
   const isInactive = !!inactive_at;
   const updatedRange = moment(updated_at).fromNow(true);
-  const updatedRangeText = `Обновлено ${updatedRange} назад`;
+  const updatedRangeText = `Актуально ${updatedRange} назад`;
+  const percentDiscount = old_price ? 100 - price / (old_price / 100) : 0;
+  const roundedPercentDiscount = Number((percentDiscount).toFixed());
   return (
       <Item className={`goodItem ${isInactive ? 'inactive' : ''}`}>
         
-        <Item.Image className='logo' size='tiny' src={logo}/>
+        <Item.Image className='logo' size='tiny' src={logo}>
+          {percentDiscount > 0 &&
+          <Label className='discount' size='large' circular>
+            -{roundedPercentDiscount}%
+          </Label>
+          }
+          <Image src={logo} />
+        </Item.Image>
         
         <Item.Content>
   
@@ -65,8 +78,13 @@ export const GoodItem = ({id: good_id, url, title, logo, price, old_price, shop_
             
             {!!diffPrevPrice &&
             <Fragment>
-              <Label as='a' color={diffPrevPrice > 0 ? 'red' : 'green'}>
-                {diffPrevPrice > 0 && '+'}{diffPrevPrice} ₽
+              {/*{percentDiscount > 0 &&*/}
+              {/*<Label>*/}
+                {/*- {roundedPercentDiscount} %*/}
+              {/*</Label>*/}
+              {/*}*/}
+              <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
+                {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
               </Label>
             </Fragment>
             }

@@ -20,9 +20,11 @@ const log = (text, params) => {
 notify = async ({id, url, price, old_price, title, usersVk, prev_price}) => {
   const formData = new FormData();
   const priceDiff = prev_price - price;
+  const percentDiscount = old_price ? Number((100 - price / (old_price / 100)).toFixed()) : 0;
+  const percentDiscountText = percentDiscount > 0 ? `[-${percentDiscount}%]` : '';
   formData.append('message', `
   =========
-  -${priceDiff}р на ${title} ${price}р
+  -${priceDiff}р на ${title} ${price}р ${percentDiscountText}
   ${prev_price}р -> ${price}р
    ${url}`);
 
