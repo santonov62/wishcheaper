@@ -147,6 +147,8 @@ const ADDITIONAL_GOOD_DATA = `SELECT
   su.id as subscription_id,
   su.price_discount,
   su.percent_discount,
+  su.price_discount,
+  su.percent_discount,
   sh.name as shop_name
 FROM goods g
        LEFT JOIN subscriptions as su ON su.good_id = g.id AND su.user_vk = $2

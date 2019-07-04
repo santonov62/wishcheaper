@@ -12,7 +12,9 @@ const isGoodInvalid = ({title, price, url}) => {
 };
 
 export const GoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id, shop_name,
-                           updated_at, created_at, inactive_at, prev_price, subscription_id}) => {
+                           updated_at, created_at, inactive_at, prev_price, subscription_id,
+                           price_discount, percent_discount}) => {
+  
   const invalidGoodProps = {good_id, url, updated_at, created_at, inactive_at};
   const goodMenuProps = {direction: 'left', good_id, subscription_id};
   
@@ -63,6 +65,12 @@ export const GoodItem = ({id: good_id, url, title, logo, price, old_price, shop_
           <Item.Extra>
             <Label floated='right' size='small'><Icon name='shop' />{shop_name}</Label>
             <Label size='small'><Icon name='history' />{updatedRangeText}</Label>
+            {!!price_discount &&
+              <Label size='small'><Icon name='bell outline' />{price_discount} ₽</Label>
+            }
+            {!!percent_discount &&
+              <Label size='small'><Icon name='bell outline' />{percent_discount} %</Label>
+            }
           </Item.Extra>
         </Item.Content>
       </Item>

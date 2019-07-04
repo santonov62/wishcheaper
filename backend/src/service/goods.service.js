@@ -101,7 +101,7 @@ const addUrl = async ({ url }) => {
 };
 
 const SEARCH_USER_GOODS = `SELECT
-   s.user_vk, s.good_id as id, s.id as subscription_id,
+   s.user_vk, s.good_id as id, s.id as subscription_id, s.price_discount, s.percent_discount,
    g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price,
    sh.title shop_title, sh.name shop_name, sh.url shop_url
 FROM

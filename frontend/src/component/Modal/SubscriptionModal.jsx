@@ -62,7 +62,6 @@ class SubscriptionModalTemplate extends React.Component {
             
             {!!success &&
             <Message positive>
-              {/*<Message.Header>You are eligible for a reward</Message.Header>*/}
               <p>
                 Сохранено
               </p>

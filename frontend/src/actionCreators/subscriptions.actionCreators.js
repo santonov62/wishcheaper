@@ -20,7 +20,7 @@ const processError = (message, dispatch) => {
 
 export const searchSubscriptions = (params) => async (dispatch, getState) => {
   try {
-    // dispatch({type: Actions.SUBSCRIPTIONS_LOADING});
+    // dispatch({type: GoodsActions.SUBSCRIPTIONS_LOADING});
     // let url = new URL(`${window.location.origin}/goods/`);
     // Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     const {id} = params;
@@ -35,7 +35,7 @@ export const searchSubscriptions = (params) => async (dispatch, getState) => {
     if (result.error)
       throw new Error(`${result.error}`);
     // dispatch({
-    //   type: Actions.SUBSCRIPTIONS_LOADED,
+    //   type: GoodsActions.SUBSCRIPTIONS_LOADED,
     //   payload: {
     //     goods: result
     //   }
@@ -47,7 +47,7 @@ export const searchSubscriptions = (params) => async (dispatch, getState) => {
 };
 
 export const saveSubscriptions = ({id, price_discount, percent_discount}) => async (dispatch, getState) => {
-  // dispatch({type: Actions.SUBSCRIPTIONS_SAVING});
+  dispatch({type: Actions.SUBSCRIPTIONS_SAVING});
   try {
     const subscription = await fetch(`/subscriptions`, {
       method: 'POST',
@@ -62,10 +62,10 @@ export const saveSubscriptions = ({id, price_discount, percent_discount}) => asy
       }
     }).then(response => response.json());
     
-    // dispatch({
-    //   type: Actions.SUBSCRIPTIONS_SAVED,
-    //   payload: {goods: good}
-    // });
+    dispatch({
+      type: Actions.SUBSCRIPTIONS_SAVED,
+      payload: {subscriptions: subscription}
+    });
     return subscription;
   } catch (e) {
     processError(e.message, dispatch);
