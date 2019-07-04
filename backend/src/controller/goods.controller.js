@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const goodsService = require('../service/goods.service');
 const subscriptionsService = require('../service/subscriptions.service');
+const authMiddleware = require('../middleware/auth.middleware');
+
 
 const getAll = async(req, res) => {
   const goods = await goodsService.search();
@@ -61,7 +63,7 @@ const log = (text, params) => {
 app.get('/', getAll);
 app.delete('/', remove);
 app.get('/search', search);
-app.get('/my', my);
+app.get('/my', authMiddleware.authRequired, my);
 app.get('/statistic', statistic);
 
 module.exports = app;

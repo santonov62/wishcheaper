@@ -10,7 +10,7 @@ import reducers from './reducer/index.reducer';
 import Header from './component/Header/Header';
 import AppLoader from './component/AppLoader';
 import LoadingTracking from './component/LoadingTracking/LoadingTracking';
-// import ErrorsTracking from './component/ErrorsTracking/ErrorsTracking';
+import ErrorsTracking from './component/ErrorsTracking/ErrorsTracking';
 import LoginPage from './page/LoginPage';
 import MainPage from './page/MainPage';
 import ScannerPage from './page/ScannerPage';
@@ -56,6 +56,7 @@ const App = () => {
                 <Fragment>
                   <UserContextProvider>
                     <AuthRoute withoutRedirect path="/" component={Header}/>
+                    <Route path="/" component={ErrorsTracking}/>
                     <Route exact path="/" component={MainPage}/>
                     <Route path="/login" component={LoginPage}/>
                     <AuthRoute exact path="/mylist" component={GoodsPage}/>

@@ -13,7 +13,7 @@ const processError = (message, dispatch) => {
   dispatch({
     type: ADD_ERROR,
     payload: {
-      message: `promos: ${message}`
+      message: `[goods.actionCreators] ${message}`
     }
   });
 };

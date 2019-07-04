@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Message, List, Button} from 'semantic-ui-react';
+import {Message, List, Button, Icon} from 'semantic-ui-react';
 import * as Actions from "../../actions/errors.actions";
 
 class ErrorsTracking extends React.Component {
@@ -14,12 +14,12 @@ class ErrorsTracking extends React.Component {
     return (
           <div className='errors'>
             {isErrorsExist &&
-              <Message attached='bottom' negative>
-                <Message.Header>Упс, что-то пошло не так :(</Message.Header>
+              <Message attached='top' negative>
+                <Icon size='large' name='close' onClick={this.onClose}/>
+                <Message.Header>Ошибка</Message.Header>
                 <List bulleted>
                   {errorsElements}
                 </List>
-                <Button basic color='red' onClick={this.onClose} content='Очистить' />
               </Message>
             }
           </div>
