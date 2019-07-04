@@ -27,7 +27,7 @@ class GoodsPage extends React.Component {
             <div className='goodsPage'>
                 <Loader size='large' active={isLoading} content='Loading' />
                 <Header as='h1'>Мои товары</Header>
-                <Item.Group>
+                <Item.Group divided>
                     {!!goodsElements && goodsElements.length > 0
                         ? goodsElements :
                         <Header as='h2'>Пока пусто</Header>

@@ -28,6 +28,25 @@ const remove = async (req, res) => {
   }
 };
 
+const search = async (req, res) => {
+  console.group(`[subscriptions.controller] [search]`);
+  try {
+    const {id} = req.query;
+    if (!id) {
+      throw new Error(`id required`);
+    }
+
+    const subscription = await subscriptionsService.search({id})[0];
+    log(`[search] done`, subscription);
+    console.groupEnd();
+    res.json(subscription);
+  } catch (e) {
+    console.groupEnd();
+    res.status(500).json({error: e.message});
+  }
+};
+
 app.delete('/', remove);
+app.get('/', search);
 
 module.exports = app;

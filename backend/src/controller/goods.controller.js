@@ -18,7 +18,7 @@ const search = async (req, res) => {
   }
 };
 
-const user = async (req, res) => {
+const my = async (req, res) => {
   try {
     const {vk} = req.query;
     const subscriptionGoods = await goodsService.userGoods({user_vk: vk});
@@ -61,7 +61,7 @@ const log = (text, params) => {
 app.get('/', getAll);
 app.delete('/', remove);
 app.get('/search', search);
-app.get('/user', user);
+app.get('/my', my);
 app.get('/statistic', statistic);
 
 module.exports = app;

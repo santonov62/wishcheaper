@@ -27,8 +27,9 @@ const search = async (params) => {
   const SELECT = `SELECT * FROM subscriptions`;
   let WHERE = ``;
   if (Object.keys(params).length > 0) {
-    const {good_id, user_id, user_vk} = params;
+    const {good_id, user_id, user_vk, id} = params;
     WHERE = ` WHERE true`;
+    if (id) WHERE += ` AND "id" = ${statementForSql(id)}`;
     if (good_id) WHERE += ` AND "good_id" = ${statementForSql(good_id)}`;
     if (user_id) WHERE += ` AND "user_id" = ${statementForSql(user_id)}`;
     if (user_vk) WHERE += ` AND "user_vk" = ${statementForSql(user_vk)}`;

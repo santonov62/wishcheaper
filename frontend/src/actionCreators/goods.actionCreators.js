@@ -24,7 +24,7 @@ export const userGoods = (params) => async (dispatch) => {
     // let url = new URL(`${window.location.origin}/goods/`);
     // Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     const {vk} = params;
-    const result = await fetch(`/goods/user?vk=${vk}`, {
+    const result = await fetch(`/goods/my?vk=${vk}`, {
       method: 'GET'
     }).then(response => response.json());
     log(`[userGoods]`, result);
