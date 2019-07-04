@@ -3,6 +3,7 @@ import {Dropdown} from 'semantic-ui-react';
 import {removeGood} from "../../actionCreators/goods.actionCreators";
 import SubscriptionModal from '../Modal/SubscriptionModal';
 import {connect} from 'react-redux';
+import './goodMenu.css';
 
 class GoodItemTemplate extends React.Component {
   constructor(props) {

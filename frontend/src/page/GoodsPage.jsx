@@ -17,7 +17,7 @@ class GoodsPage extends React.Component {
     }
     componentDidMount() {
         const {user} = this.props;
-        this.props.userGoods({ vk: user.vk });
+        this.props.userGoods();
     }
     render() {
         const {isLoading} = this.state;
@@ -42,5 +42,5 @@ export default connect(state => ({
     user: state.user,
     goods: state.goods.value
 }), dispatch => ({
-    userGoods: (params) => dispatch(userGoods(params))
+    userGoods: () => dispatch(userGoods())
 }))(GoodsPage);

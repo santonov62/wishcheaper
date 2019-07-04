@@ -20,7 +20,7 @@ const search = async (req, res) => {
 
 const my = async (req, res) => {
   try {
-    const {vk} = req.query;
+    const {vk} = req.user;
     const subscriptionGoods = await goodsService.userGoods({user_vk: vk});
     res.json(subscriptionGoods);
   } catch (e) {
