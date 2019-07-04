@@ -42,8 +42,7 @@ SET
   "prev_price" = $8
 WHERE
   g.id = $1
-RETURNING 
-  g.id, g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price`;
+RETURNING *`;
 const update = async ({ id, url, title, logo, price, old_price, prev_price }) => {
   const result = await db.query(UPDATE_GOOD, [
     id,

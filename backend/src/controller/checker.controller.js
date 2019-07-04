@@ -56,14 +56,15 @@ const getClippedUrl = (url) => {
 const add = async (req, res) => {
   try {
     let {url} = req.body;
+    
     url = getClippedUrl(url);
     if (!url) {
       throw new Error(`incorrect url`)
     }
+    
     const {user} = req;
     let good = (await goodsService.search({url}))[0];
     if (!good) {
-      // good = await checkerService.addByUrl({url});
       good = await checkerService.addUrl(url);
     }
     let subscriptions = await subscriptionService.search({
@@ -76,6 +77,13 @@ const add = async (req, res) => {
         user_id: user.id,
         user_vk: user.vk
       });
+  
+    const additionalData = await checkerService.additionalGoodData({...good, user_vk: user.vk});
+    good = {
+      ...good,
+      ...additionalData
+    };
+    
     res.json(good);
   } catch (e) {
     res.status(500).json({error: e.message});
