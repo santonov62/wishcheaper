@@ -3,6 +3,7 @@ const avitoChecker = require('./avitoChecker.service');
 const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
 const db = require('../db.service');
+const subscriptionService = require('../subscriptions.service');
 
 const moment = require('moment');
 const checkerList = [
@@ -128,8 +129,8 @@ const refresh = async ({url, id, price, prev_price}) => {
       id
     });
   
-    const isNotificationsRequired = newPrice < prev_price;
-    if (isNotificationsRequired) {
+    const IsProductBecomeCheaper = newPrice < price;
+    if (IsProductBecomeCheaper) {
       vkService.notifyAll({...good, prev_price});
     }
     

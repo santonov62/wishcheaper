@@ -17,10 +17,14 @@ const log = (text, params) => {
   console.log(`[vk.service] -> ${text}`, params);
 };
 
+const calculatePercentDiscount = ({old_price, price}) => {
+  return old_price ? Number((100 - price / (old_price / 100)).toFixed()) : 0;
+};
+
 notify = async ({id, url, price, old_price, title, usersVk, prev_price}) => {
   const formData = new FormData();
   const priceDiff = prev_price - price;
-  const percentDiscount = old_price ? Number((100 - price / (old_price / 100)).toFixed()) : 0;
+  const percentDiscount = calculatePercentDiscount({old_price, price});
   const percentDiscountText = percentDiscount > 0 ? `[-${percentDiscount}%]` : '';
   formData.append('message', `
   =========
@@ -49,9 +53,18 @@ const notifyAll = async ({id, url, price, old_price, title, prev_price}) => {
   if (!id)
     throw new Error(`Good id required.`);
   const subscriptions = await subscriptionService.search({good_id: id});
+  const filteredSubscriptions = subscriptions.filter(({price_discount, percent_discount}) => {
+    if (!!price_discount) {
+      return price <= price_discount;
+    }
+    if (!!percent_discount) {
+      return calculatePercentDiscount({old_price, price}) >= percent_discount;
+    }
+    return true;
+  });
 
-  while (subscriptions.length > 0) {
-    const chunk = subscriptions.splice(0, 100);
+  while (filteredSubscriptions.length > 0) {
+    const chunk = filteredSubscriptions.splice(0, 100);
     const usersVk = chunk.map(subscription => subscription.user_vk).join(',');
     const result = await notify({url, usersVk, price, old_price, title, prev_price});
     log(`[notifyAll] [chunk] done`, result);
