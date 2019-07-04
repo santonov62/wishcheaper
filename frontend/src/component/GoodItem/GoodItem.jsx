@@ -1,120 +1,15 @@
 import React, {Fragment} from 'react';
-import {Icon, Image, Header, Button, Divider, Label, Item, Dropdown, Modal, TextArea, Checkbox, Radio, Form, Input, Select} from 'semantic-ui-react';
+import {Icon, Loader, Image, Message, Header, Dimmer, Button, Divider, Label, Item, Dropdown, Modal, TextArea, Checkbox, Radio, Form, Input, Select} from 'semantic-ui-react';
 import {removeGood, userGoods} from '../../actionCreators/goods.actionCreators'
 import moment from 'moment';
 import {connect} from 'react-redux';
 import './goodItem.css';
+import GoodMenu from './GoodMenu';
 
 const isGoodInvalid = ({title, price, url}) => {
   const isGoodValid = !!title && !!price && !!url;
   return !isGoodValid;
 };
-
-class SubscriptionModal extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mode: 'any',
-      subscription: {}
-    }
-  };
-  onOpen = async () => {
-    const {subscription_id} = this.props;
-    const {price_discount, percent_discount} = await fetch(`/subscription?id=${subscription_id}`)
-      .then(res => res.json());
-    const mode = !!price_discount || !!percent_discount ? 'range' : 'any';
-    this.setState({
-      mode,
-      priceDiscount: price_discount,
-      percentDiscount: percent_discount
-    });
-  };
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
-  render() {
-    const {subscription_id, trigger} = this.props;
-    const {mode, priceDiscount, percentDiscount} = this.state;
-    return (
-      <Modal dimmer='inverted' size='mini'
-             trigger={trigger}
-             onOpen={this.onOpen}
-             closeIcon>
-        <Modal.Header>
-          <Icon name='bell outline' />Уведомление о снижении цены</Modal.Header>
-        <Modal.Content>
-          <p>Отправлять мне сообщение вконтакте:</p>
-          <Form>
-            <Form.Field
-              control={Radio}
-              label='При любом снижении цены'
-              value='any'
-              name='mode'
-              checked={mode === 'any'}
-              onChange={this.handleChange}
-            />
-            <Divider horizontal>Или</Divider>
-            <Form.Field
-              control={Radio}
-              label='При снижении цены ниже чем'
-              value='range'
-              name='mode'
-              checked={mode === 'range'}
-              onChange={this.handleChange}
-            />
-
-            <Form.Group widths='equal'>
-              <Form.Field
-                disabled={mode !== 'range'}
-                fluid
-                name="priceDiscount"
-                value={priceDiscount}
-                icon='ruble sign'
-                control={Input}
-                onChange={this.handleChange}
-              />
-              <Form.Field
-                disabled={mode !== 'range'}
-                value={percentDiscount}
-                name='percentDiscount'
-                fluid
-                icon='percent'
-                control={Input}
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button positive icon='save outline' labelPosition='right' content='Сохранить'/>
-        </Modal.Actions>
-      </Modal>
-    );
-  }
-}
-
-class GoodItemTemplate extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const {direction, good_id, subscription_id} = this.props;
-    return (
-        <Dropdown className='menuButton' direction={direction} icon='ellipsis horizontal'>
-          <Dropdown.Menu>
-            <Dropdown.Menu scrolling>
-              <Dropdown.Item icon='trash alternate outline' text='Удалить' onClick={() => this.props.removeGood(good_id)}/>
-              <SubscriptionModal subscription_id={subscription_id} trigger={
-                <Dropdown.Item icon='bell outline' text='Уведомления'/>
-              }/>
-            </Dropdown.Menu>
-          </Dropdown.Menu>
-        </Dropdown>);
-  }
-}
-
-
-const GoodMenu = connect(null, dispatch => ({
-  removeGood: (good_id) => dispatch(removeGood({id: good_id}))
-}))(GoodItemTemplate);
 
 export const GoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id, shop_name,
                            updated_at, created_at, inactive_at, prev_price, subscription_id}) => {

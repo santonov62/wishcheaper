@@ -64,9 +64,21 @@ const remove = async({goodId, userVk}) => {
   return result.rows && result.rows[0];
 };
 
+const SAVE_SUBSCRIPTION = `UPDATE subscriptions
+SET
+  price_discount = $2,
+  percent_discount = $3
+WHERE id = $1
+RETURNING *`;
+const save = async ({id, price_discount, percent_discount}) => {
+  const result = await db.query(SAVE_SUBSCRIPTION, [id, price_discount || null, percent_discount || null]);
+  return result && result.rows[0];
+};
+
 module.exports = {
   add,
   search,
   searchWithGoods,
-  remove
+  remove,
+  save
 };

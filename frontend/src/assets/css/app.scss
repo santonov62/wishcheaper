@@ -47,3 +47,8 @@ a {
 .mainPage {
     padding: 0 20px 40px 20px;
 }
+.ui.modal.transition.visible.active {
+    .close.icon {
+        color: black;
+    }
+}
