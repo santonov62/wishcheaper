@@ -40,7 +40,7 @@ const statistic = async (req, res) => {
 };
 
 const remove = async (req, res) => {
-  console.group(`[goods.controller] [delete]`);
+  // console.group(`[goods.controller] [delete]`);
   try {
     const {id} = req.body;
     if (!id) {
@@ -48,10 +48,10 @@ const remove = async (req, res) => {
     }
     const good = await goodsService.remove({id});
     log(`[remove] done`, good);
-    console.groupEnd();
+    // console.groupEnd();
     res.json(good);
   } catch (e) {
-    console.groupEnd();
+    // console.groupEnd();
     res.status(500).json({error: e.message});
   }
 };

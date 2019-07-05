@@ -66,10 +66,10 @@ export const GoodItem = ({id: good_id, url, title, logo, price, old_price, shop_
             <Label floated='right' size='small'><Icon name='shop' />{shop_name}</Label>
             <Label size='small'><Icon name='history' />{updatedRangeText}</Label>
             {!!price_discount &&
-              <Label size='small'><Icon name='bell outline' />{price_discount} ₽</Label>
+              <Label color='orange' size='small'><Icon name='bell outline' />{price_discount} ₽</Label>
             }
             {!!percent_discount &&
-              <Label size='small'><Icon name='bell outline' />{percent_discount} %</Label>
+              <Label color='orange' size='small'><Icon name='bell outline' />{percent_discount} %</Label>
             }
           </Item.Extra>
         </Item.Content>
@@ -86,7 +86,11 @@ const InvalidGoodItem = ({good_id, url, goodMenuProps}) => {
 
       <Item.Content>
         <GoodMenu {...goodMenuProps}/>
-        <Item.Header as='a' href={url} target='_blank'>{url}</Item.Header>
+        <Item.Header as='a' href={url} target='_blank' style={{
+          overflow: 'hidden',
+          maxWidth: 300,
+          textOverflow: 'ellipsis'
+        }}>{url}</Item.Header>
       </Item.Content>
     </Item>
   )

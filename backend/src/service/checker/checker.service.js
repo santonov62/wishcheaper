@@ -50,7 +50,7 @@ const backgroundProcess = async () => {
 }
 
 const scan = async () => {
-  console.group(`[checker.service] -> [scan]`);
+  // console.group(`[checker.service] -> [scan]`);
   const expireDate = moment().subtract(GOOD_EXPIRED_MIN, "minutes");
   const goods = await goodsService.search({expireDate});
   if (goods.length > 0) {
@@ -62,7 +62,7 @@ const scan = async () => {
   } else {
     log(`[scan] nothing to parse`, state);
   }
-  console.groupEnd();
+  // console.groupEnd();
   return state;
 }
 
@@ -98,17 +98,17 @@ const push = (goods) => {
 }
 
 const parse = async (url) => {
-  console.group(`[checker.service] -> [parse]`);
+  // console.group(`[checker.service] -> [parse]`);
   if (!isShopSupported(url))
     throw new Error(`Shop doesn't supported.`);
   const checkerInstance = getCheckerForUrl(url);
   const parsedGood = await checkerInstance.parse(url);
   log(`[parse] done`, parsedGood);
-  console.groupEnd();
+  // console.groupEnd();
   return parsedGood
 };
 
-const refresh = async ({url, id, price, prev_price, innactive_at}) => {
+const refresh = async ({url, id, price, prev_price, inactive_at}) => {
   console.group(`[checker.service] -> [refresh] good_id: ${id}`);
   if (!url)
     throw new Error(`Good url required.`);
@@ -129,7 +129,7 @@ const refresh = async ({url, id, price, prev_price, innactive_at}) => {
       id
     });
 
-    const isCheaperProductBecomeAvailable = !!innactive_at && price < prev_price;
+    const isCheaperProductBecomeAvailable = !!inactive_at && price < prev_price;
     const IsProductBecomeCheaper = newPrice < price;
     if (IsProductBecomeCheaper || isCheaperProductBecomeAvailable) {
       vkService.notifyAll({...good, prev_price});
