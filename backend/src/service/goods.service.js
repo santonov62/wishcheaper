@@ -1,5 +1,6 @@
 const db = require('./db.service');
 const shopsService = require('./shops.service');
+const moment = require('moment');
 
 const log = (text, params = '') => {
   console.log(`[goods.service] -> ${text}`, params)
@@ -148,6 +149,19 @@ const remove = async({id}) => {
   return result && result.rows[0];
 };
 
+const expired = async (shops) => {
+  const SELECT = `SELECT * FROM goods`;
+  let WHERE = ``;
+  WHERE = ` WHERE false`;
+  shops.forEach(({id, scan_interval}) => {
+    const expireDate = moment().subtract(scan_interval, "minutes").format();
+    WHERE += ` OR (shop_id = ${id} AND "updated_at" < '${expireDate}' AND ("inactive_at" IS NULL OR "inactive_at" < '${expireDate}'))`;
+  });
+  const QUERY = SELECT + WHERE;
+  const result = await db.query(QUERY);
+  return result && result.rows;
+};
+
 module.exports = {
   getAll,
   search,
@@ -157,5 +171,6 @@ module.exports = {
   userGoods,
   inactive,
   statistic,
-  remove
+  remove,
+  expired
 };

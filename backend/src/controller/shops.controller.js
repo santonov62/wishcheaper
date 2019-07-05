@@ -24,15 +24,19 @@ const getAll = async(req, res) => {
 
 app.get('/', getAll);
 
-// app.post('/', async(req, res) => {
-//   try {
-//     const preparedShop = prepareShopForSave(req);
-//     const shop = (await shopService.save(preparedShop)).rows[0];
-//     res.json({ ...shop });
-//   } catch (ex) {
-//     res.status(400).json({ message: ex.message });
-//   }
-// });
+const update = async(req, res) => {
+  console.group(`[shops.controller]: [getAll]`);
+  try {
+    const {id, scanInterval} = req.body;
+    const shop = await shopService.update({id, scanInterval});
+    res.json(shop);
+  } catch (ex) {
+    res.status(500).json({ message: ex.message });
+  } finally {
+    console.groupEnd();
+  }
+};
+app.put('/', update);
 
 // app.put('/', authMiddleware.adminAuthRequired, imageUpload.single('logo'), async(req, res) => {
 //   try {

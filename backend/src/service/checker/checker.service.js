@@ -4,6 +4,7 @@ const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
 const db = require('../db.service');
 const subscriptionService = require('../subscriptions.service');
+const shopsService = require('../shops.service');
 
 const moment = require('moment');
 const checkerList = [
@@ -49,10 +50,11 @@ const backgroundProcess = async () => {
     }
 }
 
+
 const scan = async () => {
-  // console.group(`[checker.service] -> [scan]`);
-  const expireDate = moment().subtract(GOOD_EXPIRED_MIN, "minutes");
-  const goods = await goodsService.search({expireDate});
+  shops = await getAllShops();
+
+  const goods = await goodsService.expired(shops);
   if (goods.length > 0) {
     push(goods);
     if (!state.isParsing) {
@@ -62,15 +64,23 @@ const scan = async () => {
   } else {
     log(`[scan] nothing to parse`, state);
   }
-  // console.groupEnd();
   return state;
 }
 
-const start = () => {
+let shops;
+getAllShops = async (force) => {
+  if(!shops || force)
+    shops = await shopsService.getAll();
+  return shops;
+};
+
+const start = async () => {
+  const shops = await getAllShops(true);
+  const intervalMin = Math.min.apply(null, shops.map(shop => shop.scan_interval));
   scan();
   interval = setInterval(() => {
     scan();
-  }, GOOD_EXPIRED_MIN / 3 * 60000);
+  }, intervalMin / 2 * 60000);
   state.isStarted = true;
   state.time = Date.now();
   log(`[start] done`, state);

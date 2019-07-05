@@ -39,58 +39,29 @@ const makeFormData = (shop) => {
   return data;
 };
 
-export const saveShop = shop => (dispatch, getState) => {
-  dispatch({ type: Actions.SHOPS_SAVING });
-  return fetch('/shops', {
-    method: 'POST',
-    body: makeFormData(shop),
-    headers: {
-      ...authHeader(getState().user)
-    }
-  })
-    .then(handleErrors)
-    .then(response => response.json())
-    .then(shop => {
-      const id = shop.id;
-      dispatch({ // FIXME is it more correct to return whole dispatched action and normalize it in another place?
-        type: Actions.SHOPS_SAVED,
-        payload: {
-          shop
-        }
-      });
-      return id;
+export const updateShop = ({id, scanInterval}) => async (dispatch, getState) => {
+  try {
+    dispatch({type: Actions.SHOPS_UPDATING});
+    const shop = await fetch('/shops', {
+      method: 'PUT',
+      body: JSON.stringify({id, scanInterval}),
+      headers: {
+        ...Constants.REQUEST_JSON_HEADERS,
+        ...authHeader(getState().user)
+      }
     })
-    .catch(_error => {
-      dispatch(({ type: Actions.SHOPS_FAILURE }));
-      throw new SubmissionError({ _error });
-    });
-};
+      .then(response => response.json());
 
-export const updateShop = shop => (dispatch, getState) => {
-  dispatch({ type: Actions.SHOPS_UPDATING });
-  return fetch('/shops', {
-    method: 'PUT',
-    body: makeFormData(shop),
-    headers: {
-      ...authHeader(getState().user)
-    }
-  })
-    .then(handleErrors)
-    .then(response => response.json())
-    .then(shop => {
-      const id = shop.id;
-      dispatch({
-        type: Actions.SHOPS_UPDATED,
-        payload: {
-          shop
-        }
-      });
-      return id;
-    })
-    .catch(_error => {
-      dispatch(({ type: Actions.SHOPS_FAILURE }));
-      throw new SubmissionError({ _error });
+    dispatch({
+      type: Actions.SHOPS_UPDATED,
+      payload: {
+        shops: shop
+      }
     });
+    return shop;
+  } catch (e) {
+    processError(e.message, dispatch);
+  }
 };
 
 export const deleteShop = shopId => async (dispatch, getState) => {

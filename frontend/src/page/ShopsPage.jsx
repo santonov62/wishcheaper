@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { allShops } from '../actionCreators/shops.actionCreators';
-import {ShopItem} from "../component/ShopItem/ShopItem";
+import ShopItem from "../component/ShopItem/ShopItem";
 
 class ShopsPage extends React.Component {
   constructor(props) {

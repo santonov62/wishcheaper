@@ -37,7 +37,7 @@ const shopsReducer = (state = initialState, action) => {
         value: state.value.concat(action.payload.shop)
       };
     case Actions.SHOPS_UPDATED:
-      const {shop} = action.payload;
+      const {shops: shop} = action.payload;
       const shopList = state.value.slice();
       const replaceIndex = shopList.findIndex(item => item.id === shop.id);
       shopList[replaceIndex] = shop;
