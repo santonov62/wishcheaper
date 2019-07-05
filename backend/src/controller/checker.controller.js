@@ -6,29 +6,38 @@ const subscriptionService = require('../service/subscriptions.service');
 const app = express();
 
 const start = async (req, res) => {
+  console.group(`[checker.controller] -> [start]`);
   try {
     const checker = await checkerService.start();
     res.json(checker);
   } catch (e) {
     res.status(500).json({error: e.message});
+  } finally {
+    console.groupEnd();
   }
 };
 
 const stop = async (req, res) => {
+  console.group(`[checker.controller] -> [stop]`);
   try {
     const checker = await checkerService.stop();
     res.json(checker);
   } catch (e) {
     res.status(500).json({error: e.message});
+  } finally {
+    console.groupEnd();
   }
 };
 
 const status = async (req, res) => {
+  console.group(`[checker.controller] -> [status]`);
   try {
     const checker = await checkerService.status();
     res.json(checker);
   } catch (e) {
     res.status(500).json({error: e.message});
+  } finally {
+    console.groupEnd();
   }
 };
 
@@ -39,6 +48,7 @@ const getClippedUrl = (url) => {
 };
 
 const add = async (req, res) => {
+  console.group(`[checker.controller] -> [add]`);
   try {
     let {url} = req.body;
     
@@ -50,7 +60,7 @@ const add = async (req, res) => {
     const {user} = req;
     let good = (await goodsService.search({url}))[0];
     if (!good) {
-      good = await checkerService.addUrl(url);
+      good = await checkerService.addByUrl(url);
     }
     let subscriptions = await subscriptionService.search({
       good_id: good.id,
@@ -72,15 +82,20 @@ const add = async (req, res) => {
     res.json(good);
   } catch (e) {
     res.status(500).json({error: e.message});
+  } finally {
+    console.groupEnd();
   }
 };
 
 const scan = async (req, res) => {
+  console.group(`[checker.controller] -> [scan]`);
   try {
     const checker = await checkerService.scan();
     res.json(checker);
   } catch (e) {
     res.status(500).json({error: e.message});
+  } finally {
+    console.groupEnd();
   }
 };
 

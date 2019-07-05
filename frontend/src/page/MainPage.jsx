@@ -11,7 +11,7 @@ class MainPage extends React.Component{
     super(props);
     this.state = {
       goods_count: '--',
-      month_goods_count: '--',
+      week_goods_count: '--',
       users_count: '--'
     }
   }
@@ -22,7 +22,7 @@ class MainPage extends React.Component{
   }
   render() {
     const {user} = this.props;
-    const {goods_count, month_goods_count, users_count} = this.state;
+    const {goods_count, week_goods_count, users_count} = this.state;
     return (
       <div className='mainPage'>
         <div className='statistic'>
@@ -31,11 +31,11 @@ class MainPage extends React.Component{
           <div className='stats'>
             <div className='number'>
               <div className='decorHeader'>{goods_count}</div>
-              отслеживаемых товаров
+              Отслеживаемых товаров
             </div>
             <div className='number'>
-              <div className='decorHeader'>{month_goods_count}</div>
-              Новых за месяц
+              <div className='decorHeader'>{week_goods_count}</div>
+              Новых за неделю
             </div>
             <div className='number'>
               <div className='decorHeader'>{users_count}</div>

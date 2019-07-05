@@ -8,7 +8,7 @@ const log = (text, params) => {
 };
 
 const remove = async (req, res) => {
-  console.group(`[subscriptions.controller] [delete]`);
+  console.group(`[subscriptions.controller] [remove]`);
   try {
     const {goodId} = req.body;
     if (!goodId) {
@@ -21,11 +21,11 @@ const remove = async (req, res) => {
   
     const subscription = await subscriptionsService.remove({goodId, userVk: vk});
     log(`[remove] done`, subscription);
-    console.groupEnd();
     res.json(subscription);
   } catch (e) {
-    console.groupEnd();
     res.status(500).json({error: e.message});
+  } finally {
+    console.groupEnd();
   }
 };
 
@@ -39,11 +39,11 @@ const search = async (req, res) => {
 
     const subscription = (await subscriptionsService.search({id}))[0] || {};
     log(`[search] done`, subscription);
-    console.groupEnd();
     res.json(subscription);
   } catch (e) {
-    console.groupEnd();
     res.status(500).json({error: e.message});
+  } finally {
+    console.groupEnd();
   }
 };
 
@@ -57,11 +57,11 @@ const save = async (req, res) => {
 
     const subscription = await subscriptionsService.save({id, price_discount, percent_discount});
     log(`[save] done`, subscription);
-    console.groupEnd();
     res.json(subscription);
   } catch (e) {
-    console.groupEnd();
     res.status(500).json({error: e.message});
+  } finally {
+    console.groupEnd();
   }
 };
 

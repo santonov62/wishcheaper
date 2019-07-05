@@ -92,11 +92,11 @@ const ADD_URL = `INSERT INTO goods (
 ) VALUES (
     $1, $2
 ) RETURNING *`;
-const addUrl = async ({ url }) => {
+const addByUrl = async ({ url }) => {
   const shop_id = await getShopIdByUrl(url);
   const result = await db.query(ADD_URL, [url, shop_id]);
   const good = result.rows[0];
-  log('[addUrl] done', good);
+  log('[addByUrl] done', good);
   return good;
 };
 
@@ -129,7 +129,7 @@ const inactive = async ({id}) => {
 };
 
 const GOODS_STATISTIC = `SELECT count(*) as "goods_count",
-       (SELECT count(*) FROM goods WHERE created_at > NOW() - interval '30 day') as "month_goods_count",
+       (SELECT count(*) FROM goods WHERE created_at > NOW() - interval '7 day') as "week_goods_count",
        (SELECT count(*) FROM users) as "users_count"
 FROM goods`;
 
@@ -153,7 +153,7 @@ module.exports = {
   search,
   update,
   add,
-  addUrl,
+  addByUrl,
   userGoods,
   inactive,
   statistic,

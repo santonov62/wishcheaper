@@ -109,7 +109,7 @@ const parse = async (url) => {
 };
 
 const refresh = async ({url, id, price, prev_price, inactive_at}) => {
-  console.group(`[checker.service] -> [refresh] good_id: ${id}`);
+  // console.group(`[checker.service] -> [refresh] good_id: ${id}`);
   if (!url)
     throw new Error(`Good url required.`);
   if (!id)
@@ -140,7 +140,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at}) => {
   }
 
   log(`[refresh] done`, good);
-  console.groupEnd();
+  // console.groupEnd();
   return good;
 };
 
@@ -171,7 +171,7 @@ const status = () => {
   return state;
 };
 
-const addUrl = async (url) => {
+const addByUrl = async (url) => {
 
   if (!url)
     throw new Error(`url required`);
@@ -180,9 +180,9 @@ const addUrl = async (url) => {
   if (!isShopSupported(url))
     throw new Error(`Shop doesn't supported.`);
   
-  const addedGood = await goodsService.addUrl({url});
+  const addedGood = await goodsService.addByUrl({url});
   let good = await refresh(addedGood);
-  log(`[addUrl] done`, good);
+  log(`[addByUrl] done`, good);
   return good;
 };
 
@@ -196,6 +196,6 @@ module.exports = {
   stop,
   scan,
   status,
-  addUrl,
+  addByUrl,
   additionalGoodData
 };

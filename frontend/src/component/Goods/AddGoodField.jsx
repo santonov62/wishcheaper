@@ -14,7 +14,7 @@ class AddGoodField extends React.Component {
     handleChange = (e, { name, value }) => {
         this.setState({ value });
     };
-    addUrl = async () => {
+    addByUrl = async () => {
         const {value} = this.state;
         this.setState({isLoading: true});
         this.props.addByUrl(value)
@@ -31,7 +31,7 @@ class AddGoodField extends React.Component {
                 loading={isLoading}
                 value={value}
                 name='value'
-                icon={<Icon name='add' link onClick={this.addUrl}/>}
+                icon={<Icon name='add' link onClick={this.addByUrl}/>}
                 placeholder='Вставьте url для отслеживания...'
                 onChange={this.handleChange}/>
         )

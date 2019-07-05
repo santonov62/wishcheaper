@@ -30,10 +30,10 @@ const parse = async (url) => {
 
   const browser = await puppeteer.launch(launchParams);
 
-  setTimeout(() => {
-    if (browser)
-      browser.close();
-  }, 2 * 60000);
+  // setTimeout(() => {
+  //   if (browser)
+  //     browser.close();
+  // }, 2 * 60000);
 
   try {
     const page = await browser.newPage();
