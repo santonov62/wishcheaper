@@ -8,6 +8,7 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import reducers from './reducer/index.reducer';
 import Header from './component/Header/Header';
+import Footer from './component/Footer/Footer';
 import AppLoader from './component/AppLoader';
 import LoadingTracking from './component/LoadingTracking/LoadingTracking';
 import ErrorsTracking from './component/ErrorsTracking/ErrorsTracking';
@@ -61,6 +62,7 @@ const App = () => {
                     <Route path="/login" component={LoginPage}/>
                     <AuthRoute exact path="/mylist" component={GoodsPage}/>
                     <AuthRoute adminRequired path="/scanner" component={ScannerPage}/>
+                    {/*<Route path="/" component={Footer}/>*/}
                   </UserContextProvider>
                 </Fragment>
               </Router>

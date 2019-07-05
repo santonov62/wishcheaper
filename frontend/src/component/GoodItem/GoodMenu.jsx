@@ -15,10 +15,10 @@ class GoodItemTemplate extends React.Component {
         <Dropdown className='menuButton' direction={direction} icon='ellipsis horizontal'>
           <Dropdown.Menu>
             <Dropdown.Menu scrolling>
-              <Dropdown.Item icon='trash alternate outline' text='Удалить' onClick={() => this.props.removeGood(good_id)}/>
               <SubscriptionModal subscription_id={subscription_id} trigger={
                 <Dropdown.Item icon='bell outline' text='Уведомления'/>
               }/>
+              <Dropdown.Item icon='trash alternate outline' text='Удалить' onClick={() => this.props.removeGood(good_id)}/>
             </Dropdown.Menu>
           </Dropdown.Menu>
         </Dropdown>);
