@@ -50,6 +50,7 @@ class ProfileButton extends React.Component {
             <Fragment>
               <Dropdown.Divider/>
               <Dropdown.Item as={Link} to='/scanner'>Сканер</Dropdown.Item>
+              <Dropdown.Item as={Link} to='/shops'>Магазины</Dropdown.Item>
             </Fragment>
           }
           <Dropdown.Divider/>

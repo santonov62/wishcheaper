@@ -2,6 +2,7 @@ import * as Actions from '../actions/shops.actions';
 import {SubmissionError} from 'redux-form';
 import {ADD_ERROR} from "../actions/errors.actions";
 import {authHeader} from '../helpers/auth-header';
+import * as Constants from "../constants";
 
 const processError = (message, dispatch) => {
   dispatch({type: Actions.SHOPS_FAILURE});
@@ -13,9 +14,15 @@ const processError = (message, dispatch) => {
   });
 };
 
-export const fetchShops = () => (dispatch) => {
+export const allShops = () => (dispatch, getState) => {
   dispatch({ type: Actions.SHOPS_LOADING });
-  fetch('/shops/')
+  fetch('/shops/', {
+    method: 'GET',
+    headers: {
+      ...Constants.REQUEST_JSON_HEADERS,
+      ...authHeader(getState().user)
+    }
+  })
     .then(response => response.json())
     .then(shops => dispatch({
       type: Actions.SHOPS_LOADED,

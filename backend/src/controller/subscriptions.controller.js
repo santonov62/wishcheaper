@@ -65,8 +65,8 @@ const save = async (req, res) => {
   }
 };
 
-app.delete('/', authMiddleware.authRequired, remove);
-app.get('/', authMiddleware.authRequired, search);
-app.post('/', authMiddleware.authRequired, save);
+app.delete('/', remove);
+app.get('/', search);
+app.post('/', save);
 
 module.exports = app;

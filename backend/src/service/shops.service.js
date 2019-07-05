@@ -1,5 +1,11 @@
 const db = require('./db.service');
 
+const ALL_SHOPS = `SELECT * FROM shops`;
+const getAll = async () => {
+  const result = await db.query(ALL_SHOPS);
+  return result && result.rows;
+};
+
 const SAVE_SHOP = `INSERT INTO shops (
   title, url, logo, name
 ) VALUES (
@@ -25,5 +31,6 @@ const getShopByUrl = async (url) => {
 
 module.exports = {
   save,
-  getShopByUrl
+  getShopByUrl,
+  getAll
 };

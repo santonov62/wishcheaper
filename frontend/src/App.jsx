@@ -16,9 +16,10 @@ import LoginPage from './page/LoginPage';
 import MainPage from './page/MainPage';
 import ScannerPage from './page/ScannerPage';
 import GoodsPage from './page/GoodsPage';
+import ShopsPage from './page/ShopsPage';
 import AuthRoute from './component/AuthRoute';
 import UserContextProvider from './component/UserContextProvider';
-import { loadUser, saveUser } from './storage/user.storage';
+import { loadUser } from './storage/user.storage';
 
 const App = () => {
   const persistedState = loadUser();
@@ -62,12 +63,12 @@ const App = () => {
                     <Route path="/login" component={LoginPage}/>
                     <AuthRoute exact path="/mylist" component={GoodsPage}/>
                     <AuthRoute adminRequired path="/scanner" component={ScannerPage}/>
+                    <AuthRoute adminRequired path="/shops" component={ShopsPage}/>
                     {/*<Route path="/" component={Footer}/>*/}
                   </UserContextProvider>
                 </Fragment>
               </Router>
             </AppLoader>
-            {/*<ErrorsTracking/>*/}
           </Fragment>
         </Provider>
   )
