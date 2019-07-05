@@ -108,7 +108,7 @@ const parse = async (url) => {
   return parsedGood
 };
 
-const refresh = async ({url, id, price, prev_price}) => {
+const refresh = async ({url, id, price, prev_price, innactive_at}) => {
   console.group(`[checker.service] -> [refresh] good_id: ${id}`);
   if (!url)
     throw new Error(`Good url required.`);
@@ -128,9 +128,10 @@ const refresh = async ({url, id, price, prev_price}) => {
       prev_price,
       id
     });
-  
+
+    const isCheaperProductBecomeAvailable = !!innactive_at && price < prev_price;
     const IsProductBecomeCheaper = newPrice < price;
-    if (IsProductBecomeCheaper) {
+    if (IsProductBecomeCheaper || isCheaperProductBecomeAvailable) {
       vkService.notifyAll({...good, prev_price});
     }
     
