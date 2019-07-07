@@ -63,7 +63,7 @@ const parse = async (url) => {
   
     log(`$eval oldPrice`);
     try {
-      oldPrice = await page.$eval('.item-price-old', node => parseInt(node.innerText));
+      oldPrice = await page.$eval('.item-price-old', node => parseInt(node.innerText.replace(/\s+/g, '')));
     } catch (e) {
     
     }

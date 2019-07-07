@@ -86,6 +86,7 @@ const start = async () => {
   return state;
 }
 
+
 const stop = () => {
   clearInterval(interval);
   state.isStarted = false;
