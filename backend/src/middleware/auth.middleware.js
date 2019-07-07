@@ -11,8 +11,9 @@ const checkAuth = (req, res, next) => {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
+      console.log('[auth.middleware] -> [checkAuth] error ', err);
       return res.status(401).json({
-        error: 'Authorisation error'
+        error: 'AUTHORIZATION_ERROR'
       });
     } else {
       req.user = user; //set the user to req so other routes can use it
