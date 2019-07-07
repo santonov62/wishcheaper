@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const FormData = require('form-data');
 const subscriptionService = require('./subscriptions.service');
+const shopService = require('./shops.service');
 
 const apiVersion = process.env.VK_API_VERSION;
 if (!apiVersion) {
@@ -21,13 +22,23 @@ const calculatePercentDiscount = ({old_price, price}) => {
   return old_price ? Number((100 - price / (old_price / 100)).toFixed()) : 0;
 };
 
-notify = async ({id, url, price, old_price, title, usersVk, prev_price}) => {
+let shops;
+const getShopName = async (id) => {
+  if (!shops)
+    shops = await shopService.getAll();
+
+  const shop = shops.find(shop => shop.id === id);
+  return shop.name
+};
+
+notify = async ({id, url, price, old_price, title, usersVk, prev_price, shop_id}) => {
   const formData = new FormData();
   const priceDiff = prev_price - price;
   const percentDiscount = calculatePercentDiscount({old_price, price});
   const percentDiscountText = percentDiscount > 0 ? `[-${percentDiscount}%]` : '';
+  const shopName = await getShopName(shop_id);
   formData.append('message', `
-  =========
+  = ${shopName} =
   -${priceDiff}р на ${title} ${price}р ${percentDiscountText}
   ${prev_price}р -> ${price}р
    ${url}`);
@@ -49,7 +60,7 @@ notify = async ({id, url, price, old_price, title, usersVk, prev_price}) => {
     });
 };
 
-const notifyAll = async ({id, url, price, old_price, title, prev_price}) => {
+const notifyAll = async ({id, url, price, old_price, title, prev_price, shop_id}) => {
   if (!id)
     throw new Error(`Good id required.`);
   const subscriptions = await subscriptionService.search({good_id: id});
@@ -66,7 +77,7 @@ const notifyAll = async ({id, url, price, old_price, title, prev_price}) => {
   while (filteredSubscriptions.length > 0) {
     const chunk = filteredSubscriptions.splice(0, 100);
     const usersVk = chunk.map(subscription => subscription.user_vk).join(',');
-    const result = await notify({url, usersVk, price, old_price, title, prev_price});
+    const result = await notify({url, usersVk, price, old_price, title, prev_price, shop_id});
     log(`[notifyAll] [chunk] done`, result);
   }
 };

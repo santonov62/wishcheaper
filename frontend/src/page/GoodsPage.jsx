@@ -1,46 +1,56 @@
 import React from 'react';
 import './goodsPage.css'
-import { Button, Header, Icon, Dimmer, Loader, Grid, Image, Item } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import {Button, Header, Icon, Dimmer, Loader, Grid, Image, Item} from 'semantic-ui-react';
+import {Link} from 'react-router-dom';
 import moment from 'moment';
 import {authHeader} from "../helpers/auth-header";
-import { connect } from 'react-redux';
-import { userGoods } from '../actionCreators/goods.actionCreators';
+import {connect} from 'react-redux';
+import {userGoods} from '../actionCreators/goods.actionCreators';
 import {GoodItem} from "../component/GoodItem/GoodItem";
 
 class GoodsPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLoading: false
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      goods: props.goods
     }
-    componentDidMount() {
-        const {user} = this.props;
-        this.props.userGoods();
-    }
-    render() {
-        const {isLoading} = this.state;
-        const {goods = []} = this.props;
-        const goodsElements = goods.map((good, index) => <GoodItem key={index} {...good}/>);
-        return (
-            <div className='goodsPage'>
-                <Loader size='large' active={isLoading} content='Loading' />
-                <Header as='h1'>Мои товары</Header>
-                <Item.Group divided>
-                    {!!goodsElements && goodsElements.length > 0
-                        ? goodsElements :
-                        <Header as='h2'>Пока пусто</Header>
-                    }
-                </Item.Group>
-            </div>
-        )
-    }
+  }
+
+  componentDidMount() {
+    const {user} = this.props;
+    this.props.userGoods();
+  }
+
+  filterGoods = (value) => {
+    const {goods} = this.state;
+    const filteredGoods = goods.filter(({name}) => value.indexOf(name) !== -1)
+    this.setState({goods: filteredGoods});
+  }
+
+  render() {
+    const {isLoading, goods} = this.state;
+    // const {goods = []} = this.props;
+    const goodsElements = goods.map((good, index) =>
+      <GoodItem key={index} {...good}/>);
+    return (
+      <div className='goodsPage'>
+        <Loader size='large' active={isLoading} content='Loading'/>
+        <Header as='h1'>Мои товары</Header>
+        <Item.Group divided>
+          {!!goodsElements && goodsElements.length > 0
+            ? goodsElements :
+            <Header as='h2'>Пока пусто</Header>
+          }
+        </Item.Group>
+      </div>
+    )
+  }
 };
 
 export default connect(state => ({
-    user: state.user,
-    goods: state.goods.value
+  user: state.user,
+  goods: state.goods.value
 }), dispatch => ({
-    userGoods: () => dispatch(userGoods())
+  userGoods: () => dispatch(userGoods())
 }))(GoodsPage);
