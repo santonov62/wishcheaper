@@ -63,7 +63,7 @@ const App = () => {
                     <Route path="/login" component={LoginPage}/>
                     <AuthRoute exact path="/mylist" component={GoodsPage}/>
                     <AuthRoute adminRequired path="/scanner" component={ScannerPage}/>
-                    <AuthRoute adminRequired path="/shops" component={ShopsPage}/>
+                    <AuthRoute adminRequired path="/manageShops" component={ShopsPage}/>
                     {/*<Route path="/" component={Footer}/>*/}
                   </UserContextProvider>
                 </Fragment>

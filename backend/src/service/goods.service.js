@@ -153,7 +153,7 @@ const expired = async (shops) => {
   const SELECT = `SELECT * FROM goods`;
   let WHERE = ``;
   WHERE = ` WHERE false`;
-  shops.forEach(({id, scan_interval}) => {
+  shops.forEach(({id, scan_interval = 720}) => {
     const expireDate = moment().subtract(scan_interval, "minutes").format();
     WHERE += ` OR (shop_id = ${id} AND "updated_at" < '${expireDate}' AND ("inactive_at" IS NULL OR "inactive_at" < '${expireDate}'))`;
   });

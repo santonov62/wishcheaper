@@ -12,7 +12,11 @@ const log = (text, params = '') => {
 const init = async () => {
   const shop = await shopService.getShopByUrl(SHOP_NAME);
   if (!shop) {
-    const addedShop = await shopService.save({title: SHOP_TITLE, url: `https://${SHOP_NAME}`, name: SHOP_NAME})
+    const addedShop = await shopService.save({
+      title: SHOP_TITLE,
+      url: `https://${SHOP_NAME}`,
+      name: SHOP_NAME,
+      scan_interval: 720});
     log(`[init] added shop`, addedShop);
   }
 };

@@ -7,16 +7,17 @@ const getAll = async () => {
 };
 
 const SAVE_SHOP = `INSERT INTO shops (
-  title, url, logo, name
+  title, url, logo, name, scan_interval
 ) VALUES (
-  $1, $2, $3, $4
+  $1, $2, $3, $4, $5
 ) RETURNING *`;
-const save = async ({title, url, logo, name}) => {
+const save = async ({title, url, logo, name, scan_interval}) => {
   const result = await db.query(SAVE_SHOP, [
     title,
     url,
     logo,
-    name
+    name,
+    scan_interval
   ]);
   return result.rows[0];
 };

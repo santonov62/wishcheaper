@@ -14,7 +14,6 @@ const checkerList = [
 
 let processGoods = [];
 let interval;
-const GOOD_EXPIRED_MIN = process.env.GOOD_EXPIRED_MIN || 10;
 
 const state = {
   isStarted: false,
@@ -76,7 +75,7 @@ getAllShops = async (force) => {
 
 const start = async () => {
   const shops = await getAllShops(true);
-  const intervalMin = Math.min.apply(null, shops.map(shop => shop.scan_interval));
+  const intervalMin = Math.min.apply(null, shops.map(shop => shop.scan_interval)) || 720;
   scan();
   interval = setInterval(() => {
     scan();
