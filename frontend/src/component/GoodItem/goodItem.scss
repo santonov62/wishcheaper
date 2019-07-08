@@ -1,3 +1,12 @@
+.goodItemContainer {
+  position: relative;
+  .menuButton {
+    position: absolute;
+    z-index: 1;
+    margin: 20px 10px;
+    right: 10px
+  }
+}
 .goodItem {
   margin: 20px 0;
   .extra {
@@ -5,14 +14,16 @@
   }
   &.inactive,
   &.invalid {
-    .logo,
-    .header,
-    .meta,
-    .extra {
-      opacity: 0.2
-    }
+    opacity: 0.2
+
+    //.logo,
+    //.header,
+    //.meta,
+    //.extra {
+    //  opacity: 0.2
+    //}
   }
-  .logo {
+  //.logo {
     text-align: center;
     .discount {
       left: -10px;
@@ -20,15 +31,16 @@
       position: absolute;
       z-index: 1
     }
-  }
+  //}
   .rise {
     color: red;
   }
   .cheaper {
     color: green;
   }
-  .menuButton {
-    float: right;
-    margin-right: 20px;
+  .extra.content {
+    line-height: 2;
+    margin: 0;
+    padding: 10px;
   }
 }

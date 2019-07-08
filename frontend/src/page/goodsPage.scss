@@ -1,2 +1,10 @@
 .goodsPage {
+  .goods {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .goodItem {
+    margin: 10px;
+  }
 }
