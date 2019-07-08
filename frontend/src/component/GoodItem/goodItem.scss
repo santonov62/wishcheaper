@@ -1,53 +1,64 @@
+@media only screen and (max-width: 768px) {
+  .goodItemContainer {
+    .goodItem {
+      width: 330px;
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .goodItemContainer {
+    .goodItem {
+      width: 230px;
+    }
+  }
+}
+
 .goodItemContainer {
   position: relative;
-  margin: 10px 0;
+  margin: 10px 7px;
   .menuButton {
     position: absolute;
     z-index: 1;
-    margin: 20px 10px;
-    right: 10px
+    margin: 8px;
+    right: 0;
   }
-}
-.goodItem {
-  height: 100%;
-  //margin: 20px 0;
-  .extra {
-    opacity: 0.7;
-  }
-  &.inactive,
-  &.invalid {
-    opacity: 0.2
 
-    //.logo,
-    //.header,
-    //.meta,
-    //.extra {
-    //  opacity: 0.2
-    //}
-  }
-  .logo {
-    //text-align: center;
-    margin: 10px;
-    align-self: center;
-    img {
-      width: 200px;
+  .goodItem {
+    &.ui.card {
+      margin: 0;
     }
-    .discount {
-      left: -10px;
-      top: -10px;
-      position: absolute;
-      z-index: 1
+    height: 100%;
+    .extra {
+      opacity: 0.7;
     }
-  }
-  .rise {
-    color: red;
-  }
-  .cheaper {
-    color: green;
-  }
-  .extra.content {
-    line-height: 2;
-    margin: 0;
-    padding: 10px;
+    &.inactive,
+    &.invalid {
+      opacity: 0.2
+    }
+    .logo {
+      margin: 10px;
+      align-self: center;
+      img {
+        width: 200px;
+      }
+      .discount {
+        left: -10px;
+        top: -10px;
+        position: absolute;
+        z-index: 1
+      }
+    }
+    .rise {
+      color: red;
+    }
+    .cheaper {
+      color: green;
+    }
+    .extra.content {
+      line-height: 2;
+      margin: 0;
+      padding: 10px;
+    }
   }
 }
