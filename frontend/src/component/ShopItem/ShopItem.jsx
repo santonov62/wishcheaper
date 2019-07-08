@@ -36,12 +36,13 @@ class ShopItem extends React.Component {
           </Item.Header>
 
           <Item.Meta>
-            <Input labelPosition='left'
-                   label='Сканировать каждые (мин.)'
-                   action={<Button color='teal' icon='save' onClick={this.save}/>}
+            <Input
+                   label='минут'
+                   action={<Button color='green' icon='save' onClick={this.save}/>}
                    placeholder='15...'
                    value={scanInterval}
                    name='scanInterval'
+                   width={2}
                    onChange={this.handleChange}/>
           </Item.Meta>
           <Item.Extra>

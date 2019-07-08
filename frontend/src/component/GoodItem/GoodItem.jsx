@@ -67,7 +67,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           
             {!!diffPrevPrice &&
             <Fragment>
-              <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
+              &nbsp;<Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
                 {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
               </Label>
             </Fragment>
