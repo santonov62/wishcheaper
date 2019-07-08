@@ -99,6 +99,9 @@ export const addByUrl = (url) => async (dispatch, getState) => {
         ...authHeader(getState().user)
       }
     }).then(res => res.json());
+    if (good.error)
+      throw new Error(good.error);
+    
     dispatch({
       type: Actions.GOODS_SAVED,
       payload: {goods: good}

@@ -84,15 +84,13 @@ const parse = async (url) => {
     
     log(`[parse] done`, parsedData);
 
-    if (!isDebugMode)
-      await browser.close();
-
     return parsedData;
 
   } catch (e) {
+    throw new Error(e);
+  } finally {
     if (!isDebugMode)
       await browser.close();
-    throw new Error(e);
   }
 };
 
