@@ -1,19 +1,36 @@
+.goodItemContainer {
+  position: relative;
+  margin: 10px 0;
+  .menuButton {
+    position: absolute;
+    z-index: 1;
+    margin: 20px 10px;
+    right: 10px
+  }
+}
 .goodItem {
-  margin: 20px 0;
+  height: 100%;
+  //margin: 20px 0;
   .extra {
     opacity: 0.7;
   }
   &.inactive,
   &.invalid {
-    .logo,
-    .header,
-    .meta,
-    .extra {
-      opacity: 0.2
-    }
+    opacity: 0.2
+
+    //.logo,
+    //.header,
+    //.meta,
+    //.extra {
+    //  opacity: 0.2
+    //}
   }
   .logo {
-    text-align: center;
+    //text-align: center;
+    align-self: center;
+    img {
+      width: 200px;
+    }
     .discount {
       left: -10px;
       top: -10px;
@@ -27,8 +44,9 @@
   .cheaper {
     color: green;
   }
-  .menuButton {
-    float: right;
-    margin-right: 20px;
+  .extra.content {
+    line-height: 2;
+    margin: 0;
+    padding: 10px;
   }
 }
