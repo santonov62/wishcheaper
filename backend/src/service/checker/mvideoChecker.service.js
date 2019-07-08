@@ -2,11 +2,11 @@ const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
-const SHOP_NAME = 'avito.ru';
-const SHOP_TITLE = 'Avito';
+const SHOP_NAME = 'mvideo.ru';
+const SHOP_TITLE = 'Мвидео';
 
 const log = (text, params = '') => {
-  console.log(`[avitoChecker.service] -> ${text}`, params);
+  console.log(`[mvideoChecker.service] -> ${text}`, params);
 };
 
 const init = async () => {
@@ -39,44 +39,47 @@ const parse = async (url) => {
 
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
-    // log(`done`);
+
+    let inactive_at;
+    const payButton = await page.$('.o-pay__btn.sel-pdp-button-place-to-cart');
+    if (!payButton) {
+      inactive_at = new Date();
+    }
+      // throw new Error(`Product is out of stock.`);
 
     let title, currentPrice, logo, oldPrice;
+    //TITLE
     log(`$eval title`);
     try {
-      title = await page.$eval('.title-info-title-text', node => node.innerText);
-    } catch (e) {
+      title = await page.$eval('.sel-product-title', node => node.innerText);
+    } catch (e) { }
     
-    }
-    
+    //PRICE
     log(`$eval price`);
     try {
-      currentPrice = await page.$eval('.js-item-price', node => node.getAttribute('content'));
-    } catch (e) {
-    
-    }
+      currentPrice = await page.$eval('.sel-product-tile-price', node => parseInt(node.innerText.replace(/\s+/g, '')));
+    } catch (e) { }
   
+    //OLD PRICE
     log(`$eval oldPrice`);
     try {
-      oldPrice = await page.$eval('.item-price-old', node => parseInt(node.innerText.replace(/\s+/g, '')));
-    } catch (e) {
-    
-    }
+      oldPrice = await page.$eval('.c-pdp-price__old', node => parseInt(node.innerText.replace(/\s+/g, '')));
+    } catch (e) { }
     
     log(`$eval .photo[data-img]`);
     try {
-      logo = await page.$eval('.gallery-img-frame', node => node.getAttribute('data-url').replace(/\/\//, 'https://'));
-    } catch (e) {
+      logo = await page.$eval('.c-media-container__image-wrapper img', node => node.getAttribute('src').replace(/\/\//, 'https://'));
+    } catch (e) { }
     
-    }
     const parsedData = {
         url,
         title,
         price: currentPrice,
         old_price: oldPrice,
-        logo
+        logo,
+        inactive_at
     };
-    
+  
     log(`[parse] done`, parsedData);
 
     return parsedData;

@@ -23,16 +23,16 @@ class GoodsPage extends React.Component {
     const {goods = []} = this.props;
     const goodsElements = goods.map((good, index) => <GoodItem key={index} {...good}/>);
     return (
-      <div className='goodsPage'>
-        <Loader size='large' active={isLoading} content='Loading' />
-        <Header as='h1'>Мои товары</Header>
-        <Item.Group divided>
-          {!!goodsElements && goodsElements.length > 0
-            ? goodsElements :
-            <Header as='h2'>Пока пусто</Header>
-          }
-        </Item.Group>
-      </div>
+        <div className='goodsPage'>
+          <Loader size='large' active={isLoading} content='Loading'/>
+          <Header as='h1'>Мои товары</Header>
+          <div className='goods'>
+            {!!goodsElements && goodsElements.length > 0
+                ? goodsElements :
+                <Header as='h2'>Пока пусто</Header>
+            }
+          </div>
+        </div>
     )
   }
 };

@@ -1,5 +1,6 @@
 const pandaoChecker = require('./pandaoChecker.service');
 const avitoChecker = require('./avitoChecker.service');
+const mvideoChecker = require('./mvideoChecker.service');
 const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
 const db = require('../db.service');
@@ -9,7 +10,8 @@ const shopsService = require('../shops.service');
 const moment = require('moment');
 const checkerList = [
   pandaoChecker,
-  avitoChecker
+  avitoChecker,
+  mvideoChecker
 ];
 
 let processGoods = [];
@@ -128,7 +130,8 @@ const refresh = async ({url, id, price, prev_price, inactive_at}) => {
   const parsedGood = await parse(url);
   
   let good;
-  if (isValid(parsedGood)) {
+  if (isGoodExists(parsedGood)) {
+    
     const newPrice = parsedGood.price;
     if (!prev_price || newPrice !== price)
       prev_price = price;
@@ -172,7 +175,7 @@ const additionalGoodData = async ({id, user_vk}) => {
   return result.rows && result.rows[0];
 };
 
-const isValid = ({url, title, price}) => {
+const isGoodExists = ({url, title, price}) => {
   return !!url && !!title && !!price;
 };
 
