@@ -16,8 +16,9 @@ const search = async (params) => {
   const SELECT = `SELECT * FROM goods`;
   let WHERE = ``;
   if (Object.keys(params).length > 0) {
-    const {url, expireDate} = params;
+    const {url, expireDate, id} = params;
     WHERE = ` WHERE true`;
+    if (id) WHERE += ` AND "id" = ${statementForSql(id)}`;
     if (url) WHERE += ` AND "url" = ${statementForSql(url)}`;
     if (expireDate) {
       const paramIndex = statementForSql(expireDate);

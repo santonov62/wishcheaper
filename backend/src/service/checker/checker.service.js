@@ -3,6 +3,7 @@ const avitoChecker = require('./avitoChecker.service');
 const mvideoChecker = require('./mvideoChecker.service');
 const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
+const autobuyService = require('../autobuy/autobuy.service');
 const db = require('../db.service');
 const subscriptionService = require('../subscriptions.service');
 const shopsService = require('../shops.service');
@@ -38,7 +39,8 @@ const backgroundProcess = async () => {
         state.isParsing = true;
         while (processGoods.length > 0) {
             const good = processGoods.shift();
-            result.push(await refresh(good));
+            const refreshedGood = await refresh(good);
+            result.push(refreshedGood);
         }
         state.lastParseTime = Date.now();
         state.isParsing = false;
@@ -56,6 +58,7 @@ const scan = async () => {
   shops = await getAllShops();
 
   const goods = await goodsService.expired(shops);
+  // const goods = await goodsService.search({id: 17});
   if (goods.length > 0) {
     push(goods);
     if (!state.isParsing) {
@@ -69,7 +72,7 @@ const scan = async () => {
 }
 
 let shops;
-getAllShops = async (force) => {
+const getAllShops = async (force) => {
   if(!shops || force)
     shops = await shopsService.getAll();
   return shops;
@@ -120,7 +123,7 @@ const parse = async (url) => {
   return parsedGood
 };
 
-const refresh = async ({url, id, price, prev_price, inactive_at, old_price}) => {
+const refresh = async ({url, id, price, prev_price, inactive_at, old_price, autobuy_price}) => {
   // console.group(`[checker.service] -> [refresh] good_id: ${id}`);
   if (!url)
     throw new Error(`Good url required.`);
@@ -142,12 +145,18 @@ const refresh = async ({url, id, price, prev_price, inactive_at, old_price}) => 
       id
     });
 
-    // const isCheaperProductBecomeAvailable = !!inactive_at && price < prev_price;
-    const isDiscountProductBecomeAvailable = !!inactive_at && (price < old_price || price < prev_price);
-    const IsProductBecomeCheaper = newPrice < price;
-    if (IsProductBecomeCheaper || isDiscountProductBecomeAvailable) {
-      vkService.goodBecomeCheaper({...good, prev_price});
+    const isDiscountedProductBecameAvailable = !!inactive_at && (price < old_price || price < prev_price);
+    const isProductBecameCheaper = newPrice < price;
+    if (isProductBecameCheaper || isDiscountedProductBecameAvailable) {
+      const notifySubscriptions = await subscriptionService.requireNotification({...good});
+      vkService.notifyGoodBecameCheaper({good: {...good, prev_price}, subscriptions: notifySubscriptions});
+      const buySubscriptions = await subscriptionService.requireBuy({...good});
+      if (buySubscriptions && buySubscriptions.length > 0) {
+        autobuyService.buy({good: {...good, prev_price}, subscriptions: buySubscriptions});
+      }
     }
+
+
     
   } else {
     good = await goodsService.inactive({ id });

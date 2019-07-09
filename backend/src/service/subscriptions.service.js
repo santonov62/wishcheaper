@@ -75,10 +75,50 @@ const save = async ({id, price_discount, percent_discount}) => {
   return result && result.rows[0];
 };
 
+
+
+
+const calculatePercentDiscount = ({old_price, price}) => {
+  return old_price ? Number((100 - price / (old_price / 100)).toFixed()) : 0;
+};
+
+const requireNotification = async ({id: good_id, url, price, old_price}) => {
+  log('[requireNotification]');
+  if (!good_id)
+    throw new Error(`Good id required.`);
+  const subscriptions = await search({good_id});
+  const filteredSubscriptions = subscriptions.filter(({price_discount, percent_discount}) => {
+    if (!!price_discount) {
+      return price <= price_discount;
+    }
+    if (!!percent_discount) {
+      return calculatePercentDiscount({old_price, price}) >= percent_discount;
+    }
+    return true;
+  });
+  log('[requireNotification] done', filteredSubscriptions);
+  return filteredSubscriptions;
+};
+
+const REQUIRE_BUY = `SELECT * FROM subscriptions
+WHERE
+  good_id = $1 
+AND 
+  autobuy_price IS NOT NULL`;
+const requireBuy = async ({id: good_id}) => {
+  if (!good_id)
+    throw new Error(`Good id required.`);
+
+  const result = await db.query(REQUIRE_BUY, [good_id]);
+  return result && result.rows;
+};
+
 module.exports = {
   add,
   search,
   searchWithGoods,
   remove,
-  save
+  save,
+  requireNotification,
+  requireBuy
 };

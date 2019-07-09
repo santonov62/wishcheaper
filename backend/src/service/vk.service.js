@@ -31,22 +31,13 @@ const getShopName = async (id) => {
   return shop.name
 };
 
-notifyBecomeCheaper = async ({id, url, price, old_price, title, usersVk, prev_price, shop_id}) => {
+const sendVk = async ({message, usersVk}) => {
   const formData = new FormData();
-  const priceDiff = prev_price - price;
-  const priceDiffText = `- ${priceDiff}р`;
-  const percentDiscount = calculatePercentDiscount({old_price, price});
-  const percentDiscountText = percentDiscount > 0 ? `[-${percentDiscount}%]` : '';
-  const shopName = await getShopName(shop_id);
-  formData.append('message', `
-  = ${shopName} = ${percentDiscountText} ${priceDiffText}
-  ${title} ${price}р
-  ${prev_price}р -> ${price}р
-   ${url}`);
-
+  formData.append('message', message);
   formData.append('user_ids', usersVk);
   formData.append('access_token', accessToken);
   formData.append('v', apiVersion);
+
   return fetch(`https://api.vk.com/method/messages.send`, {
     method: 'POST',
     body: formData,
@@ -61,28 +52,45 @@ notifyBecomeCheaper = async ({id, url, price, old_price, title, usersVk, prev_pr
     });
 };
 
-const goodBecomeCheaper = async ({id, url, price, old_price, title, prev_price, shop_id}) => {
+const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersVk, prev_price, shop_id}) => {
+  const priceDiff = prev_price - price;
+  const priceDiffText = `- ${priceDiff}р на`;
+  const percentDiscount = calculatePercentDiscount({old_price, price});
+  const percentDiscountText = percentDiscount > 0 ? `[${percentDiscount}%]` : '';
+  const shopName = await getShopName(shop_id);
+  const message = `
+  = ${shopName} = ${percentDiscountText}
+  ${priceDiffText} ${title} ${price}р
+  ${prev_price}р -> ${price}р
+   ${url}`;
+
+  return sendVk({message, usersVk});
+};
+
+const notifyAutobuySuccess = async ({id, url, price, old_price, title, usersVk, prev_price, shop_id, buyPrice}) => {
+  const shopName = await getShopName(shop_id);
+  const message = `
+  КУПЛЕНО за ${buyPrice}р [${shopName}]
+  ${title}
+  ${url}`;
+
+  return sendVk({message, usersVk});
+};
+
+const notifyGoodBecameCheaperAll = async ({good, subscriptions}) => {
+  const {id} = good;
   if (!id)
     throw new Error(`Good id required.`);
-  const subscriptions = await subscriptionService.search({good_id: id});
-  const filteredSubscriptions = subscriptions.filter(({price_discount, percent_discount}) => {
-    if (!!price_discount) {
-      return price <= price_discount;
-    }
-    if (!!percent_discount) {
-      return calculatePercentDiscount({old_price, price}) >= percent_discount;
-    }
-    return true;
-  });
 
-  while (filteredSubscriptions.length > 0) {
-    const chunk = filteredSubscriptions.splice(0, 100);
+  while (subscriptions.length > 0) {
+    const chunk = subscriptions.splice(0, 100);
     const usersVk = chunk.map(subscription => subscription.user_vk).join(',');
-    const result = await notifyBecomeCheaper({url, usersVk, price, old_price, title, prev_price, shop_id});
+    const result = await notifyGoodBecameCheaper({...good, usersVk});
     log(`[goodBecomeCheaper] [chunk] done`, result);
   }
 };
 
 module.exports = {
-  goodBecomeCheaper
+  notifyGoodBecameCheaper: notifyGoodBecameCheaperAll,
+  notifyAutobuySuccess
 };
