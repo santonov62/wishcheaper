@@ -20,7 +20,7 @@ class Header extends React.Component {
     const { activeItem, value, isLoading } = this.state;
 
     return (
-      <Menu inverted className='headerMenu'>
+      <Menu fixed='top' inverted className='headerMenu'>
 
         <Menu.Item
           name='main'
