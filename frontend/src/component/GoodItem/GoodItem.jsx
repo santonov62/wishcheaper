@@ -12,14 +12,14 @@ const isGoodValid = ({title, price, url}) => {
 
 export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_name,
                            updated_at, created_at, inactive_at, prev_price, subscription_id,
-                           price_discount, percent_discount}) => {
+                           price_discount, percent_discount, autobuy_price}) => {
   
   const invalidGoodProps = {id, url, updated_at, created_at, inactive_at};
   const goodMenuProps = {direction: 'left', good_id: id, subscription_id};
   const isInvalidValid = !isGoodValid({url, title, price});
   const shortGoodItemsProps = {id, url, title, logo, price, old_price, shop_id, shop_name,
     updated_at, created_at, inactive_at, prev_price, subscription_id,
-    price_discount, percent_discount};
+    price_discount, percent_discount, autobuy_price};
   
   return (
     <div className='goodItemContainer'>
@@ -39,7 +39,7 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_
 
 const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id, shop_name,
                          updated_at, created_at, inactive_at, prev_price, subscription_id,
-                         price_discount, percent_discount}) => {
+                         price_discount, percent_discount, autobuy_price}) => {
   
   const isInactive = !!inactive_at;
   const diffPrevPrice = !!prev_price && price - prev_price;
@@ -82,6 +82,9 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           }
           {!!percent_discount &&
           <Label color='orange' size='small'><Icon name='bell outline' />{percent_discount} %</Label>
+          }
+          {!!autobuy_price &&
+          <Label color='blue' size='small'><Icon name='handshake outline' />&lt; {autobuy_price} ₽</Label>
           }
         </Card.Content>
       </Card>

@@ -146,7 +146,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at, old_price}) => 
     const isDiscountProductBecomeAvailable = !!inactive_at && (price < old_price || price < prev_price);
     const IsProductBecomeCheaper = newPrice < price;
     if (IsProductBecomeCheaper || isDiscountProductBecomeAvailable) {
-      vkService.notifyAll({...good, prev_price});
+      vkService.goodBecomeCheaper({...good, prev_price});
     }
     
   } else {

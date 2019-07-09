@@ -82,7 +82,7 @@ function generateToken(user) {
     vk: user.vk && user.vk.toString()
   };
   return jwt.sign(u, process.env.JWT_SECRET, {
-    expiresIn: 60 * 60 * 24 // expires in 24 hours
+    expiresIn: 60 * 60 * (24 * 7) // expires in one week
   });
 }
 
