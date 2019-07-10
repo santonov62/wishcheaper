@@ -28,7 +28,7 @@ const search = async (params) => {
   const SEARCH_QUERY = SELECT + WHERE;
   const result = await db.query(SEARCH_QUERY, statementForSqlParams);
   const goods = result && result.rows;
-  log('[search] done', goods);
+  // log('[search] done', goods);
   return goods;
 };
 
@@ -58,7 +58,7 @@ const update = async ({ id, url, title, logo, price, old_price, prev_price, inac
     inactive_at
   ]);
   const good = result.rows[0];
-  log('[update] done', good);
+  // log('[update] done', good);
   return good;
 };
 
@@ -86,7 +86,7 @@ const add = async ({ url, title, logo, price, old_price, shop_id }) => {
 
   const result = await db.query(SAVE_GOOD, [url, title, logo, price, old_price, shop_id]);
   const good = result.rows[0];
-  log('[save] done', good);
+  // log('[save] done', good);
   return good;
 };
 
@@ -99,7 +99,7 @@ const addByUrl = async ({ url }) => {
   const shop_id = await getShopIdByUrl(url);
   const result = await db.query(ADD_URL, [url, shop_id]);
   const good = result.rows[0];
-  log('[addByUrl] done', good);
+  // log('[addByUrl] done', good);
   return good;
 };
 
@@ -127,7 +127,7 @@ WHERE
 RETURNING *`;
 const inactive = async ({id}) => {
   const result = await db.query(INACTIVE_GOODS, [id, new Date()]);
-  log('[inactive] done', result.rows[0]);
+  // log('[inactive] done', result.rows[0]);
   return result.rows[0];
 };
 
