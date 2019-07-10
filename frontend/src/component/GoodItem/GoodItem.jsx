@@ -84,12 +84,12 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           <Label color='orange' size='small'><Icon name='bell outline' />{percent_discount} %</Label>
           }
           {!!autobuy_price &&
-          <Label color='blue' size='small'><Icon name='handshake outline' />&lt; {autobuy_price} ₽</Label>
+          <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} ₽</Label>
           }
         </Card.Content>
       </Card>
   )
-}
+};
 
 
 const InvalidGoodItem = ({good_id, url}) => {

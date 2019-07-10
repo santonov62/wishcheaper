@@ -50,12 +50,12 @@ const search = async (req, res) => {
 const save = async (req, res) => {
   console.group(`[subscriptions.controller] [save]`);
   try {
-    const {id, price_discount, percent_discount} = req.body;
+    const {id, price_discount, percent_discount, autobuy_price} = req.body;
     if (!id) {
       throw new Error(`id required`);
     }
 
-    const subscription = await subscriptionsService.save({id, price_discount, percent_discount});
+    const subscription = await subscriptionsService.save({id, price_discount, percent_discount, autobuy_price});
     log(`[save] done`, subscription);
     res.json(subscription);
   } catch (e) {

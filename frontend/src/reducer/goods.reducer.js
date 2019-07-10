@@ -62,6 +62,7 @@ const codesReducer = (state = initialState, action) => {
       if (!!good) {
         good.price_discount = savedSubscription.price_discount;
         good.percent_discount = savedSubscription.percent_discount;
+        good.autobuy_price = savedSubscription.autobuy_price;
       }
       return {
         isLoading: false,

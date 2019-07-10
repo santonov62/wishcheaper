@@ -46,7 +46,7 @@ export const searchSubscriptions = (params) => async (dispatch, getState) => {
   }
 };
 
-export const saveSubscriptions = ({id, price_discount, percent_discount}) => async (dispatch, getState) => {
+export const saveSubscriptions = ({id, price_discount, percent_discount, autobuy_price}) => async (dispatch, getState) => {
   dispatch({type: Actions.SUBSCRIPTIONS_SAVING});
   try {
     const subscription = await fetch(`/subscriptions`, {
@@ -54,7 +54,8 @@ export const saveSubscriptions = ({id, price_discount, percent_discount}) => asy
       body: JSON.stringify({
         id,
         price_discount,
-        percent_discount
+        percent_discount,
+        autobuy_price
       }),
       headers: {
         ...Constants.REQUEST_JSON_HEADERS,

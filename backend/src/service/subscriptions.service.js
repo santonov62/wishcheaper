@@ -67,11 +67,12 @@ const remove = async({goodId, userVk}) => {
 const SAVE_SUBSCRIPTION = `UPDATE subscriptions
 SET
   price_discount = $2,
-  percent_discount = $3
+  percent_discount = $3,
+  autobuy_price = $4
 WHERE id = $1
 RETURNING *`;
-const save = async ({id, price_discount, percent_discount}) => {
-  const result = await db.query(SAVE_SUBSCRIPTION, [id, price_discount || null, percent_discount || null]);
+const save = async ({id, price_discount, percent_discount, autobuy_price}) => {
+  const result = await db.query(SAVE_SUBSCRIPTION, [id, price_discount || null, percent_discount || null, autobuy_price || null]);
   return result && result.rows[0];
 };
 
@@ -104,12 +105,12 @@ const REQUIRE_BUY = `SELECT * FROM subscriptions
 WHERE
   good_id = $1 
 AND 
-  autobuy_price IS NOT NULL`;
-const requireBuy = async ({id: good_id}) => {
+  autobuy_price > $2`;
+const requireBuy = async ({id: good_id, price}) => {
   if (!good_id)
     throw new Error(`Good id required.`);
 
-  const result = await db.query(REQUIRE_BUY, [good_id]);
+  const result = await db.query(REQUIRE_BUY, [good_id, price]);
   return result && result.rows;
 };
 

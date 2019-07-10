@@ -12,29 +12,43 @@ class SubscriptionModalTemplate extends React.Component {
       percentDiscount: '',
       isLoading: false,
       success: false,
+      autobuy: false,
+      autobuyPrice: ''
     }
   };
   onOpen = async () => {
     this.setState({isLoading: true, success: false});
     const {subscription_id} = this.props;
-    const {price_discount, percent_discount} = await this.props.searchSubscriptions({id: subscription_id});
+    const {price_discount, percent_discount, autobuy_price} = await this.props.searchSubscriptions({id: subscription_id});
     
     const mode = !!price_discount || !!percent_discount ? 'range' : 'any';
     this.setState({
       mode,
       priceDiscount: price_discount || '',
       percentDiscount: percent_discount || '',
-      isLoading: false
+      isLoading: false,
+      autobuyPrice: autobuy_price || '',
+      autobuy: !!autobuy_price
     });
   };
+  // toggle = () => this.setState(({ checked }) => ({ autobuy: !checked }));
+  handleCheckboxChange = (event, { name, checked }) => {
+    this.setState({ [name]: checked });
+  };
   saveSubscription = async () => {
-    const {percentDiscount, priceDiscount, mode} = this.state;
+    const {percentDiscount, priceDiscount, autobuyPrice, mode, autobuy} = this.state;
     const {subscription_id} = this.props;
     const isAnyMode = mode === 'any';
-    const params = isAnyMode ? {} : {
+    const isAutobuyMode = !!autobuy;
+    let params = isAnyMode ? {} : {
       price_discount: priceDiscount,
       percent_discount: percentDiscount
     };
+    if (isAutobuyMode)
+      params = {
+        ...params,
+        autobuy_price: autobuyPrice
+      };
     const subscription = await this.props.saveSubscriptions({
       id: subscription_id,
       ...params
@@ -45,7 +59,7 @@ class SubscriptionModalTemplate extends React.Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
   render() {
     const {trigger} = this.props;
-    const {mode, priceDiscount, percentDiscount, isLoading, success} = this.state;
+    const {mode, priceDiscount, percentDiscount, isLoading, success, autobuy, autobuyPrice} = this.state;
     return (
         <Modal dimmer='inverted' size='mini'
                trigger={trigger}
@@ -110,6 +124,26 @@ class SubscriptionModalTemplate extends React.Component {
                     onChange={this.handleChange}
                 />
               </Form.Group>
+              
+              <Divider horizontal />
+              
+                <Form.Checkbox
+                    name='autobuy'
+                    checked={autobuy}
+                    label='Автоматически покупать'
+                    onChange={this.handleCheckboxChange} />
+                
+                    <Form.Field
+                    disabled={!autobuy}
+                    value={autobuyPrice}
+                    name='autobuyPrice'
+                    label='При сумме ниже'
+                    fluid
+                    icon='ruble sign'
+                    control={Input}
+                    onChange={this.handleChange}
+                />
+  
             </Form>
           </Modal.Content>
           <Modal.Actions>
