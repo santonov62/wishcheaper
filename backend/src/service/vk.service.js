@@ -53,16 +53,18 @@ const sendVk = async ({message, usersVk}) => {
 };
 
 const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersVk, prev_price, shop_id}) => {
-  const priceDiff = prev_price - price;
-  const priceDiffText = `- ${priceDiff}р на`;
+  const priceDiff = old_price - price;
+  const priceDiffText = `-${priceDiff}р`;
+  const lastPriceDiff = prev_price - price;
+  const lastPriceDiffText = lastPriceDiff !== 0 ? `Динамика цены -${lastPriceDiff}р` : `Появился в наличии`;
   const percentDiscount = calculatePercentDiscount({old_price, price});
   const percentDiscountText = percentDiscount > 0 ? `[${percentDiscount}%]` : '';
   const shopName = await getShopName(shop_id);
   const message = `
-  = ${shopName} = ${percentDiscountText}
-  ${priceDiffText} ${title} ${price}р
-  ${prev_price}р -> ${price}р
-   ${url}`;
+  ${old_price}р -> ${price}р ${percentDiscountText} ${priceDiffText}
+  ${title} ${price}р
+  ${lastPriceDiffText}
+  ${url}`;
 
   return sendVk({message, usersVk});
 };

@@ -104,12 +104,12 @@ const REQUIRE_BUY = `SELECT * FROM subscriptions
 WHERE
   good_id = $1 
 AND 
-  autobuy_price IS NOT NULL`;
-const requireBuy = async ({id: good_id}) => {
+  autobuy_price > $2`;
+const requireBuy = async ({id: good_id, price}) => {
   if (!good_id)
     throw new Error(`Good id required.`);
 
-  const result = await db.query(REQUIRE_BUY, [good_id]);
+  const result = await db.query(REQUIRE_BUY, [good_id, price]);
   return result && result.rows;
 };
 
