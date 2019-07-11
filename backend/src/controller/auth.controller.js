@@ -2,8 +2,14 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const usersService = require('../service/users.service');
 const md5 = require('md5');
-const VK_SECRET_KEY = process.env.VK_SECRET_KEY;
 const app = express();
+const VK_SECRET_KEY = process.env.VK_SECRET_KEY;
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  console.error('ERROR!: Please set JWT_SECRET to .env file before running the app.');
+  process.exit();
+}
 
 const authByVk = async (req, res) => {
   console.group(`[auth.controller] -> [authByVk]`);
@@ -11,8 +17,8 @@ const authByVk = async (req, res) => {
   try {
     const session = req.body;
 
-    if (!isCorrectVKSession(session))
-      throw new Error(`Error checking vk session`);
+    if (!isVkSessionCorrect(session))
+      throw new Error(`Incorrect vk session`);
 
     let user = await usersService.search({vk: session.mid});
     if (!user){
@@ -31,11 +37,12 @@ const authByVk = async (req, res) => {
       token: token
     });
   } catch (ex) {
-    res.status(401).json(`[backend auth by vk]: ${ex.message}`);
+    res.status(401).json(`[authByVk]: ${ex.message}`);
   } finally {
     console.groupEnd();
   }
 };
+
 const authFromToken = async (req, res) => {
   console.group(`[auth.controller] -> [authFromToken]`);
   try {
@@ -81,12 +88,12 @@ function generateToken(user) {
     admin: user.admin && user.admin.toString(),
     vk: user.vk && user.vk.toString()
   };
-  return jwt.sign(u, process.env.JWT_SECRET, {
+  return jwt.sign(u, JWT_SECRET, {
     expiresIn: 60 * 60 * (24 * 7) // expires in one week
   });
 }
 
-const isCorrectVKSession = (session) => {
+const isVkSessionCorrect = (session) => {
   return session && session.sig === md5(`expire=${session.expire}mid=${session.mid}secret=${session.secret}sid=${session.sid}${VK_SECRET_KEY}`);
 };
 

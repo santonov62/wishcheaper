@@ -17,11 +17,6 @@ const app = express();
 
 app.use(sslRedirect());
 
-if (!process.env.JWT_SECRET) {
-  console.error('ERROR!: Please set JWT_SECRET to .env file before running the app.');
-  process.exit();
-}
-
 app.use(bodyParser.json());
 app.use('/*', authMiddleware.checkAuth);
 app.use('/checker', checkerController);

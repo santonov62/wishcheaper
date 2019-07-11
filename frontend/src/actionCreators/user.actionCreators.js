@@ -3,7 +3,7 @@ import {ADD_ERROR} from '../actions/errors.actions';
 import * as Constants from "../constants";
 import {clearUser, saveUser} from "../storage/user.storage";
 
-const loadAuthData = async (session) => {
+const authByVk = async (session) => {
   return await fetch('/auth/vk', {
     method: 'POST',
     body: JSON.stringify(session),
@@ -50,8 +50,8 @@ const loadVkSession = () => {
 export const authWithVk = () => async (dispatch, getState) => {
   try {
     dispatch({ type: Actions.USER_LOADING });
-    const session = await loadVkSession();
-    const authData = await loadAuthData(session);
+    const vkSession = await loadVkSession();
+    const authData = await authByVk(vkSession);
     if (!authData.user || !authData.token)
       throw new Error(authData);
 
