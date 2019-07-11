@@ -57,7 +57,7 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   const priceDiff = old_price && old_price - price;
   const priceDiffText = !!priceDiff ? `-${priceDiff}р` : ``;
   const lastPriceDiff = prev_price - price;
-  const lastPriceDiffText = lastPriceDiff !== 0 ? `Динамика цены -${lastPriceDiff}р` : `Появился в наличии`;
+  const lastPriceDiffText = lastPriceDiff !== 0 ? `От предыдущей цены -${lastPriceDiff}р` : `Появился в наличии`;
   const percentDiscount = calculatePercentDiscount({old_price, price});
   const percentDiscountText = percentDiscount > 0 ? `[${percentDiscount}%]` : '';
   const shopName = await getShopName(shop_id);
