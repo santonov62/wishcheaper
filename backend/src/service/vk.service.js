@@ -55,7 +55,7 @@ const sendVk = async ({message, usersVk}) => {
 const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersVk, prev_price, shop_id}) => {
   const oldPriceText = !!old_price ? `${old_price}р ->` : ``;
   const priceDiff = old_price && old_price - price;
-  const priceDiffText = !!priceDiff ? `-${priceDiff}р` : ``;
+  const priceDiffText = !!priceDiff ? `[-${priceDiff}р]` : ``;
   const lastPriceDiff = prev_price - price;
   const lastPriceDiffText = lastPriceDiff !== 0 ? `Динамика цены -${lastPriceDiff}р` : `Появился в наличии`;
   const percentDiscount = calculatePercentDiscount({old_price, price});
