@@ -91,13 +91,13 @@ const add = async ({ url, title, logo, price, old_price, shop_id }) => {
 };
 
 const ADD_URL = `INSERT INTO goods (
-    url, shop_id
+    url, shop_id, inactive_at
 ) VALUES (
-    $1, $2
+    $1, $2, $3
 ) RETURNING *`;
 const addByUrl = async ({ url }) => {
   const shop_id = await getShopIdByUrl(url);
-  const result = await db.query(ADD_URL, [url, shop_id]);
+  const result = await db.query(ADD_URL, [url, shop_id, new Date()]);
   const good = result.rows[0];
   // log('[addByUrl] done', good);
   return good;
