@@ -104,10 +104,15 @@ const push = (goods) => {
   if (!goods)
     return;
 
-  if (goods.length)
-    processGoods = processGoods.concat(goods);
-  else
-    processGoods.push(goods);
+  goods = [].concat(goods);
+
+  const filteredGoods = goods.filter(good => {
+    return !processGoods.some(processGood => {
+      return processGood.id === good.id
+    })
+  });
+
+  processGoods = processGoods.concat(filteredGoods);
 
   return processGoods;
 }
