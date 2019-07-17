@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const isDebugMode = false;
+const proxyHolderService = require('./proxyHolder.service');
+const isDebugMode = true;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'avito.ru';
 const SHOP_TITLE = 'Avito';
@@ -27,8 +28,10 @@ const parse = async (url) => {
   
   if (!url)
     throw new Error(`Url required.`);
-
-  let launchParams = { args: [ `--no-sandbox` ], headless: true };
+  
+  const proxy = await proxyHolderService.pullProxy();
+  
+  let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
   if (isDebugMode)
     launchParams = { ...launchParams, headless: false };
 
@@ -78,6 +81,8 @@ const parse = async (url) => {
     };
     
     log(`[parse] done`, parsedData);
+  
+    proxyHolderService.pushProxy(proxy);
 
     return parsedData;
 

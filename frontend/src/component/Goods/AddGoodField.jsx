@@ -7,7 +7,7 @@ import {addByUrl} from "../../actionCreators/goods.actionCreators";
 
 class AddGoodField extends React.Component {
     state = {
-        value: '',
+        value: 'https://www.avito.ru/ryazan/telefony/iphone_xs_space_gray_novyy_1264324596',
         isLoading: false
     };
     
