@@ -150,7 +150,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at, old_price, auto
       id
     });
 
-    const priceShift = 40;
+    const priceShift = price * 0.002; // 2%
     const priceWithShifting = price + priceShift;
     const isDiscountedProductBecameAvailable = !!inactive_at && (priceWithShifting < old_price || priceWithShifting < prev_price);
     const isProductBecameCheaper = newPrice + priceShift < price;
