@@ -7,7 +7,7 @@ const TIMEOUT_DELAY = 30000;
 
 const parseProxydockerProxies = async () => {
   log(`parseProxydockerProxies`);
-  const browser = await puppeteer.launch({args: [`--no-sandbox`]});
+  const browser = await puppeteer.launch({args: [`--no-sandbox`], headless: true});
   try {
     const page = await browser.newPage();
     // const url = `https://www.proxydocker.com/en/proxylist/search?port=All&type=HTTP&anonymity=All&country=Russia&city=All&state=All&need=All`;
@@ -17,10 +17,15 @@ const parseProxydockerProxies = async () => {
     await page.goto(url, {waitUntil: 'domcontentloaded'});
     log(`done`);
   
-    log(`waitForNavigation: `, '.proxylist_table');
-    await page.waitFor('.proxylist_table tr td:first-child:not([colspan])');
-    log(`done`);
+    // log(`waitForNavigation: `, '.proxylist_table');
+    // await page.waitFor('.proxylist_table tr td:first-child:not([colspan])', {visible: true});
+    // log(`done`);
   
+    // await page.waitFor('.proxylist_table tbody tr', {visible: true});
+    log(`waitFor: `, '.proxylist_table tbody tr');
+    const selector = '.proxylist_table tbody tr';
+    await page.waitFor(selector => document.querySelectorAll(selector).length > 0, {}, selector);
+    
     log(`eval`, '.proxylist_table tbody tr');
     let proxies = await page.$$eval('.proxylist_table tbody tr', (trs) => {
       const ips = [];
@@ -39,11 +44,11 @@ const parseProxydockerProxies = async () => {
     proxies = [...new Set([...proxiesList, ...proxies])];
     log(`proxies`, proxies);
     lastUpdateTime = Date.now();
-    browser.close();
     return proxies;
   } catch (e) {
-    browser.close();
     throw new Error(e);
+  } finally {
+    // browser.close()
   }
 };
 const updateProxies = async () => {
