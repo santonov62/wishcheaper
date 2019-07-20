@@ -7,7 +7,7 @@ const TIMEOUT_DELAY = 30000;
 
 const parseProxydockerProxies = async () => {
   log(`parseProxydockerProxies`);
-  const browser = await puppeteer.launch({args: [`--no-sandbox`], headless: false});
+  const browser = await puppeteer.launch({args: [`--no-sandbox`], headless: true});
   try {
     const page = await browser.newPage();
     // const url = `https://www.proxydocker.com/en/proxylist/search?port=All&type=HTTP&anonymity=All&country=Russia&city=All&state=All&need=All`;

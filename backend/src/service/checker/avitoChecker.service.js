@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const proxyHolderService = require('./proxyHolder.service');
-const isDebugMode = true;
+const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'avito.ru';
 const SHOP_TITLE = 'Avito';
@@ -41,36 +41,26 @@ const parse = async (url) => {
     const page = await browser.newPage();
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
-    // log(`done`);
+    // await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
+    try {
+      await page.goto(url, {waitUntil: 'domcontentloaded', timeout: 30000});
+    } catch (e) {
+
+    }
+    log(`done`);
 
     let title, currentPrice, logo, oldPrice;
-    log(`$eval title`);
     try {
+      log(`$eval title`);
       title = await page.$eval('.title-info-title-text', node => node.innerText);
-    } catch (e) {
-    
-    }
-    
-    log(`$eval price`);
-    try {
+      log(`$eval price`);
       currentPrice = await page.$eval('.js-item-price', node => node.getAttribute('content'));
-    } catch (e) {
-    
-    }
-  
-    log(`$eval oldPrice`);
-    try {
+      log(`$eval oldPrice`);
       oldPrice = await page.$eval('.item-price-old', node => parseInt(node.innerText.replace(/\s+/g, '')));
-    } catch (e) {
-    
-    }
-    
-    log(`$eval .photo[data-img]`);
-    try {
+      log(`logo`);
       logo = await page.$eval('.gallery-img-frame', node => node.getAttribute('data-url').replace(/\/\//, 'https://'));
     } catch (e) {
-    
+
     }
     const parsedData = {
         url,
@@ -81,15 +71,15 @@ const parse = async (url) => {
     };
     
     log(`[parse] done`, parsedData);
-  
-    proxyHolderService.pushProxy(proxy);
+    if (!!title)
+      proxyHolderService.pushProxy(proxy);
 
     return parsedData;
 
   } catch (e) {
     throw new Error(e);
   } finally {
-    if (!isDebugMode)
+    // if (!isDebugMode)
       await browser.close();
   }
 };
