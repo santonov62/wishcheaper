@@ -29,11 +29,12 @@ const parse = async (url) => {
   if (!url)
     throw new Error(`Url required.`);
   
-  // const proxy = await proxyHolderService.pullProxy();
-  // let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
   const proxy = await proxyHolderService.pullProxy();
+  let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
 
-  let launchParams = { args: [ `--no-sandbox` ] };
+  // const proxy = await proxyHolderService.pullProxy();
+  // let launchParams = { args: [ `--no-sandbox` ] };
+
   if (isDebugMode)
     launchParams = { ...launchParams, headless: false };
 
@@ -64,6 +65,7 @@ const parse = async (url) => {
     } catch (e) {
 
     }
+
     const parsedData = {
         url,
         title,

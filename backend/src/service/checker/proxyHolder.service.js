@@ -48,7 +48,7 @@ const parseProxydockerProxies = async () => {
   } catch (e) {
     throw new Error(e);
   } finally {
-    // browser.close()
+    browser.close();
   }
 };
 const updateProxies = async () => {
