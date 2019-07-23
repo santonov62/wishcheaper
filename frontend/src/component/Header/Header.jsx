@@ -22,14 +22,14 @@ class Header extends React.Component {
     return (
       <Menu fixed='top' inverted className='headerMenu'>
 
-        <Menu.Item
-          name='main'
-          as={Link}
-          to="/"
-          active={activeItem === 'main'}
-          onClick={this.handleItemClick}>
-          <Image src='/images/logo.png' size='mini' />
-        </Menu.Item>
+        {/*<Menu.Item*/}
+          {/*name='main'*/}
+          {/*as={Link}*/}
+          {/*to="/"*/}
+          {/*active={activeItem === 'main'}*/}
+          {/*onClick={this.handleItemClick}>*/}
+          {/*<Image src='/images/logo.png' size='mini' />*/}
+        {/*</Menu.Item>*/}
 
         <Menu.Item
           name='mylist'
