@@ -50,7 +50,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
   return (
       <Card className={`goodItem ${isInactive ? 'inactive' : ''}`}>
         <div className='logo'>
-          <Image src={logo} />
+          {!!logo ? <Image src={logo} /> : <Icon size='huge' name='ban' style={{margin: 30}} /> }
           {percentDiscount > 0 &&
           <Label color='orange' className='discount' size='large' circular>
             -{roundedPercentDiscount}%
@@ -96,8 +96,8 @@ const InvalidGoodItem = ({good_id, url}) => {
   return (
     
       <Card className='goodItem invalid'>
-        <div className='logo' style={{marginTop: 20}}>
-          <Icon size='huge' name='ban' />
+        <div className='logo'>
+          <Icon size='huge' name='ban' style={{margin: 30}}/>
         </div>
         <Card.Content>
           <Card.Header as='a' href={url} target='_blank' style={{

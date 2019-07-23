@@ -52,19 +52,29 @@ const parse = async (url) => {
     }
     log(`done`);
 
-    let title, currentPrice, logo, oldPrice;
-    try {
-      log(`$eval title`);
-      title = await page.$eval('.title-info-title-text', node => node.innerText);
-      log(`$eval price`);
-      currentPrice = await page.$eval('.js-item-price', node => node.getAttribute('content'));
-      log(`$eval oldPrice`);
-      oldPrice = await page.$eval('.item-price-old', node => parseInt(node.innerText.replace(/\s+/g, '')));
-      log(`logo`);
-      logo = await page.$eval('.gallery-img-frame', node => node.getAttribute('data-url').replace(/\/\//, 'https://'));
-    } catch (e) {
+    // await page.waitFor(`.gallery-img-frame`);
 
-    }
+    let title, currentPrice, logo, oldPrice;
+
+    log(`$eval title`);
+    try {
+      title = await page.$eval('.title-info-title-text', node => node.innerText);
+    } catch (e) { }
+
+      log(`$eval price`);
+    try {
+      currentPrice = await page.$eval('.js-item-price', node => node.getAttribute('content'));
+    } catch (e) { }
+
+    log(`$eval oldPrice`);
+    try {
+      oldPrice = await page.$eval('.item-price-old', node => parseInt(node.innerText.replace(/\s+/g, '')));
+    } catch (e) { }
+
+    log(`logo`);
+    try {
+      logo = await page.$eval('.gallery-img-frame img', node => node.getAttribute('src').replace(/\/\//, 'https://'));
+    } catch (e) { }
 
     const parsedData = {
         url,
@@ -84,7 +94,7 @@ const parse = async (url) => {
     throw new Error(e);
   } finally {
     // if (!isDebugMode)
-      await browser.close();
+    //   await browser.close();
   }
 };
 
