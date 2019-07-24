@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
-const SHOP_NAME = 'ru.aliexpress.com';
-const SHOP_TITLE = 'Aliexpress';
+const SHOP_NAME = 'tmall.aliexpress.com';
+const SHOP_TITLE = 'Tmall Aliexpress';
 
 const log = (text, params = '') => {
   console.log(`[pandaoChecker.service] -> ${text}`, params);
@@ -44,22 +44,22 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
-      title = await page.$eval('.product-title', node => node.innerText);
+      title = await page.$eval('.product-name', node => node.innerText);
     } catch (e) { }
     
     log(`price`);
     try {
-      currentPrice = await page.$eval('.product-price-current .product-price-value', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('.p-current-price .p-price', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
   
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('.product-price-original .product-price-value', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('.p-del-price-content .p-price', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
     
     log(`logo`);
     try {
-      logo = await page.$eval('.magnifier-image', node => node.getAttribute('src'))
+      logo = await page.$eval('.ui-image-viewer-thumb-frame img', node => node.getAttribute('src'))
     } catch (e) { }
     
     const parsedData = {

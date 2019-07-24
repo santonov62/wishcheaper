@@ -2,6 +2,7 @@ const pandaoChecker = require('./pandaoChecker.service');
 const avitoChecker = require('./avitoChecker.service');
 const mvideoChecker = require('./mvideoChecker.service');
 const aliexpressChecker = require('./aliexpressChecker.service');
+const tmallAliexpressChecker = require('./tmallAliexpressChecker.service');
 const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
 const autobuyService = require('../autobuy/autobuy.service');
@@ -14,7 +15,8 @@ const checkerList = [
   pandaoChecker,
   avitoChecker,
   mvideoChecker,
-  aliexpressChecker
+  aliexpressChecker,
+  tmallAliexpressChecker
 ];
 
 let processGoods = [];
