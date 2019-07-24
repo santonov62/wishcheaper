@@ -94,7 +94,7 @@ const parse = async (url) => {
     throw new Error(e);
   } finally {
     // if (!isDebugMode)
-    //   await browser.close();
+      await browser.close();
   }
 };
 
