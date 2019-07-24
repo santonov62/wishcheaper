@@ -24,8 +24,8 @@ const init = async () => {
 
 init();
 
-const parse = async (url) => {
-  
+const parse = async (url, attempts = 0) => {
+  attempts++;
   if (!url)
     throw new Error(`Url required.`);
   
@@ -48,7 +48,9 @@ const parse = async (url) => {
     try {
       await page.goto(url, {waitUntil: 'domcontentloaded', timeout: 30000});
     } catch (e) {
-
+      browser.close();
+      if (attempts < 5)
+        return await parse(url, attempts);
     }
     log(`done`);
 
@@ -63,7 +65,7 @@ const parse = async (url) => {
 
       log(`$eval price`);
     try {
-      currentPrice = await page.$eval('.js-item-price', node => node.getAttribute('content'));
+      currentPrice = await page.$eval('.js-item-price', node => parseInt(node.getAttribute('content')));
     } catch (e) { }
 
     log(`$eval oldPrice`);
@@ -86,15 +88,14 @@ const parse = async (url) => {
     
     log(`[parse] done`, parsedData);
     if (!!title)
-      proxyHolderService.pushProxy(proxy);
+      proxyHolderService.unshiftProxy(proxy);
 
     return parsedData;
 
   } catch (e) {
     throw new Error(e);
   } finally {
-    // if (!isDebugMode)
-      await browser.close();
+    await browser.close();
   }
 };
 

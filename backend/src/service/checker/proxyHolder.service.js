@@ -70,6 +70,10 @@ const pushProxy = (proxy) => {
   proxiesList.push(proxy);
   log(`pushProxy`, proxy)
 };
+const unshiftProxy = (proxy) => {
+  proxiesList.unshift(proxy);
+  log(`unshiftProxy`, proxy)
+};
 const isProxiesNeedUpdate = () => {
   if (proxiesList > 1000)
     return;
@@ -85,5 +89,6 @@ const log = (text, params = '') => {
 
 module.exports = {
   pushProxy,
+  unshiftProxy,
   pullProxy
 };
