@@ -24,12 +24,16 @@ const init = async () => {
 
 init();
 
+let proxy;
+
 const parse = async (url, attempts = 0) => {
   attempts++;
   if (!url)
     throw new Error(`Url required.`);
-  
-  const proxy = await proxyHolderService.pullProxy();
+
+  if (!proxy)
+    proxy = await proxyHolderService.pullProxy();
+
   let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
 
   // const proxy = await proxyHolderService.pullProxy();
@@ -44,10 +48,10 @@ const parse = async (url, attempts = 0) => {
     const page = await browser.newPage();
 
     log(`goto: `, url);
-    // await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     try {
-      await page.goto(url, {waitUntil: 'domcontentloaded', timeout: 30000});
+      await page.goto(url, {waitUntil: 'domcontentloaded', timeout: 15000});
     } catch (e) {
+      proxy = null;
       browser.close();
       if (attempts < 5)
         return await parse(url, attempts);

@@ -79,7 +79,7 @@ const isProxiesNeedUpdate = () => {
     return;
 
   const isExpired = Date.now() - lastUpdateTime > 60000 * 10;
-  const isPoor = proxiesList.length < 20;
+  const isPoor = proxiesList.length < 10;
   return isExpired || isPoor;
 };
 
