@@ -50,7 +50,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
   return (
       <Card className={`goodItem ${isInactive ? 'inactive' : ''}`}>
         <div className='logo'>
-          {!!logo ? <Image src={logo} /> : <Icon size='huge' name='ban' style={{margin: 30}} /> }
+          {!!logo ? <Image src={logo} /> : <Icon size='huge' name='image' style={{margin: 30}} /> }
           {percentDiscount > 0 &&
           <Label color='orange' className='discount' size='large' circular>
             -{roundedPercentDiscount}%
