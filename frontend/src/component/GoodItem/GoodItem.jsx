@@ -65,7 +65,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
             {!!old_price && <span><strike>{old_price}₽</strike> -> </span>}
             <span>{price} ₽</span>
             &nbsp;
-            {!!min_price &&
+            {!!min_price && min_price < price &&
             <Label color='blue' alt='Минимальная цена'>
               <Icon name='chart bar outline' />{min_price} ₽
             </Label>
