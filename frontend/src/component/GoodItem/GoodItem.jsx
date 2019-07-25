@@ -12,14 +12,14 @@ const isGoodValid = ({title, price, url}) => {
 
 export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_name,
                            updated_at, created_at, inactive_at, prev_price, subscription_id,
-                           price_discount, percent_discount, autobuy_price}) => {
+                           price_discount, percent_discount, autobuy_price, min_price}) => {
   
   const invalidGoodProps = {id, url, updated_at, created_at, inactive_at};
   const goodMenuProps = {direction: 'left', good_id: id, subscription_id};
   const isInvalidValid = !isGoodValid({url, title, price});
   const shortGoodItemsProps = {id, url, title, logo, price, old_price, shop_id, shop_name,
     updated_at, created_at, inactive_at, prev_price, subscription_id,
-    price_discount, percent_discount, autobuy_price};
+    price_discount, percent_discount, autobuy_price, min_price};
   
   return (
     <div className='goodItemContainer'>
@@ -39,7 +39,7 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_
 
 const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id, shop_name,
                          updated_at, created_at, inactive_at, prev_price, subscription_id,
-                         price_discount, percent_discount, autobuy_price}) => {
+                         price_discount, percent_discount, autobuy_price, min_price}) => {
   
   const isInactive = !!inactive_at;
   const diffPrevPrice = !!prev_price && price - prev_price;
@@ -64,10 +64,16 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           <Card.Description>
             {!!old_price && <span><strike>{old_price}₽</strike> -> </span>}
             <span>{price} ₽</span>
-          
+            &nbsp;
+            {!!min_price &&
+            <Label color='blue' alt='Минимальная цена'>
+              <Icon name='chart bar outline' />{min_price} ₽
+            </Label>
+            }
+            
             {!!diffPrevPrice &&
             <Fragment>
-              &nbsp;<Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
+              <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
                 {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
               </Label>
             </Fragment>

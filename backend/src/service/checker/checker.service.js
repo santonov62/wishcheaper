@@ -132,7 +132,7 @@ const parse = async (url) => {
   return parsedGood
 };
 
-const refresh = async ({url, id, price, prev_price, inactive_at, old_price, autobuy_price}) => {
+const refresh = async ({url, id, price, prev_price, inactive_at, old_price, autobuy_price, min_price}) => {
   // console.group(`[checker.service] -> [refresh] good_id: ${id}`);
   if (!url)
     throw new Error(`Good url required.`);
@@ -148,8 +148,11 @@ const refresh = async ({url, id, price, prev_price, inactive_at, old_price, auto
     if (!prev_price || newPrice !== price)
       prev_price = price;
     
+    const minPrice = !min_price || newPrice < min_price ? newPrice : min_price;
+    
     good = await goodsService.update({
       ...parsedGood,
+      min_price: minPrice,
       prev_price,
       id
     });
