@@ -52,7 +52,7 @@ const sendVk = async ({message, usersVk}) => {
     });
 };
 
-const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersVk, prev_price, shop_id}) => {
+const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersVk, prev_price, shop_id, min_price}) => {
   const oldPriceText = !!old_price ? `${old_price}р ->` : ``;
   const priceDiff = old_price && old_price - price;
   const priceDiffText = !!priceDiff ? `[-${priceDiff}р]` : ``;
@@ -61,8 +61,9 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   const percentDiscount = calculatePercentDiscount({old_price, price});
   const percentDiscountText = percentDiscount > 0 ? `[${percentDiscount}%]` : '';
   const shopName = await getShopName(shop_id);
+  const importantText = price <= min_price + price * 0.005 ? `!!! ` : ``;
   const message = `
-  ${price}р ${percentDiscountText} ${shopName}
+  ${importantText}${price}р ${percentDiscountText} ${shopName}
   ${title}
   ${lastPriceDiffText}
   ${oldPriceText} ${price}р ${priceDiffText}
