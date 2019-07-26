@@ -31,8 +31,13 @@ const parse = async (url, attempts = 0) => {
   if (!url)
     throw new Error(`Url required.`);
 
-  if (!proxy)
-    proxy = await proxyHolderService.pullProxy();
+  if (!proxy) {
+    try {
+      proxy = await proxyHolderService.pullProxy();
+    } catch (e) {
+      return {};
+    }
+  }
 
   let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
 
