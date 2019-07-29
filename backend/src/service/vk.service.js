@@ -62,7 +62,7 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   const percentDiscountText = percentDiscount > 0 ? `[${percentDiscount}%]` : '';
   const shopName = await getShopName(shop_id);
   const importantText = price <= min_price + price * 0.01 ? `!!! ` : ``;
-  const minPriceText = `Мин ${min_price}р`;
+  const minPriceText = !!min_price && `Мин ${min_price}р`;
   const message = `
   ${importantText}${price}р ${percentDiscountText} ${shopName}
   ${title}

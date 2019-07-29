@@ -46,7 +46,7 @@ class AddGoodField extends React.Component {
                 value={value}
                 name='value'
                 icon={<Icon name='add' link onClick={this.addByUrl}/>}
-                placeholder='Вставьте url для отслеживания...'
+                placeholder='Назавание или url для отслеживания...'
                 onChange={this.handleChange}/>
         )
     }
