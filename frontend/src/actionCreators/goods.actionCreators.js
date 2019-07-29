@@ -18,10 +18,11 @@ const processError = (message, dispatch) => {
   });
 };
 
-export const userGoods = () => async (dispatch, getState) => {
+export const userGoods = (params = {}) => async (dispatch, getState) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
-    const result = await fetch(`/goods/my`, {
+    const {title = ''} = params;
+    const result = await fetch(`/goods/my?title=${title}`, {
       method: 'GET',
       headers: {
         ...Constants.REQUEST_JSON_HEADERS,

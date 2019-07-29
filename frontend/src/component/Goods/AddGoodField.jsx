@@ -4,15 +4,29 @@ import {authHeader} from "../../helpers/auth-header";
 import { connect } from 'react-redux';
 import * as Constants from "../../constants";
 import {addByUrl} from "../../actionCreators/goods.actionCreators";
+import { userGoods } from '../../actionCreators/goods.actionCreators';
 
 class AddGoodField extends React.Component {
     state = {
         value: '',
         isLoading: false
     };
+    searchTimeout = null;
     
+    isUrl = (text) => {
+        const match = text.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#//=]*)/g);
+        return match && !!match[0];
+    };
     handleChange = (e, { name, value }) => {
         this.setState({ value });
+        
+        if (this.isUrl(value))
+            return;
+        
+        clearTimeout(this.searchTimeout);
+        this.searchTimeout = setTimeout(() => {
+            this.props.userGoods({title: value});
+        },1500);
     };
     addByUrl = async () => {
         const {value} = this.state;
@@ -37,5 +51,10 @@ class AddGoodField extends React.Component {
         )
     }
 }
-export default connect(({user}) => ({user}), dispatch => ({addByUrl: url => dispatch(addByUrl(url))}))(AddGoodField);
+export default connect(({user}) => ({user}),
+        dispatch => ({
+            addByUrl: url => dispatch(addByUrl(url)),
+            userGoods: ({title}) => dispatch(userGoods({title}))
+        })
+)(AddGoodField);
 

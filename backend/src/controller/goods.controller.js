@@ -34,7 +34,8 @@ const my = async (req, res) => {
   console.group(`[goods.controller] -> [my]`);
   try {
     const {vk} = req.user;
-    const subscriptionGoods = await goodsService.userGoods({user_vk: vk});
+    const {title} = req.query;
+    const subscriptionGoods = await goodsService.userGoods({user_vk: vk, title});
     res.json(subscriptionGoods);
   } catch (e) {
     res.status(500).json({error: e.message});

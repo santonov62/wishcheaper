@@ -105,20 +105,52 @@ const addByUrl = async ({ url }) => {
   return good;
 };
 
-const SEARCH_USER_GOODS = `SELECT
+// const SEARCH_USER_GOODS = `SELECT
+//    s.user_vk, s.good_id as id, s.id as subscription_id, s.price_discount, s.percent_discount, s.autobuy_price,
+//    g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price,
+//    sh.title shop_title, sh.name shop_name, sh.url shop_url
+// FROM
+//   subscriptions s
+//     LEFT JOIN goods g ON (g.id = s."good_id")
+//     LEFT JOIN shops sh ON (sh.id = g."shop_id")
+// WHERE
+//     s.user_vk = $1
+// ORDER BY g.created_at DESC`;
+// const userGoods = async ({user_vk}) => {
+//   const result = await db.query(SEARCH_USER_GOODS, [user_vk]);
+//   return result.rows;
+// };
+const userGoods = async (params) => {
+  const statementForSqlParams = [];
+  const statementForSql = (param) => {
+    statementForSqlParams.push(param);
+    return `$${statementForSqlParams.length}`;
+  };
+  
+  const SELECT = `SELECT
    s.user_vk, s.good_id as id, s.id as subscription_id, s.price_discount, s.percent_discount, s.autobuy_price,
    g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price,
    sh.title shop_title, sh.name shop_name, sh.url shop_url
 FROM
   subscriptions s
     LEFT JOIN goods g ON (g.id = s."good_id")
-    LEFT JOIN shops sh ON (sh.id = g."shop_id")
-WHERE
-    s.user_vk = $1
-ORDER BY g.created_at DESC`;
-const userGoods = async ({user_vk}) => {
-  const result = await db.query(SEARCH_USER_GOODS, [user_vk]);
-  return result.rows;
+    LEFT JOIN shops sh ON (sh.id = g."shop_id")`;
+  
+  let WHERE = ``;
+  if (Object.keys(params).length > 0) {
+    let {user_vk, title} = params;
+    WHERE = ` WHERE true`;
+    if (user_vk) WHERE += ` AND s.user_vk = ${statementForSql(user_vk)}`;
+    if (title) {
+      title = `%${title}%`;
+      WHERE += ` AND LOWER(g.title) LIKE LOWER(${statementForSql(title)})`;
+    }
+  }
+  const ORDER_BY = ` ORDER BY g.created_at DESC`;
+  const SEARCH_QUERY = SELECT + WHERE + ORDER_BY;
+  const result = await db.query(SEARCH_QUERY, statementForSqlParams);
+  const goods = result && result.rows;
+  return goods;
 };
 
 const INACTIVE_GOODS = `UPDATE goods
