@@ -66,9 +66,9 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   const message = `
   ${importantText}${price}р ${percentDiscountText} ${shopName}
   ${title}
+  ${minPriceText}
   ${lastPriceDiffText}
   ${oldPriceText} ${price}р ${priceDiffText}
-  ${minPriceText}
   ${url}`;
 
   return sendVk({message, usersVk});
