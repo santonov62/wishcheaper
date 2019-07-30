@@ -18,6 +18,13 @@ const processError = (message, dispatch) => {
   });
 };
 
+const status = (res) => {
+  if (res.status === 401) {
+    authWithVk();
+  }
+  return res;
+};
+
 export const userGoods = (params = {}) => async (dispatch, getState) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
@@ -29,7 +36,9 @@ export const userGoods = (params = {}) => async (dispatch, getState) => {
         ...authHeader(getState().user)
       }
     })
+        .then(status)
         .then(response => response.json());
+    
     log(`[userGoods]`, result);
     if (result.error)
       throw new Error(`${result.error}`);

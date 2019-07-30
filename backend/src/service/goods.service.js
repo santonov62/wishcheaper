@@ -129,7 +129,7 @@ const userGoods = async (params) => {
   
   const SELECT = `SELECT
    s.user_vk, s.good_id as id, s.id as subscription_id, s.price_discount, s.percent_discount, s.autobuy_price,
-   g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price,
+   g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price, round(100 - g.price / (g.old_price / 100)) as percentDiscount,
    sh.title shop_title, sh.name shop_name, sh.url shop_url
 FROM
   subscriptions s
@@ -146,7 +146,7 @@ FROM
       WHERE += ` AND LOWER(g.title) LIKE LOWER(${statementForSql(title)})`;
     }
   }
-  const ORDER_BY = ` ORDER BY g.created_at DESC`;
+  const ORDER_BY = ` ORDER BY percentDiscount DESC NULLS LAST`;
   const SEARCH_QUERY = SELECT + WHERE + ORDER_BY;
   const result = await db.query(SEARCH_QUERY, statementForSqlParams);
   const goods = result && result.rows;
