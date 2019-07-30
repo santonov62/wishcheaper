@@ -2,6 +2,7 @@ import * as Actions from '../actions/goods.actions';
 import * as Constants from '../constants';
 import { ADD_ERROR } from "../actions/errors.actions";
 import { authHeader } from '../helpers/auth-header';
+import { authWithVk } from '../actionCreators/user.actionCreators';
 
 
 const log = (text, params = '') => {
