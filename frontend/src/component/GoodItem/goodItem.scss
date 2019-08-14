@@ -37,6 +37,9 @@
     &.invalid {
       opacity: 0.2
     }
+    &.important {
+      background-color: #fff6e9;
+    }
     .logo {
       margin: 10px;
       align-self: center;

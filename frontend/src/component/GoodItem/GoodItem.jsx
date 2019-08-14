@@ -47,8 +47,9 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
   const updatedRangeText = `${updatedRange} назад`;
   const percentDiscount = old_price ? 100 - price / (old_price / 100) : 0;
   const roundedPercentDiscount = Number((percentDiscount).toFixed());
+  const isImportant = price < min_price * 0.015;
   return (
-      <Card className={`goodItem ${isInactive ? 'inactive' : ''}`}>
+      <Card className={`goodItem ${isInactive ? 'inactive' : ''} ${isImportant ? 'important' : ''}`}>
         <div className='logo'>
           {!!logo ? <Image src={logo} /> : <Icon size='huge' name='image' style={{margin: 30}} /> }
           {percentDiscount > 0 &&
