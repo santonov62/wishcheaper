@@ -65,7 +65,7 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   const minPriceText = !!min_price && `Мин ${min_price}р`;
   const priceText = `Цена ${price}р`;
   const message = `
-  ${importantText} ${percentDiscountText} ${shopName}
+  ${importantText} ${percentDiscountText} ${price}р ${shopName}
   ${title}
   ${priceText}
   ${minPriceText}
