@@ -146,7 +146,7 @@ FROM
       WHERE += ` AND LOWER(g.title) LIKE LOWER(${statementForSql(title)})`;
     }
   }
-  const ORDER_BY = ` ORDER BY g.inactive_at DESC, percentDiscount DESC NULLS LAST, g.updated_at DESC`;
+  const ORDER_BY = ` ORDER BY g.inactive_at DESC, g.price - g.min_price, percentDiscount DESC NULLS LAST, g.updated_at DESC`;
   const SEARCH_QUERY = SELECT + WHERE + ORDER_BY;
   const result = await db.query(SEARCH_QUERY, statementForSqlParams);
   const goods = result && result.rows;
