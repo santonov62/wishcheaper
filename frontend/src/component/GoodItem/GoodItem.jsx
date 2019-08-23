@@ -47,7 +47,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
   const updatedRangeText = `${updatedRange} назад`;
   const percentDiscount = old_price ? 100 - price / (old_price / 100) : 0;
   const roundedPercentDiscount = Number((percentDiscount).toFixed());
-  const isImportant = price < min_price + min_price * 0.015;
+  const isImportant = !!min_price && price < min_price + min_price * 0.015;
   return (
       <Card className={`goodItem ${isInactive ? 'inactive' : ''} ${isImportant ? 'important' : ''}`}>
         <div className='logo'>
@@ -66,7 +66,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
             {!!old_price && <span><strike>{old_price}₽</strike> -> </span>}
             <span style={{fontSize: 32}}>{price} ₽</span>
             <br />
-            {!!min_price && min_price !== price &&
+            {!!min_price &&
             <Label alt='Минимальная зафиксированная цена'>
               <Icon name='chart bar outline' />{min_price} ₽
             </Label>
