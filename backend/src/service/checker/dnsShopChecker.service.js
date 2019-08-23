@@ -40,7 +40,13 @@ const parse = async (url) => {
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     // log(`done`);
-
+  
+    let inactive_at;
+    const payButton = await page.$('.btn-price-item-alert');
+    if (!payButton) {
+      inactive_at = new Date();
+    }
+    
     let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
@@ -67,7 +73,8 @@ const parse = async (url) => {
         title,
         price: currentPrice,
         old_price: oldPrice,
-        logo
+        logo,
+        inactive_at
     };
     
     log(`[parse] done`, parsedData);
