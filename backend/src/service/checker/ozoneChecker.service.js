@@ -2,11 +2,11 @@ const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
-const SHOP_NAME = 'dns-shop.ru';
-const SHOP_TITLE = 'DNS';
+const SHOP_NAME = 'ozon.ru';
+const SHOP_TITLE = 'Ozone';
 
 const log = (text, params = '') => {
-  console.log(`[dnsShopChecker.service] -> ${text}`, params);
+  console.log(`[ozonChecker.service] -> ${text}`, params);
 };
 
 const init = async () => {
@@ -42,7 +42,7 @@ const parse = async (url) => {
     // log(`done`);
   
     let inactive_at;
-    const payButton = await page.$('.btn-price-item-alert');
+    const payButton = await page.$('[data-test-id=saleblock-subscribe-button]');
     if (!!payButton) {
       inactive_at = new Date();
     }
@@ -50,22 +50,22 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
-      title = await page.$eval('.price-item-title', node => node.innerText);
+      title = await page.$eval('.name', node => node.innerText);
     } catch (e) { }
     
     log(`price`);
     try {
-      currentPrice = await page.$eval('.current-price-value', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('.price-number', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
   
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('.prev-price-total', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('.price-number.cross', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
     
     log(`logo`);
     try {
-      logo = await page.$eval('.owl-item img', node => node.getAttribute('src'))
+      logo = await page.$eval('.img.magnifier-image.shown img', node => node.getAttribute('src'))
     } catch (e) { }
     
     const parsedData = {

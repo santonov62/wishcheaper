@@ -1,15 +1,16 @@
-const pandaoChecker = require('./pandaoChecker.service');
-const avitoChecker = require('./avitoChecker.service');
-const mvideoChecker = require('./mvideoChecker.service');
-const aliexpressChecker = require('./aliexpressChecker.service');
-const tmallAliexpressChecker = require('./tmallAliexpressChecker.service');
-const dnsShopChecker = require('./dnsShopChecker.service');
 const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
 const autobuyService = require('../autobuy/autobuy.service');
 const db = require('../db.service');
 const subscriptionService = require('../subscriptions.service');
 const shopsService = require('../shops.service');
+const pandaoChecker = require('./pandaoChecker.service');
+const avitoChecker = require('./avitoChecker.service');
+const mvideoChecker = require('./mvideoChecker.service');
+const aliexpressChecker = require('./aliexpressChecker.service');
+const tmallAliexpressChecker = require('./tmallAliexpressChecker.service');
+const dnsShopChecker = require('./dnsShopChecker.service');
+const ozoneChecker = require('./ozoneChecker.service');
 
 const moment = require('moment');
 const checkerList = [
@@ -18,7 +19,8 @@ const checkerList = [
   mvideoChecker,
   aliexpressChecker,
   tmallAliexpressChecker,
-  dnsShopChecker
+  dnsShopChecker,
+  ozoneChecker
 ];
 
 let processGoods = [];
