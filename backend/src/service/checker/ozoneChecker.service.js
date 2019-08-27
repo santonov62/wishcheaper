@@ -55,12 +55,12 @@ const parse = async (url) => {
     
     log(`price`);
     try {
-      currentPrice = await page.$eval('.price-number', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('[data-test-id=saleblock-first-price]', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
   
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('.price-number.cross', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('.top-sale-block div div div div div', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
     
     log(`logo`);
