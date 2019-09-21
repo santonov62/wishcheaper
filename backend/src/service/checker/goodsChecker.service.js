@@ -72,7 +72,7 @@ const parse = async (url) => {
         url,
         title,
         price: currentPrice,
-        // old_price: oldPrice,
+        old_price: oldPrice,
         logo,
         inactive_at
     };
