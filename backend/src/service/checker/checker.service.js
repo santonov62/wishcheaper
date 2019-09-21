@@ -11,8 +11,8 @@ const aliexpressChecker = require('./aliexpressChecker.service');
 const tmallAliexpressChecker = require('./tmallAliexpressChecker.service');
 const dnsShopChecker = require('./dnsShopChecker.service');
 const ozoneChecker = require('./ozoneChecker.service');
+const techportChecker = require('./techportChecker.service');
 
-const moment = require('moment');
 const checkerList = [
   pandaoChecker,
   avitoChecker,
@@ -20,7 +20,8 @@ const checkerList = [
   aliexpressChecker,
   tmallAliexpressChecker,
   dnsShopChecker,
-  ozoneChecker
+  ozoneChecker,
+  techportChecker
 ];
 
 let processGoods = [];
