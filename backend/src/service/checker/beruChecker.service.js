@@ -55,12 +55,12 @@ const parse = async (url) => {
     
     log(`price`);
     try {
-      currentPrice = await page.$eval('[data-zone-name="offer-cart"] .section> div> div> div> span> span', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('[data-zone-name="offer-cart"] .section> div> div> div> span > span:nth-child(1)> span', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
   
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('[data-zone-name="offer-cart"] .section> div> div> div> span:nth-child(1)> span', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('[data-zone-name="offer-cart"] .section> div> div> div> span > span:nth-child(2)> span', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
     
     log(`logo`);
