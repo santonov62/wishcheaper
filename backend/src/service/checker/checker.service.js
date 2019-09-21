@@ -13,6 +13,7 @@ const dnsShopChecker = require('./dnsShopChecker.service');
 const ozoneChecker = require('./ozoneChecker.service');
 const techportChecker = require('./techportChecker.service');
 const beruChecker = require('./beruChecker.service');
+const goodsChecker = require('./goodsChecker.service');
 
 const checkerList = [
   pandaoChecker,
@@ -23,7 +24,8 @@ const checkerList = [
   dnsShopChecker,
   ozoneChecker,
   techportChecker,
-  beruChecker
+  beruChecker,
+  goodsChecker
 ];
 
 let processGoods = [];
