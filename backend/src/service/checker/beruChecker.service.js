@@ -43,7 +43,7 @@ const parse = async (url) => {
 
     let inactive_at;
     const payButton = await page.$('[data-zone-name="offer-cart"] .section button');
-    if (!!payButton) {
+    if (!payButton) {
       inactive_at = new Date();
     }
     
