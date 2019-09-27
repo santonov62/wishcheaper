@@ -209,7 +209,8 @@ const additionalGoodData = async ({id, user_vk}) => {
 };
 
 const isGoodExists = ({url, title, price}) => {
-  return !!url && !!title && !!price;
+  // return !!url && !!title && !!price;
+  return !!url && !!title;
 };
 
 const status = () => {

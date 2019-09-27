@@ -7,7 +7,7 @@ import './goodItem.css';
 import GoodMenu from './GoodMenu';
 
 const isGoodValid = ({title, price, url}) => {
-  return !!title && !!price && !!url;
+  return !!title && !!url;
 };
 
 export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_name,
@@ -63,10 +63,20 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
           <Card.Description style={{marginTop: 20, lineHeight: 2.1}}>
-            Цена {!!old_price && <span><strike>{old_price}₽</strike> -> </span>}
-            <Label alt='Минимальная зафиксированная цена'>
-              <span>{price} ₽</span>
-            </Label>
+            {!!price &&
+                <Fragment>
+                  Цена {!!old_price && <span><strike>{old_price}₽</strike> -> </span>}
+                  <Label alt='Минимальная зафиксированная цена'>
+                    <span>{price} ₽</span>
+                  </Label>
+                </Fragment>
+            }
+            {!price &&
+                <Fragment>
+                  Нет цены
+                </Fragment>
+            }
+            
             <br />
             
             {!!min_price &&
