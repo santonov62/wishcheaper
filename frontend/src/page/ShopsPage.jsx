@@ -26,10 +26,7 @@ class ShopsPage extends React.Component {
         <Loader size='large' active={isLoading} content='Loading' />
         <Header as='h1'>Магазины</Header>
         <Item.Group divided>
-          {!!shopsElements && shopsElements.length > 0
-            ? shopsElements :
-            <Header as='h2'>Пока пусто</Header>
-          }
+          {shopsElements}
         </Item.Group>
       </div>
     )
