@@ -41,6 +41,12 @@ const getShopByUrl = async (url) => {
   return result.rows[0];
 };
 
+const USER_SHOPS_WITH_GOODS = `SELECT * FROM shops WHERE `;
+const userShopsWithGoods = async () => {
+  const result = await db.query(ALL_SHOPS);
+  return result && result.rows;
+}
+
 module.exports = {
   update,
   save,

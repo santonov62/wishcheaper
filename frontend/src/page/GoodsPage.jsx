@@ -7,6 +7,7 @@ import {authHeader} from "../helpers/auth-header";
 import { connect } from 'react-redux';
 import { userGoods } from '../actionCreators/goods.actionCreators';
 import {GoodItem} from "../component/GoodItem/GoodItem";
+import ShopsToolbar from "../component/ShopsToolbar/ShopsToolbar";
 
 class GoodsPage extends React.Component {
   constructor(props) {
@@ -26,11 +27,9 @@ class GoodsPage extends React.Component {
         <div className='goodsPage'>
           <Loader size='large' active={isLoading} content='Loading'/>
           <Header as='h1'>Мои товары</Header>
+          <ShopsToolbar/>
           <div className='goods'>
-            {!!goodsElements && goodsElements.length > 0
-                ? goodsElements :
-                <Header as='h2'>Пока пусто</Header>
-            }
+            {goodsElements}
           </div>
         </div>
     )
