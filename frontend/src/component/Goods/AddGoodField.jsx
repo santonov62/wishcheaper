@@ -43,9 +43,11 @@ class AddGoodField extends React.Component {
         });
     };
     onBlur = () => {
-        document.querySelectorAll('.headerMenu > :not(.addGoodItem)').forEach(el => {
-            el.classList.remove("forceHidden");
-        });
+        setTimeout(() => {
+            document.querySelectorAll('.headerMenu > :not(.addGoodItem)').forEach(el => {
+                el.classList.remove("forceHidden");
+            });
+        }, 1000);
     };
     render() {
         const { value, isLoading } = this.state;
