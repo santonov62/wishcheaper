@@ -151,7 +151,8 @@ const refresh = async ({url, id, price, prev_price, inactive_at, old_price, auto
   const parsedGood = await parse(url);
   
   let good;
-  if (isGoodExists(parsedGood)) {
+  const isCorrectUrl = !!parsedGood.url && !!parsedGood.title;
+  if (isCorrectUrl) {
     
     const newPrice = parsedGood.price;
     if (!prev_price || newPrice !== price)
@@ -165,17 +166,21 @@ const refresh = async ({url, id, price, prev_price, inactive_at, old_price, auto
       prev_price,
       id
     });
+    
+    const isCorrectProduct = !!parsedGood.url && !!parsedGood.title && !!parsedGood.price;
 
-    const priceShift = price * 0.005; // 0,5%
-    const priceWithShifting = price + priceShift;
-    const isDiscountedProductBecameAvailable = !!inactive_at && (priceWithShifting < old_price || priceWithShifting < prev_price);
-    const isProductBecameCheaper = newPrice + priceShift < price;
-    if (isProductBecameCheaper || isDiscountedProductBecameAvailable) {
-      const notifySubscriptions = await subscriptionService.requireNotification({...good});
-      vkService.notifyGoodBecameCheaper({good: {...good, prev_price}, subscriptions: notifySubscriptions});
-      const buySubscriptions = await subscriptionService.requireBuy({...good});
-      if (buySubscriptions && buySubscriptions.length > 0) {
-        autobuyService.buy({good: {...good, prev_price}, subscriptions: buySubscriptions});
+    if (isCorrectProduct) {
+      const priceShift = price * 0.005; // 0,5%
+      const priceWithShifting = price + priceShift;
+      const isDiscountedProductBecameAvailable = !!inactive_at && (priceWithShifting < old_price || priceWithShifting < prev_price);
+      const isProductBecameCheaper = newPrice + priceShift < price;
+      if (isProductBecameCheaper || isDiscountedProductBecameAvailable) {
+        const notifySubscriptions = await subscriptionService.requireNotification({...good});
+        vkService.notifyGoodBecameCheaper({good: {...good, prev_price}, subscriptions: notifySubscriptions});
+        const buySubscriptions = await subscriptionService.requireBuy({...good});
+        if (buySubscriptions && buySubscriptions.length > 0) {
+          autobuyService.buy({good: {...good, prev_price}, subscriptions: buySubscriptions});
+        }
       }
     }
 
@@ -206,11 +211,6 @@ WHERE
 const additionalGoodData = async ({id, user_vk}) => {
   const result = await db.query(ADDITIONAL_GOOD_DATA, [id, user_vk]);
   return result.rows && result.rows[0];
-};
-
-const isGoodExists = ({url, title, price}) => {
-  // return !!url && !!title && !!price;
-  return !!url && !!title;
 };
 
 const status = () => {
