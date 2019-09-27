@@ -62,18 +62,27 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           <Card.Header as='a' href={url} target='_blank'>{title}</Card.Header>
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
-          <Card.Description style={{marginTop: 20}}>
-            {!!old_price && <span><strike>{old_price}₽</strike> -> </span>}
-            <span style={{fontSize: 32}}>{price} ₽</span>
-            <br />
-            {!!min_price &&
+          <Card.Description style={{marginTop: 20, lineHeight: 2.1}}>
+            Цена {!!old_price && <span><strike>{old_price}₽</strike> -> </span>}
             <Label alt='Минимальная зафиксированная цена'>
-              <Icon name='chart bar outline' />{min_price} ₽
+              <span>{price} ₽</span>
             </Label>
+            <br />
+            
+            {!!min_price &&
+              <Fragment>
+                Мин&nbsp;
+                <Label alt='Минимальная зафиксированная цена'>
+                  <Icon name='chart bar outline' />{min_price} ₽
+                </Label>
+                {/*> <span>{min_price} ₽</span>*/}
+              </Fragment>
             }
             
             {!!diffPrevPrice &&
             <Fragment>
+              <br />
+              Динамика&nbsp;
               <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
                 {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
               </Label>
