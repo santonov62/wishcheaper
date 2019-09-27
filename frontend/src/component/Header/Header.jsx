@@ -41,7 +41,7 @@ class Header extends React.Component {
           {/*Мои товары*/}
         </Menu.Item>
 
-        <Menu.Item style={{display: 'flex', flexGrow: 1, padding: 5}}>
+        <Menu.Item className='addGoodItem' style={{display: 'flex', flexGrow: 1, padding: 5}}>
           <AddGoodField />
         </Menu.Item>
 
