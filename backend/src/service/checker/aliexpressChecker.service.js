@@ -41,7 +41,7 @@ const parse = async (url) => {
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     // log(`done`);
 
-    let title, currentPrice, logo, oldPrice;
+    let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);
     try {
       title = await page.$eval('.product-title', node => node.innerText);
@@ -50,7 +50,9 @@ const parse = async (url) => {
     log(`price`);
     try {
       currentPrice = await page.$eval('.product-price-current .product-price-value', node => parseInt(node.innerText.replace(/\s/g, '')));
-    } catch (e) { }
+    } catch (e) {
+      inactive_at = new Date();
+    }
   
     log(`oldPrice`);
     try {
@@ -67,7 +69,8 @@ const parse = async (url) => {
         title,
         price: currentPrice,
         old_price: oldPrice,
-        logo
+        logo,
+        inactive_at
     };
     
     log(`[parse] done`, parsedData);

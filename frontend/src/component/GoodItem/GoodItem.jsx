@@ -62,33 +62,9 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           <Card.Header as='a' href={url} target='_blank'>{title}</Card.Header>
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
-          <Card.Description style={{marginTop: 20, lineHeight: 2.1}}>
-            {!!price &&
-                <Fragment>
-                  Цена {!!old_price && <span><strike>{old_price}₽</strike> -> </span>}
-                  <Label alt='Минимальная зафиксированная цена'>
-                    <span>{price} ₽</span>
-                  </Label>
-                </Fragment>
-            }
-            {!price &&
-                <Fragment>
-                  Нет цены
-                </Fragment>
-            }
-            
-            <br />
-            
-            {!!min_price &&
-              <Fragment>
-                Мин&nbsp;
-                <Label alt='Минимальная зафиксированная цена'>
-                  <Icon name='chart bar outline' />{min_price} ₽
-                </Label>
-                {/*> <span>{min_price} ₽</span>*/}
-              </Fragment>
-            }
-            
+          <Card.Description style={{lineHeight: 2.1}}>
+  
+  
             {!!diffPrevPrice &&
             <Fragment>
               <br />
@@ -96,6 +72,33 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
               <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
                 {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
               </Label>
+            </Fragment>
+            }
+            
+            {!!price &&
+                <Fragment>
+                  Цена&nbsp;
+                  <Label alt='Минимальная зафиксированная цена'>
+                    <span>{price} ₽</span>
+                  </Label>
+                  {!!old_price && <span>&nbsp;<strike>{old_price}₽</strike></span>}
+                </Fragment>
+            }
+            {!price &&
+                <Fragment>
+                  <br />
+                  Нет цены
+                </Fragment>
+            }
+  
+            {!!min_price &&
+            <Fragment>
+              <br />
+              Мин&nbsp;
+              <Label alt='Минимальная зафиксированная цена'>
+                <Icon name='chart bar outline' />{min_price} ₽
+              </Label>
+              {/*> <span>{min_price} ₽</span>*/}
             </Fragment>
             }
           </Card.Description>
