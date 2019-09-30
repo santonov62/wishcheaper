@@ -50,7 +50,7 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
-      title = await page.$eval('.name', node => node.innerText);
+      title = await page.$eval('.top-base-column-top h1', node => node.innerText);
     } catch (e) { }
     
     log(`price`);
