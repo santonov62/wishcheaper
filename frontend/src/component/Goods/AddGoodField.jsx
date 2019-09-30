@@ -37,18 +37,18 @@ class AddGoodField extends React.Component {
                 isLoading: false
             }));
     };
-    onFocus = () => {
-        document.querySelectorAll('.headerMenu > :not(.addGoodItem)').forEach(el => {
-            el.classList.add("forceHidden");
-        });
-    };
-    onBlur = () => {
-        setTimeout(() => {
-            document.querySelectorAll('.headerMenu > :not(.addGoodItem)').forEach(el => {
-                el.classList.remove("forceHidden");
-            });
-        }, 1000);
-    };
+    // onFocus = () => {
+    //     document.querySelectorAll('.headerMenu > :not(.addGoodItem)').forEach(el => {
+    //         el.classList.add("forceHidden");
+    //     });
+    // };
+    // onBlur = () => {
+    //     setTimeout(() => {
+    //         document.querySelectorAll('.headerMenu > :not(.addGoodItem)').forEach(el => {
+    //             el.classList.remove("forceHidden");
+    //         });
+    //     }, 1000);
+    // };
     render() {
         const { value, isLoading } = this.state;
     
@@ -60,8 +60,6 @@ class AddGoodField extends React.Component {
                 icon={<Icon name='add' link onClick={this.addByUrl}/>}
                 placeholder='Назавание или url для отслеживания...'
                 onChange={this.handleChange}
-                onFocus={this.onFocus}
-                onBlur={this.onBlur}
             />
         )
     }
