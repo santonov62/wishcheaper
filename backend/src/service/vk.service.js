@@ -67,9 +67,9 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   const message = `
   ${importantText} ${percentDiscountText} ${price}р ${shopName}
   ${title}
+  > ${lastPriceDiffText}
   > ${priceText}
   > ${minPriceText}
-  > ${lastPriceDiffText}
   > ${oldPriceText} ${price}р ${priceDiffText}
   ${url}`;
 
