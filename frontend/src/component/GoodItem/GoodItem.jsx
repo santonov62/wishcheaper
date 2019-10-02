@@ -52,11 +52,18 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
       <Card className={`goodItem ${isInactive ? 'inactive' : ''} ${isImportant ? 'important' : ''}`}>
         <div className='logo'>
           {!!logo ? <Image src={logo} /> : <Icon size='huge' name='image' style={{margin: 30}} /> }
-          {percentDiscount > 0 &&
-          <Label color='orange' className='discount' size='large' circular>
-            -{roundedPercentDiscount}%
-          </Label>
-          }
+          <div className='floating'>
+            {percentDiscount > 0 &&
+            <Label color='orange' size='large' circular>
+              -{roundedPercentDiscount}%
+            </Label>
+            }
+            {!!isImportant &&
+            <Label color='green' size='large' circular>
+              Дешево
+            </Label>
+            }
+          </div>
         </div>
         <Card.Content>
           <Card.Header as='a' href={url} target='_blank'>{title}</Card.Header>
