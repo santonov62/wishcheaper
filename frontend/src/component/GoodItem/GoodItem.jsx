@@ -63,15 +63,14 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
           <Card.Description style={{lineHeight: 2.1}}>
-  
-  
+
             {!!diffPrevPrice &&
             <Fragment>
-              <br />
               Динамика&nbsp;
               <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
                 {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
               </Label>
+              <br />
             </Fragment>
             }
             
@@ -82,23 +81,24 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                     <span>{price} ₽</span>
                   </Label>
                   {!!old_price && <span>&nbsp;<strike>{old_price}₽</strike></span>}
+                  <br />
                 </Fragment>
             }
             {!price &&
                 <Fragment>
-                  <br />
                   Нет цены
+                  <br />
                 </Fragment>
             }
   
             {!!min_price &&
             <Fragment>
-              <br />
               Мин&nbsp;
               <Label alt='Минимальная зафиксированная цена'>
                 <Icon name='chart bar outline' />{min_price} ₽
               </Label>
               {/*> <span>{min_price} ₽</span>*/}
+              <br />
             </Fragment>
             }
           </Card.Description>
