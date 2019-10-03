@@ -102,7 +102,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
             <Fragment>
               Мин&nbsp;
               <Label alt='Минимальная зафиксированная цена'>
-                <Icon name='chart bar outline' />{min_price} ₽
+                {min_price} ₽
               </Label>
               {/*> <span>{min_price} ₽</span>*/}
               <br />

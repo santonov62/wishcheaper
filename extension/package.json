@@ -1,0 +1,12 @@
+{
+  "name": "delivery-group-order-extension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit-element": "^2.1.0"
+  }
+}

@@ -1,0 +1,17 @@
+body {
+    min-height: 50px;
+    min-width: 300px;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+/* Loader */
+.loader {
+
+}
