@@ -41,13 +41,13 @@ const parse = async (url) => {
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     // log(`done`);
   
-    let inactive_at;
-    const payButton = await page.$('[data-test-id=saleblock-subscribe-button]');
-    if (!!payButton) {
-      inactive_at = new Date();
-    }
+    // let inactive_at;
+    // const payButton = await page.$('[data-test-id=saleblock-subscribe-button]');
+    // if (!!payButton) {
+    //   inactive_at = new Date();
+    // }
     
-    let title, currentPrice, logo, oldPrice;
+    let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);
     try {
       title = await page.$eval('.top-base-column-top h1', node => node.innerText);
@@ -68,6 +68,10 @@ const parse = async (url) => {
     try {
       logo = await page.$eval('.img.magnifier-image.shown img', node => node.getAttribute('src'))
     } catch (e) { }
+
+    if (!currentPrice) {
+      inactive_at = new Date();
+    }
     
     const parsedData = {
         url,
