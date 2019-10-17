@@ -7,17 +7,8 @@
     "declarativeContent",
     "http://*/*",
     "https://*/*",
-    "https://vk.com/js/api/openapi.js"
+    "identity"
   ],
-  "content_scripts": [
-  {
-    "matches": [
-      "<all_urls>"
-    ],
-    "js": ["openapi.js", "content.js"]
-  }
-],
-  "web_accessible_resources": ["https://vk.com/js/api/openapi.js"],
   "background": {
     "scripts": [
       "background.js"
