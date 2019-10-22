@@ -1,60 +1,129 @@
 chrome.runtime.onStartup.addListener(function() {
-  vkAuth();
+  // vkAuth();
 });
 
-// chrome.runtime.onInstalled.addListener(function() {
-  // chrome.storage.sync.set({color: '#3aa757'}, function() {
-  //   console.log("The color is green.");
-  // });
-  //
-  // chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-  //   chrome.declarativeContent.onPageChanged.addRules([{
-  //     conditions: [new chrome.declarativeContent.PageStateMatcher({
-  //       pageUrl: {hostEquals: 'developer.chrome.com'},
-  //     })
-  //     ],
-  //     actions: [new chrome.declarativeContent.ShowPageAction()]
-  //   }]);
-  // });
+function getUrlParameterValue(url, parameterName) {
+  "use strict";
   
-// });
+  var urlParameters  = url.substr(url.indexOf("#") + 1),
+      parameterValue = "",
+      index,
+      temp;
+  
+  urlParameters = urlParameters.split("&");
+  
+  for (index = 0; index < urlParameters.length; index += 1) {
+    temp = urlParameters[index].split("=");
+    
+    if (temp[0] === parameterName) {
+      return temp[1];
+    }
+  }
+  
+  return parameterValue;
+}
 
-chrome.runtime.onMessage.addListener((options, sender) => {
-  if (options === 'vkAuth') {
-    vkAuth()
+function listenerHandler(authenticationTabId, resolve, reject) {
+  
+  return function tabUpdateListener(tabId, changeInfo) {
+    var vkAccessToken,
+        vkAccessTokenExpiredFlag;
+    
+    if (tabId === authenticationTabId && changeInfo.url !== undefined && changeInfo.status === "loading") {
+      
+      if (changeInfo.url.indexOf('oauth.vk.com/blank.html') > -1) {
+        authenticationTabId = null;
+        chrome.tabs.onUpdated.removeListener(tabUpdateListener);
+        
+        vkAccessToken = getUrlParameterValue(changeInfo.url, 'access_token');
+        
+        if (vkAccessToken === undefined || vkAccessToken.length === undefined) {
+          displayeAnError('vk auth response problem', 'access_token length = 0 or vkAccessToken == undefined');
+          return;
+        }
+        
+        vkAccessTokenExpiredFlag = Number(getUrlParameterValue(changeInfo.url, 'expires_in'));
+        
+        // if (vkAccessTokenExpiredFlag !== 0) {
+        if (vkAccessTokenExpiredFlag < 0) {
+          reject('expired');
+          displayeAnError('vk auth response problem', 'vkAccessTokenExpiredFlag != 0' + vkAccessToken);
+          return;
+        }
+        
+        chrome.storage.local.set({'vkaccess_token': vkAccessToken}, () => {
+          chrome.tabs.remove([tabId], () => {
+            resolve(vkAccessToken);
+            alert('Vk auth successful');
+          });
+        });
+      }
+    }
+  }
+}
+
+async function authVk() {
+  const token = await getVkAccessToken();
+  const user = await getUser(token);
+}
+
+function getUser(token) {
+  fetch(`https://api.vk.com/method/users.get?v=5.87&access_token=${token}`, {
+    method: 'GET'
+  })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      });
+}
+
+function getVkAccessToken() {
+  
+  return new Promise((resolve, reject) => {
+    
+    chrome.storage.local.get({'vkaccess_token': {}}, ({vkaccess_token}) => {
+  
+      if (vkaccess_token.length === undefined) {
+        const vkCLientId = '7173995';
+        const vkAuthenticationUrl = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&redirect_uri=http%3A%2F%2Foauth.vk.com%2Fblank.html&display=page&response_type=token';
+  
+        chrome.tabs.create({url: vkAuthenticationUrl, selected: true}, (tab) => {
+          const authenticationTabId = tab.id;
+          chrome.tabs.onUpdated.addListener(listenerHandler(authenticationTabId, resolve, reject));
+        });
+        
+      } else {
+        resolve(vkaccess_token);
+      }
+      
+    });
+  });
+  
+}
+
+/**
+ * Display an alert with an error message, description
+ *
+ * @param  {string} textToShow  Error message text
+ * @param  {string} errorToShow Error to show
+ */
+function displayeAnError(textToShow, errorToShow) {
+  "use strict";
+  
+  alert(textToShow + '\n' + errorToShow);
+}
+
+
+/**
+ * Handler of chrome context menu creation process -creates a new item in the context menu
+ */
+chrome.contextMenus.create({
+  id: "add",
+  title: "Bookmark to wishcheaper"
+});
+
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
+  if (info.menuItemId === "add") {
+    authVk()
   }
 });
-
-const vkAuth = () => {
-  var
-      extensionClientId = 'fccambcnjhpmgegajdgnnlfkanddnjbh',
-      vkCLientId           = '7173995',
-      redirectUrl = chrome.identity.getRedirectURL(),
-      // vkRequestedScopes    = 'docs,offline',
-      // vkAuthenticationUrl  = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&scope=' + vkRequestedScopes + '&redirect_uri=http%3A%2F%2Foauth.vk.com%2Fblank.html&display=page&response_type=token';
-      vkAuthenticationUrl  = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&redirect_uri='+redirectUrl+'&display=page&response_type=token';
-  
-  // chrome.storage.local.get({'vkaccess_token': {}}, function (items) {
-  //
-  //   if (items.vkaccess_token.length === undefined) {
-  //     chrome.tabs.create({url: vkAuthenticationUrl, selected: true}, function (tab) {
-  //       chrome.tabs.onUpdated.addListener(listenerHandler(tab.id));
-  //     });
-  //
-  //     return;
-  //   }
-  chrome.identity.launchWebAuthFlow(
-      {
-        'url': vkAuthenticationUrl,
-        'interactive': true
-      },
-      function(data) {
-        alert(data);
-      }
-  );
-  // imageUploadHelperUrl += imageSourceUrl + '&' + items.vkaccess_token;
-  
-  // chrome.tabs.create({url: imageUploadHelperUrl, selected: true});
-  
-  // });
-};

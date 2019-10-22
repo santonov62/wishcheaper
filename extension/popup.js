@@ -1,8 +1,8 @@
 
 window.onload = () => {
     injectVkScript();
-    const vkButton = document.getElementById('vk');
-    vkButton.onclick = vkAuth;
+    // const vkButton = document.getElementById('vk');
+    // vkButton.onclick = vkAuth;
 };
 
 const injectVkScript = () => {
@@ -12,24 +12,14 @@ const injectVkScript = () => {
     document.head.append(script);
     
     script.onload = () => {
-        vkApiInit();
+        window.VK.init({
+            apiId: 7037811
+        });
         hideSpinner();
-        // vkAuth();
     };
     script.onerror = () => {
-        vkApiError();
+        log('vkApiError');
     };
-};
-
-const vkApiError = () => {
-    log('vkApiError');
-};
-
-const vkApiInit = () => {
-    log('vkApiInit');
-    window.VK.init({
-        apiId: 7037811
-    });
 };
 
 const log = (value) => {
@@ -58,70 +48,6 @@ const vkAuth = () => {
         }
     );
 };
-
-function listenerHandler(authenticationTabId, imageSourceUrl) {
-    "use strict";
-    
-    return function tabUpdateListener(tabId, changeInfo) {
-        var vkAccessToken,
-            vkAccessTokenExpiredFlag;
-        
-        if (tabId === authenticationTabId && changeInfo.url !== undefined && changeInfo.status === "loading") {
-            
-            if (changeInfo.url.indexOf('oauth.vk.com/blank.html') > -1) {
-                authenticationTabId = null;
-                chrome.tabs.onUpdated.removeListener(tabUpdateListener);
-                
-                vkAccessToken = getUrlParameterValue(changeInfo.url, 'access_token');
-                alert(vkAccessToken)
-                
-                if (vkAccessToken === undefined || vkAccessToken.length === undefined) {
-                    displayeAnError('vk auth response problem', 'access_token length = 0 or vkAccessToken == undefined');
-                    return;
-                }
-                
-                vkAccessTokenExpiredFlag = Number(getUrlParameterValue(changeInfo.url, 'expires_in'));
-                
-                if (vkAccessTokenExpiredFlag !== 0) {
-                    displayeAnError('vk auth response problem', 'vkAccessTokenExpiredFlag != 0' + vkAccessToken);
-                    return;
-                }
-                
-                chrome.storage.local.set({'vkaccess_token': vkAccessToken}, function () {
-                    chrome.tabs.update(
-                        tabId,
-                        {
-                            'url'   : 'upload.html#?' + vkAccessToken,
-                            'active': true
-                        },
-                        function (tab) {}
-                    );
-                });
-            }
-        }
-    };
-}
-
-function getUrlParameterValue(url, parameterName) {
-    "use strict";
-    
-    var urlParameters  = url.substr(url.indexOf("#") + 1),
-        parameterValue = "",
-        index,
-        temp;
-    
-    urlParameters = urlParameters.split("&");
-    
-    for (index = 0; index < urlParameters.length; index += 1) {
-        temp = urlParameters[index].split("=");
-        
-        if (temp[0] === parameterName) {
-            return temp[1];
-        }
-    }
-    
-    return parameterValue;
-}
 
 //
 // const renderOrders = (orders = []) => {
