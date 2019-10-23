@@ -70,8 +70,8 @@ function authVk() {
         
         if (!authData) {
           const token = await getVkAccessToken();
-          // const authData = await fetch('https://wishcheaper.herokuapp.com/auth/vk/token', {
-          const authData = await fetch('http://localhost:3000/auth/vk/token', {
+          const authData = await fetch('https://wishcheaper.herokuapp.com/auth/vk/token', {
+          // const authData = await fetch('http://localhost:3000/auth/vk/token', {
             method: 'POST',
             body: JSON.stringify({token}),
             headers: {
