@@ -1,3 +1,4 @@
+
 chrome.runtime.onStartup.addListener(function() {
   // vkAuth();
 });
@@ -62,20 +63,38 @@ function listenerHandler(authenticationTabId, resolve, reject) {
   }
 }
 
-async function authVk() {
-  const token = await getVkAccessToken();
-  const user = await getUser(token);
+function authVk() {
+  return new Promise((resolve, reject) => {
+    try {
+      chrome.storage.local.get(['authData'], async ({authData}) => {
+        
+        if (!authData) {
+          const token = await getVkAccessToken();
+          // const authData = await fetch('https://wishcheaper.herokuapp.com/auth/vk/token', {
+          const authData = await fetch('http://localhost:3000/auth/vk/token', {
+            method: 'POST',
+            body: JSON.stringify({token}),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(response => response.json());
+      
+          chrome.storage.local.set({authData}, () => {
+            resolve(authData);
+          });
+          
+        } else {
+          resolve(authData)
+        }
+      });
+      
+    } catch (e) {
+      reject(e.message);
+    }
+  })
+  
 }
 
-function getUser(token) {
-  fetch(`https://api.vk.com/method/users.get?v=5.87&access_token=${token}`, {
-    method: 'GET'
-  })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-      });
-}
 
 function getVkAccessToken() {
   
