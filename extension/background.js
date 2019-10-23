@@ -103,8 +103,8 @@ function getVkAccessToken() {
     chrome.storage.local.get({'vkaccess_token': {}}, ({vkaccess_token}) => {
   
       if (vkaccess_token.length === undefined) {
-        const vkCLientId = '7173995';
-        const vkAuthenticationUrl = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&redirect_uri=http%3A%2F%2Foauth.vk.com%2Fblank.html&display=page&response_type=token';
+        const vkClientId = '7173995';
+        const vkAuthenticationUrl = 'https://oauth.vk.com/authorize?client_id=' + vkClientId + '&redirect_uri=http%3A%2F%2Foauth.vk.com%2Fblank.html&display=page&response_type=token';
   
         chrome.tabs.create({url: vkAuthenticationUrl, selected: true}, (tab) => {
           const authenticationTabId = tab.id;
