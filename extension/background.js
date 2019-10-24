@@ -1,7 +1,13 @@
 
 chrome.runtime.onStartup.addListener(function() {
-  // vkAuth();
+
 });
+
+const DOMAIN = `https://wishcheaper.herokuapp.com`;
+const vkCLientId = '7039043';
+
+// const DOMAIN = `http://localhost:3000`;
+// const vkCLientId = '7037811';
 
 function getUrlParameterValue(url, parameterName) {
   "use strict";
@@ -45,8 +51,7 @@ function listenerHandler(authenticationTabId, resolve, reject) {
         
         vkAccessTokenExpiredFlag = Number(getUrlParameterValue(changeInfo.url, 'expires_in'));
         
-        // if (vkAccessTokenExpiredFlag !== 0) {
-        if (vkAccessTokenExpiredFlag < 0) {
+        if (vkAccessTokenExpiredFlag !== 0) {
           reject('expired');
           displayeAnError('vk auth response problem', 'vkAccessTokenExpiredFlag != 0' + vkAccessToken);
           return;
@@ -55,11 +60,37 @@ function listenerHandler(authenticationTabId, resolve, reject) {
         chrome.storage.local.set({'vkaccess_token': vkAccessToken}, () => {
           chrome.tabs.remove([tabId], () => {
             resolve(vkAccessToken);
-            alert('Vk auth successful');
+            console.log(`Vk token: ${vkAccessToken}`)
           });
         });
       }
     }
+  }
+}
+
+async function addUrl(url) {
+  try {
+    const authData = await authVk();
+    if (!authData)
+      throw new Error(`authData required`);
+    
+    const good = await fetch(`${DOMAIN}/checker/add`, {
+      method: 'POST',
+      body: JSON.stringify({
+        url
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authData.token}`
+      }
+    }).then(res => res.json());
+    if (good.error)
+      throw new Error(good.error);
+    console.log("[addUrl] good", good);
+    alert('Product added');
+    return good;
+  } catch (e) {
+    alert(e.message);
   }
 }
 
@@ -70,7 +101,7 @@ function authVk() {
         
         if (!authData) {
           const token = await getVkAccessToken();
-          const authData = await fetch('https://wishcheaper.herokuapp.com/auth/vk/token', {
+          const authData = await fetch(`${DOMAIN}/auth/vk/token`, {
           // const authData = await fetch('http://localhost:3000/auth/vk/token', {
             method: 'POST',
             body: JSON.stringify({token}),
@@ -79,6 +110,9 @@ function authVk() {
             }
           }).then(response => response.json());
       
+          if (!!authData && !authData.token)
+            throw new Error(authData);
+          
           chrome.storage.local.set({authData}, () => {
             resolve(authData);
           });
@@ -95,54 +129,42 @@ function authVk() {
   
 }
 
-
 function getVkAccessToken() {
   
   return new Promise((resolve, reject) => {
     
-    chrome.storage.local.get({'vkaccess_token': {}}, ({vkaccess_token}) => {
+    // chrome.storage.local.get({'vkaccess_token': {}}, ({vkaccess_token}) => {
   
-      if (vkaccess_token.length === undefined) {
-        const vkCLientId = '7173995';
-        const vkAuthenticationUrl = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&redirect_uri=http%3A%2F%2Foauth.vk.com%2Fblank.html&display=page&response_type=token';
+      // if (vkaccess_token.length === undefined) {
+        const vkAuthenticationUrl = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&redirect_uri=http%3A%2F%2Foauth.vk.com%2Fblank.html&display=page&response_type=token&scope=offline';
   
         chrome.tabs.create({url: vkAuthenticationUrl, selected: true}, (tab) => {
           const authenticationTabId = tab.id;
           chrome.tabs.onUpdated.addListener(listenerHandler(authenticationTabId, resolve, reject));
         });
         
-      } else {
-        resolve(vkaccess_token);
-      }
+      // } else {
+      //   resolve(vkaccess_token);
+      // }
       
-    });
+    // });
   });
   
 }
 
-/**
- * Display an alert with an error message, description
- *
- * @param  {string} textToShow  Error message text
- * @param  {string} errorToShow Error to show
- */
 function displayeAnError(textToShow, errorToShow) {
   "use strict";
   
   alert(textToShow + '\n' + errorToShow);
 }
 
-
-/**
- * Handler of chrome context menu creation process -creates a new item in the context menu
- */
 chrome.contextMenus.create({
   id: "add",
-  title: "Bookmark to wishcheaper"
+  title: "Save to wishcheaper"
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
   if (info.menuItemId === "add") {
-    authVk()
+    addUrl(info.pageUrl);
   }
 });
