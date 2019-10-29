@@ -23,7 +23,7 @@ function addByUrl() {
 }
 
 function vkAuth() {
-  chrome.runtime.sendMessage('caanfdghlmmflppgchfaocfjhdeaonma', 'vkAuth', {}, function(response) {
+  chrome.runtime.sendMessage('', {action: 'vkAuth'}, function(response) {
     console.log(`Success! `, response);
   });
 }

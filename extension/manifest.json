@@ -9,7 +9,8 @@
     "https://*/*",
     "identity",
     "contextMenus",
-    "tabs"
+    "tabs",
+    "<all_urls>"
   ],
   "background": {
     "scripts": [
