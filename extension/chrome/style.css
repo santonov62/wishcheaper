@@ -1,17 +1,78 @@
+@font-face {
+    font-family: "Font Awesome 5 Brands";
+    font-style: normal;
+    font-weight: 400;
+    src: url(./fa-brands-400.woff2) format("woff2")
+}
 body {
     min-height: 50px;
-    min-width: 300px;
+    min-width: 250px;
+    display: flex;
+    background-image: url(images/bg.jpg);
 }
 
 .show {
-    display: block;
+    display: block !important;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 /* Loader */
 .loader {
 
+}
+
+.btn {
+    margin: .375rem;
+    color: inherit;
+    text-transform: uppercase;
+    word-wrap: break-word;
+    white-space: normal;
+    cursor: pointer;
+    border: 0;
+    border-radius: .125rem;
+    box-shadow:0 0 7px #fff;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    padding: .84rem 2.14rem;
+    font-size: .81rem;
+}
+.btn-vk {
+    color: #fff;
+    background-color: #4c75a3!important;
+    flex-grow: 1;
+}
+.btn-add {
+    color: #fff;
+    background-color: #56b68b!important;
+    flex-grow: 1;
+}
+.waves-effect {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.fab {
+    font-family: "Font Awesome 5 Brands";
+}
+.fa, .fab, .fad, .fal, .far, .fas {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+.pr-1, .px-1 {
+    padding-right: .25rem!important;
+}
+.fa-vk:before {
+    content: "\f189";
 }

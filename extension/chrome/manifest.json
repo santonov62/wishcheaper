@@ -5,6 +5,7 @@
   "permissions": [
     "storage",
     "declarativeContent",
+    "<all_urls>",
     "contextMenus",
     "tabs"
   ],
