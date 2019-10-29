@@ -3,15 +3,8 @@ chrome.runtime.onStartup.addListener(function() {
 
 });
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  alert("message received");
-});
-
-const DOMAIN = `https://wishcheaper.herokuapp.com`;
-const vkCLientId = '7039043';
-
-// const DOMAIN = `http://localhost:3000`;
-// const vkCLientId = '7037811';
+// const DOMAIN = `https://wishcheaper.herokuapp.com`;
+const DOMAIN = `http://localhost:3000`;
 
 function getUrlParameterValue(url, parameterName) {
   "use strict";
@@ -55,7 +48,7 @@ function listenerHandler(authenticationTabId, resolve, reject) {
         
         vkAccessTokenExpiredFlag = Number(getUrlParameterValue(changeInfo.url, 'expires_in'));
         
-        if (vkAccessTokenExpiredFlag !== 0) {
+        if (vkAccessTokenExpiredFlag < 0) {
           reject('expired');
           displayeAnError('vk auth response problem', 'vkAccessTokenExpiredFlag != 0' + vkAccessToken);
           return;
@@ -64,7 +57,7 @@ function listenerHandler(authenticationTabId, resolve, reject) {
         chrome.storage.local.set({'vkaccess_token': vkAccessToken}, () => {
           chrome.tabs.remove([tabId], () => {
             resolve(vkAccessToken);
-            console.log(`Vk token: ${vkAccessToken}`)
+            alert(`Vk token: ${vkAccessToken}`);
           });
         });
       }
@@ -101,8 +94,8 @@ async function addUrl(url) {
 function authVk() {
   return new Promise((resolve, reject) => {
     try {
-      chrome.storage.local.get(['authData'], async (items) => {
-        const {authData} = items;
+      chrome.storage.local.get(['authData'], async ({authData}) => {
+        
         if (!authData) {
           const token = await getVkAccessToken();
           const authData = await fetch(`${DOMAIN}/auth/vk/token`, {
@@ -114,9 +107,6 @@ function authVk() {
             }
           }).then(response => response.json());
       
-          if (!!authData && !authData.token)
-            throw new Error(authData);
-          
           chrome.storage.local.set({authData}, () => {
             resolve(authData);
           });
@@ -140,7 +130,10 @@ function getVkAccessToken() {
     // chrome.storage.local.get({'vkaccess_token': {}}, ({vkaccess_token}) => {
   
       // if (vkaccess_token.length === undefined) {
-        const vkAuthenticationUrl = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&redirect_uri=http%3A%2F%2Foauth.vk.com%2Fblank.html&display=page&response_type=token&scope=offline';
+        // const vkCLientId = '7173995';
+        // const vkCLientId = '7037811';
+        const vkCLientId = '7039043';
+        const vkAuthenticationUrl = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&redirect_uri=http%3A%2F%2Foauth.vk.com%2Fblank.html&display=page&response_type=token';
   
         chrome.tabs.create({url: vkAuthenticationUrl, selected: true}, (tab) => {
           const authenticationTabId = tab.id;
@@ -164,7 +157,7 @@ function displayeAnError(textToShow, errorToShow) {
 
 chrome.contextMenus.create({
   id: "add",
-  title: "Save to wishcheaper"
+  title: "Bookmark to wishcheaper"
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
