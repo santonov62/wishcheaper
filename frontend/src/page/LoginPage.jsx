@@ -11,9 +11,9 @@ const LoginPage = ({ signedIn, signInHandler }) => {
   }
 
   return (
-      <div className='loginPage' style={{ padding: '20px' }}>
+      <div className='loginPage'>
         <Header as='h1'>Авторизируйтесь</Header>
-        <SignInWithVkButton text='Вконтакте' signInHandler={signInHandler}/>
+        <SignInWithVkButton size='huge' text='Вконтакте' signInHandler={signInHandler}/>
       </div>
   )
 };
