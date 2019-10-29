@@ -20,14 +20,14 @@ function vkAuthListener(ownerTabId) {
     }
   }
 }
-let loginUrl = 'http://localhost:3000/login';
 
 chrome.runtime.onMessage.addListener( ({action, data}) => {
   console.log(`action: ${action}`, data);
   if (action === 'vkAuth') {
+    const url = data.url;
     console.group(`[vkAuth]`);
-    console.log('chrome.tabs.create ', loginUrl);
-    chrome.tabs.create({url: loginUrl, selected: true}, (tab) => {
+    console.log('chrome.tabs.create ', url);
+    chrome.tabs.create({url, selected: true}, (tab) => {
       console.log('done');
       chrome.tabs.onUpdated.addListener(vkAuthListener(tab.id));
     });
