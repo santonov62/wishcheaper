@@ -3,6 +3,10 @@ chrome.runtime.onStartup.addListener(function() {
 
 });
 
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  alert("message received");
+});
+
 const DOMAIN = `https://wishcheaper.herokuapp.com`;
 const vkCLientId = '7039043';
 
@@ -97,8 +101,8 @@ async function addUrl(url) {
 function authVk() {
   return new Promise((resolve, reject) => {
     try {
-      chrome.storage.local.get(['authData'], async ({authData}) => {
-        
+      chrome.storage.local.get(['authData'], async (items) => {
+        const {authData} = items;
         if (!authData) {
           const token = await getVkAccessToken();
           const authData = await fetch(`${DOMAIN}/auth/vk/token`, {
