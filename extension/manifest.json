@@ -18,9 +18,6 @@
     ],
     "persistent": false
   },
-  "web_accessible_resources": [
-    "constants.js"
-  ],
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
