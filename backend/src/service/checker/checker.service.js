@@ -14,6 +14,8 @@ const ozoneChecker = require('./ozoneChecker.service');
 const techportChecker = require('./techportChecker.service');
 const beruChecker = require('./beruChecker.service');
 const goodsChecker = require('./goodsChecker.service');
+const lamodaChecker = require('./lamodaChecker.service');
+const wildberriesChecker = require('./wildberriesChecker.service');
 
 const checkerList = [
   pandaoChecker,
@@ -25,7 +27,9 @@ const checkerList = [
   ozoneChecker,
   techportChecker,
   beruChecker,
-  goodsChecker
+  goodsChecker,
+  lamodaChecker,
+  wildberriesChecker
 ];
 
 let processGoods = [];

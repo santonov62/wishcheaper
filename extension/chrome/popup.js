@@ -23,12 +23,8 @@ function addByUrl() {
 }
 
 function vkAuth() {
-  // chrome.tabs.create({url: 'http://localhost:3000', selected: true}, (tab) => {
-  chrome.tabs.create({url: 'http://localhost:3000'}, (tab) => {
-    alert()
-    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-      alert(response.farewell);
-    });
+  chrome.runtime.sendMessage('caanfdghlmmflppgchfaocfjhdeaonma', 'vkAuth', {}, function(response) {
+    console.log(`Success! `, response);
   });
 }
 

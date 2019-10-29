@@ -2,11 +2,11 @@ const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
-const SHOP_NAME = 'ozon.ru';
+const SHOP_NAME = 'wildberries.ru';
 const SHOP_TITLE = 'Ozone';
 
 const log = (text, params = '') => {
-  console.log(`[ozonChecker.service] -> ${text}`, params);
+  console.log(`[wildberries.service] -> ${text}`, params);
 };
 
 const init = async () => {
@@ -39,34 +39,29 @@ const parse = async (url) => {
 
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
-    // log(`done`);
-  
-    // let inactive_at;
-    // const payButton = await page.$('[data-test-id=saleblock-subscribe-button]');
-    // if (!!payButton) {
-    //   inactive_at = new Date();
-    // }
-    
+
     let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);
     try {
-      title = await page.$eval('.top-base-column-top h1', node => node.innerText);
+      title = await page.$eval('.brand-and-name.j-product-title', node => node.innerText);
     } catch (e) { }
     
     log(`price`);
     try {
-      currentPrice = await page.$eval('.top-sale-block>div>div:nth-child(1)>div>div>div>div span:nth-of-type(1)', node => parseInt(node.innerText.replace(/\s/g, '')));
-    } catch (e) { }
+      currentPrice = await page.$eval('.final-cost', node => parseInt(node.innerText.replace(/\s/g, '')));
+    } catch (e) {
+      inactive_at = new Date();
+    }
   
     log(`oldPrice`);
     try {
       // oldPrice = await page.$eval('.top-sale-block div div div div div', node => parseInt(node.innerText.replace(/\s/g, '')));
-      oldPrice = await page.$eval('.top-sale-block>div>div:nth-child(1)>div>div>div>div span:nth-of-type(2)', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('.old-price', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
     
     log(`logo`);
     try {
-      logo = await page.$eval('.img.magnifier-image.shown img', node => node.getAttribute('src'))
+      logo = await page.$eval('img.preview-photo.j-preview-photo', node => node.getAttribute('src'))
     } catch (e) { }
 
     if (!currentPrice) {
