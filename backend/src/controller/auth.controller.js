@@ -17,11 +17,20 @@ const authByVkToken = async (req, res) => {
   
   try {
     const {token: vkToken} = req.body;
+    if (!vkToken)
+      throw new Error(`vk token requred!`);
+    
     const vkUser = await fetch(`https://api.vk.com/method/users.get?v=5.87&access_token=${vkToken}&fields=uid,domain,first_name,last_name,photo_200`, {
       method: 'GET'
-    }).then(res => res.json())
-        .then(({response}) => response[0]);
-  
+    })
+        .then(res => res.json())
+        .then(({response, error}) => {
+          if (!!error)
+            throw new Error(error.error_msg);
+          
+          return response && response[0];
+        });
+    
     let user = await usersService.search({vk: vkUser.id});
     if (!user){
       const userData = {

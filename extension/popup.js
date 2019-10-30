@@ -1,94 +1,126 @@
+const DOMAIN = `https://wishcheaper.herokuapp.com`;
 
 window.onload = () => {
-    injectVkScript();
-    // const vkButton = document.getElementById('vk');
-    // vkButton.onclick = vkAuth;
+
+  const vkButton = document.getElementById('vk');
+  vkButton.onclick = vkAuth;
+
+  const addButton = document.getElementById('add');
+  addButton.onclick = addCurrent;
+
+  chrome.storage.local.get(['authData'], ({authData}) => {
+    if (!!authData) {
+      // addButton.classList.remove('hidden');
+      addCurrent();
+    } else {
+      vkButton.classList.remove('hidden');
+    }
+    hideSpinner();
+  });
+
 };
 
-const injectVkScript = () => {
-    let script = document.createElement('script');
-    
-    script.src = "openapi.js";
-    document.head.append(script);
-    
-    script.onload = () => {
-        window.VK.init({
-            apiId: 7037811
-        });
-        hideSpinner();
-    };
-    script.onerror = () => {
-        log('vkApiError');
-    };
+function addCurrent() {
+  chrome.tabs.query({
+    active: true,
+    currentWindow: true
+  }, (tabs) => {
+    const tab = tabs[0];
+    console.log(tab)
+      addByUrl(tab.url)
+  })
+}
+
+function vkAuth() {
+  chrome.runtime.sendMessage('', {action: 'vkAuth', data: { url: `${DOMAIN}/login` }});
+}
+
+async function addByUrl(url) {
+  console.group('[addByUrl] ', url);
+  showSpinner();
+  try {
+    let authData = await getAuthData();
+    if (!authData)
+      throw new Error(`authData required`);
+
+    authData = JSON.parse(authData);
+
+    const good = await fetch(`${DOMAIN}/checker/add`, {
+      method: 'POST',
+      body: JSON.stringify({
+        url
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authData.user.token}`
+      }
+    }).then(res => res.json());
+    if (good.error)
+      throw new Error(good.error);
+    console.log("[addUrl] good", good);
+    showMessage(`Товар добавлен`);
+    return good;
+  } catch (e) {
+    showMessage(e.message);
+  } finally {
+    console.groupEnd();
+    hideSpinner();
+  }
+}
+
+async function getAuthData() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get(['authData'], async ({authData}) => {
+      if (!authData) {
+        reject(authData)
+      } else {
+        resolve(authData)
+      }
+    });
+  });
+}
+
+const showSpinner = () => {
+  const spinner = document.getElementById(`spinner`);
+  spinner.classList.remove('hidden');
+  hideContent();
+};
+const hideSpinner = () => {
+  const spinner = document.getElementById(`spinner`);
+  spinner.classList.add(`hidden`);
+  showContent();
+};
+
+const showContent = () => {
+  const content = document.getElementById(`content`);
+  content.classList.remove('hidden');
+};
+const hideContent = () => {
+  const content = document.getElementById(`content`);
+  content.classList.add('hidden');
+};
+
+const showMessage = (text) => {
+  hideButtons();
+  const el = document.getElementById(`message`);
+  el.innerText = text;
+  el.classList.remove(`hidden`);
+};
+const hideMessage = () => {
+  const message = document.getElementById(`message`);
+  message.classList.add(`hidden`);
+  showButtons();
+};
+
+const hideButtons = () => {
+  const el = document.getElementById(`buttons`);
+  el.classList.add(`hidden`);
+};
+const showButtons = () => {
+  const el = document.getElementById(`buttons`);
+  el.classList.remove(`hidden`);
 };
 
 const log = (value) => {
-    console.log(value);
-};
-
-const vkAuth = () => {
-    
-    // chrome.runtime.sendMessage('fccambcnjhpmgegajdgnnlfkanddnjbh', 'vkAuth');
-    
-    var
-        extensionClientId = 'fccambcnjhpmgegajdgnnlfkanddnjbh',
-        vkCLientId           = '7173995',
-        redirectUrl = chrome.identity.getRedirectURL(),
-        // vkRequestedScopes    = 'docs,offline',
-        // vkAuthenticationUrl  = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&scope=' + vkRequestedScopes + '&redirect_uri=http%3A%2F%2Foauth.vk.com%2Fblank.html&display=page&response_type=token';
-        vkAuthenticationUrl  = 'https://oauth.vk.com/authorize?client_id=' + vkCLientId + '&redirect_uri='+redirectUrl+'&display=page&response_type=token';
-    
-    chrome.identity.launchWebAuthFlow(
-        {
-            'url': '',
-            'interactive': true
-        },
-        function(data) {
-            alert(data);
-        }
-    );
-};
-
-//
-// const renderOrders = (orders = []) => {
-//     const ul = document.querySelector('#orders ul');
-//     orders.forEach((order) => {
-//         const li = document.createElement('li');
-//         ul.appendChild(li);
-//         const a = document.createElement('a');
-//         const title = `${order.shop && order.shop.name} (${order.address})`;
-//         const linkText = document.createTextNode(title);
-//         a.appendChild(linkText);
-//         a.title = title;
-//         a.href = order.url;
-//         a.target = 'blank';
-//         li.appendChild(a);
-//     });
-// };
-//
-// const loadOrders = () => {
-//     return fetch('https://delivery-group-order.herokuapp.com/')
-//         .then(
-//             function (response) {
-//                 if (response.status !== 200) {
-//                     console.log('Looks like there was a problem. Status Code: ' + response.status);
-//                     return;
-//                 }
-//
-//                 return response.json();
-//             }
-//         )
-//         .catch(function (err) {
-//             console.log('Fetch Error :-S', err);
-//         });
-// };
-//
-const showSpinner = () => {
-    const spinner = document.querySelector(`.loader`);
-    spinner.classList.add(`show`);
-};
-
-const hideSpinner = () => {
-    const spinner = document.querySelector(`.loader`);
-    spinner.classList.add(`hide`);
+  console.log(value);
 };

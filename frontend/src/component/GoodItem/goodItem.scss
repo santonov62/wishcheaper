@@ -26,6 +26,12 @@
   }
 
   .goodItem {
+    .title {
+      white-space: nowrap; /* Запрещаем перенос строк */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-clamp: 2
+    }
     &.ui.card {
       margin: 0;
     }

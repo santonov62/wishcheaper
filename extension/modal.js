@@ -1,20 +1,11 @@
+document.querySelector('body').innerHTML += `
+<style>
 @font-face {
     font-family: "Font Awesome 5 Brands";
     font-style: normal;
     font-weight: 400;
     src: url(fa-brands-400.woff2) format("woff2")
 }
-body {
-    min-height: 50px;
-    min-width: 250px;
-    background-image: url(images/bg.jpg);
-    display: flex;
-    align-items: stretch;
-    flex-direction: column;
-    margin: 15px;
-    font-size: 18px;
-}
-
 #spinner {
     align-self: center;
 }
@@ -86,7 +77,7 @@ body {
     padding-right: .25rem!important;
 }
 .fa-vk:before {
-    content: "\f189";
+    content: "\\f189";
 }
 .lds-ripple {
     display: inline-block;
@@ -120,3 +111,20 @@ body {
         opacity: 0;
     }
 }
+</style>
+
+<div class="modal">
+    <div id="content">
+    <div id="buttons">
+        <button id="vk" type="button" class="btn btn-vk waves-effect waves-light hidden">
+            <i class="fab fa-vk pr-1"></i> Авторизоваться
+        </button>
+        <button id="add" type="button" class="btn btn-add waves-effect waves-light hidden">
+            <i class="fab pr-1"></i> Сохранить
+        </button>
+    </div>
+    <div id="message" class="hidden"></div>
+</div>
+<div id="spinner" class="lds-ripple"><div></div><div></div></div>
+</div>
+`;

@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
-<div id="orders" class="orders">
-    <div class="loader">Loading...</div>
-    <ul>
-    </ul>
+<div id="content">
+    <div id="buttons">
+        <button id="vk" type="button" class="btn btn-vk waves-effect waves-light hidden">
+            <i class="fab fa-vk pr-1"></i> Авторизоваться
+        </button>
+        <button id="add" type="button" class="btn btn-add waves-effect waves-light hidden">
+            <i class="fab pr-1"></i> Сохранить
+        </button>
+    </div>
+    <div id="message" class="hidden"></div>
 </div>
-<button id="vk">vk</button>
-<!--<script>-->
-  <!--function vkApiInit() {-->
-    <!--alert('vkApiInit');-->
-    <!--VK.init({-->
-      <!--apiId: 7037811-->
-    <!--});-->
-  <!--}-->
-  <!--function vkApiError() {-->
-    <!--alert('vkApiError');-->
-  <!--}-->
-<!--</script>-->
-<script src="popup.js"></script>
+<div id="spinner" class="lds-ripple"><div></div><div></div></div>
 
+<script src="popup.js"></script>
 </body>
 </html>
