@@ -43,6 +43,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
   
   const isInactive = !!inactive_at;
   const diffPrevPrice = !!prev_price && price - prev_price;
+  const diffPrice = !!old_price && price - old_price;
   const updatedRange = moment(updated_at).fromNow(true);
   const updatedRangeText = `${updatedRange} назад`;
   const percentDiscount = old_price ? 100 - price / (old_price / 100) : 0;
@@ -66,30 +67,45 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           </div>
         </div>
         <Card.Content>
-          <Card.Header as='a' href={url} target='_blank'>{title}</Card.Header>
+          <Card.Header className='title' as='a' href={url} target='_blank'>{title}</Card.Header>
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
-          <Card.Description style={{lineHeight: 2.1}}>
-
-            {!!diffPrevPrice &&
-            <Fragment>
-              Динамика&nbsp;
-              <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
-                {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
-              </Label>
-              <br />
-            </Fragment>
-            }
+          <Card.Description>
             
+            {/*{!!diffPrevPrice &&*/}
+            {/*<Fragment>*/}
+              {/*Динамика&nbsp;*/}
+              {/*<Label color={diffPrevPrice > 0 ? 'red' : 'green'}>*/}
+                {/*{diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽*/}
+              {/*</Label>*/}
+              {/*<br />*/}
+            {/*</Fragment>*/}
+            {/*}*/}
+            
+            {/*{!!price &&*/}
+                {/*<Fragment>*/}
+                  {/*Цена&nbsp;*/}
+                  {/*<Label alt='Цена'>*/}
+                    {/*<span>{price} ₽</span>*/}
+                  {/*</Label>*/}
+                  {/*{!!old_price && <span>&nbsp;<strike>{old_price}₽</strike></span>}*/}
+                  {/*<br />*/}
+                {/*</Fragment>*/}
+            {/*}*/}
             {!!price &&
-                <Fragment>
-                  Цена&nbsp;
-                  <Label alt='Минимальная зафиксированная цена'>
-                    <span>{price} ₽</span>
-                  </Label>
-                  {!!old_price && <span>&nbsp;<strike>{old_price}₽</strike></span>}
+                <div style={{marginBottom: 10, marginTop: 10}}>
+                  {!!old_price &&
+                    <Fragment>
+                      &nbsp;<span style={{fontSize: 16, color: '#ccc'}}><strike>{old_price}₽</strike></span>
+                      {!!diffPrice &&
+                        <Fragment>&nbsp;&nbsp;<span style={{fontSize: 11, color: 'green'}}>{diffPrice} ₽</span></Fragment>
+                      }
+                      <br />
+                    </Fragment>
+                  }
+                  <span style={{fontSize: 28, lineHeight: 1}}>{price} ₽</span>
                   <br />
-                </Fragment>
+                </div>
             }
             {!price &&
                 <Fragment>
@@ -97,32 +113,60 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                   <br />
                 </Fragment>
             }
-  
-            {!!min_price &&
-            <Fragment>
-              Мин&nbsp;
-              <Label alt='Минимальная зафиксированная цена'>
-                {min_price} ₽
-              </Label>
-              {/*> <span>{min_price} ₽</span>*/}
-              <br />
-            </Fragment>
-            }
+            
+            {/*{!!min_price &&*/}
+            {/*<Fragment>*/}
+              {/*Мин&nbsp;*/}
+              {/*<Label alt='Минимальная зафиксированная цена'>*/}
+                {/*{min_price} ₽*/}
+              {/*</Label>*/}
+              {/*/!*> <span>{min_price} ₽</span>*!/*/}
+              {/*<br />*/}
+            {/*</Fragment>*/}
+            {/*}*/}
+            
+            {/*{!!diffPrevPrice &&*/}
+            {/*<Fragment>*/}
+              {/*Динамика&nbsp;*/}
+              {/*<Label color={diffPrevPrice > 0 ? 'red' : 'green'}>*/}
+                {/*{diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽*/}
+              {/*</Label>*/}
+              {/*<br />*/}
+            {/*</Fragment>*/}
+            {/*}*/}
+            
           </Card.Description>
         </Card.Content>
+        
         <Card.Content extra>
           <Label floated='right' size='small'><Icon name='shop' />{shop_name}</Label>
           <Label size='small'><Icon name='history' />{updatedRangeText}</Label>
+          
           {!!price_discount &&
           <Label color='orange' size='small'><Icon name='bell outline' />{price_discount} ₽</Label>
           }
+          
           {!!percent_discount &&
           <Label color='orange' size='small'><Icon name='bell outline' />{percent_discount} %</Label>
           }
+          
           {!!autobuy_price &&
           <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} ₽</Label>
           }
+  
+          {!!min_price &&
+          <Label alt='Минимальная зафиксированная цена'>
+          {min_price} ₽
+          </Label>
+          }
+  
+          {!!diffPrevPrice &&
+          <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
+          {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
+          </Label>
+          }
         </Card.Content>
+        
       </Card>
   )
 };
