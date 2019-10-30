@@ -3,6 +3,15 @@ chrome.runtime.onStartup.addListener(function() {
 
 });
 
+// chrome.browserAction.onClicked.addListener((tab) => {
+//   const tabId = tab.id;
+//   chrome.tabs.executeScript(tabId, {
+//     file: "modal.js"
+//   }, () => {
+//
+//   });
+// });
+
 function vkAuthListener(ownerTabId) {
   return function checkAuthSuccess(tabId, changeInfo, tab) {
     if (tabId === ownerTabId) {
