@@ -77,7 +77,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           </div>
         </div>
         <Card.Content>
-          <Card.Header className='title' as='a' href={url} target='_blank'>{title}</Card.Header>
+          <Card.Header className='title' as='a' href={url} target='_blank' title={title}>{title}</Card.Header>
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
           <Card.Description>
@@ -115,13 +115,13 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           }
   
           {!!min_price &&
-          <Label color="red" title="Лучшая цена">
+          <Label size='small' color="red" title="Лучшая цена">
             <Icon name='fire' />{min_price} ₽
           </Label>
           }
 
           {!!diffPrevPrice &&
-          <Label color={diffPrevPrice > 0 ? 'red' : 'green'} title="Динамика цены/изменение от предыдущего сканирования">
+          <Label size='small' color={diffPrevPrice > 0 ? 'red' : 'green'} title="Динамика цены/изменение от предыдущего сканирования">
             <Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽
           </Label>
           }
