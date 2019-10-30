@@ -55,13 +55,13 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           {!!logo ? <Image src={logo} /> : <Icon size='huge' name='image' style={{margin: 30}} /> }
           <div className='floating'>
             {percentDiscount > 0 &&
-            <Label color='orange' size='large' circular>
-              -{roundedPercentDiscount}%
+            <Label color='yellow' size='large' circular>
+              {roundedPercentDiscount}%
             </Label>
             }
-            {!!isImportant &&
-            <Label color='green' size='large' circular>
-              Дешево
+            {isImportant &&
+            <Label color='red' size='large' circular>
+              <Icon name='fire'/>
             </Label>
             }
           </div>
@@ -71,27 +71,6 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
           <Card.Description>
-            
-            {/*{!!diffPrevPrice &&*/}
-            {/*<Fragment>*/}
-              {/*Динамика&nbsp;*/}
-              {/*<Label color={diffPrevPrice > 0 ? 'red' : 'green'}>*/}
-                {/*{diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽*/}
-              {/*</Label>*/}
-              {/*<br />*/}
-            {/*</Fragment>*/}
-            {/*}*/}
-            
-            {/*{!!price &&*/}
-                {/*<Fragment>*/}
-                  {/*Цена&nbsp;*/}
-                  {/*<Label alt='Цена'>*/}
-                    {/*<span>{price} ₽</span>*/}
-                  {/*</Label>*/}
-                  {/*{!!old_price && <span>&nbsp;<strike>{old_price}₽</strike></span>}*/}
-                  {/*<br />*/}
-                {/*</Fragment>*/}
-            {/*}*/}
             {!!price &&
                 <div style={{marginBottom: 10, marginTop: 10}}>
                   {!!old_price &&
@@ -114,57 +93,35 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                 </Fragment>
             }
             
-            {/*{!!min_price &&*/}
-            {/*<Fragment>*/}
-              {/*Мин&nbsp;*/}
-              {/*<Label alt='Минимальная зафиксированная цена'>*/}
-                {/*{min_price} ₽*/}
-              {/*</Label>*/}
-              {/*/!*> <span>{min_price} ₽</span>*!/*/}
-              {/*<br />*/}
-            {/*</Fragment>*/}
-            {/*}*/}
-            
-            {/*{!!diffPrevPrice &&*/}
-            {/*<Fragment>*/}
-              {/*Динамика&nbsp;*/}
-              {/*<Label color={diffPrevPrice > 0 ? 'red' : 'green'}>*/}
-                {/*{diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽*/}
-              {/*</Label>*/}
-              {/*<br />*/}
-            {/*</Fragment>*/}
-            {/*}*/}
-            
           </Card.Description>
         </Card.Content>
         
         <Card.Content extra>
-          <Label floated='right' size='small'><Icon name='shop' />{shop_name}</Label>
-          <Label size='small'><Icon name='history' />{updatedRangeText}</Label>
-          
-          {!!price_discount &&
-          <Label color='orange' size='small'><Icon name='bell outline' />{price_discount} ₽</Label>
-          }
-          
-          {!!percent_discount &&
-          <Label color='orange' size='small'><Icon name='bell outline' />{percent_discount} %</Label>
-          }
-          
+          <Label color='blue' size='small' title="Магазин"><Icon name='shop' />{shop_name}</Label>
+          <Label color="grey" size='small' title="Последнее сканирование"><Icon name='history' />{updatedRangeText}</Label>
+
           {!!autobuy_price &&
           <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} ₽</Label>
           }
   
           {!!min_price &&
-          <Label alt='Минимальная зафиксированная цена'>
-          {min_price} ₽
+          <Label color="red" title="Лучшая цена">
+            <Icon name='fire' />{min_price} ₽
           </Label>
           }
-  
+
           {!!diffPrevPrice &&
-          <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
-          {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
+          <Label color={diffPrevPrice > 0 ? 'red' : 'green'} title="Динамика цены/изменение от предыдущего сканирования">
+            <Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽
           </Label>
           }
+
+          <Label color='orange' size='small' title="Оповещение о снижении цены">
+            <Icon name='bell outline' />
+            {!!percent_discount && <Fragment>{percent_discount} %</Fragment>}
+            {!percent_discount && 'Всегда'}
+          </Label>
+
         </Card.Content>
         
       </Card>
