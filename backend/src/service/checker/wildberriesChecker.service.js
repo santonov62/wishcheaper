@@ -3,7 +3,7 @@ const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'wildberries.ru';
-const SHOP_TITLE = 'Ozone';
+const SHOP_TITLE = 'wildberries';
 
 const log = (text, params = '') => {
   console.log(`[wildberries.service] -> ${text}`, params);
