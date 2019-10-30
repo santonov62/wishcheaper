@@ -40,12 +40,12 @@ const App = () => {
         <Provider store={store}>
           <Fragment>
             <Helmet
-              defaultTitle='Сканер цен'
-              titleTemplate='%s - Сканер цен'
+              defaultTitle='Единый список желаний'
+              titleTemplate='%s - Единый список желаний'
               meta={[
                 {
                   "name": "description",
-                  "content": "Сканер цен"
+                  "content": "Единый список желаний"
                 }, {
                   'name': 'og:type',
                   'content': 'website'
