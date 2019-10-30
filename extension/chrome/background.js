@@ -14,8 +14,8 @@ function vkAuthListener(ownerTabId) {
         }, () => {
           console.log('done');
           console.groupEnd();
+          chrome.tabs.remove(tabId, () => {});
         });
-        chrome.tabs.remove(tabId, () => {});
       }
     }
   }

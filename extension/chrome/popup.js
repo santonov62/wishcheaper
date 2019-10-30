@@ -62,7 +62,7 @@ async function addByUrl(url) {
       throw new Error(good.error);
     console.log("[addUrl] good", good);
     // alert('Product added');
-    showMessage(`Product saved. ${JSON.stringify(good)}`);
+    showMessage(`Product saved.`);
     return good;
   } catch (e) {
     // alert(e.message);
