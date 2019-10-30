@@ -4,18 +4,19 @@ import {removeGood, userGoods} from '../../actionCreators/goods.actionCreators'
 import moment from 'moment';
 import {connect} from 'react-redux';
 import './goodItem.css';
-import GoodMenu from './GoodMenu';
+// import GoodMenu from './GoodMenu';
+import SubscriptionModal from '../Modal/SubscriptionModal';
 
 const isGoodValid = ({title, price, url}) => {
   return !!title && !!url;
 };
 
-export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_name,
+const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_name,
                            updated_at, created_at, inactive_at, prev_price, subscription_id,
-                           price_discount, percent_discount, autobuy_price, min_price}) => {
+                           price_discount, percent_discount, autobuy_price, min_price, removeGood}) => {
   
   const invalidGoodProps = {id, url, updated_at, created_at, inactive_at};
-  const goodMenuProps = {direction: 'left', good_id: id, subscription_id};
+  // const goodMenuProps = {direction: 'left', good_id: id, subscription_id};
   const isInvalidValid = !isGoodValid({url, title, price});
   const shortGoodItemsProps = {id, url, title, logo, price, old_price, shop_id, shop_name,
     updated_at, created_at, inactive_at, prev_price, subscription_id,
@@ -23,8 +24,13 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_
   
   return (
     <div className='goodItemContainer'>
-      <GoodMenu {...goodMenuProps}/>
-      {!!isInvalidValid &&
+      {/*<GoodMenu {...goodMenuProps}/>*/}
+      <Icon link className='menuButton' title="Удалить" name='close' onClick={() => {
+        const isAccepted = window.confirm("Вы действительно хотите удалить товар из подписок?");
+        if (isAccepted)
+          removeGood(id);
+      }}/>
+      {isInvalidValid &&
           <InvalidGoodItem {...invalidGoodProps} />
       }
       {!isInvalidValid &&
@@ -36,6 +42,10 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_
   
   )
 };
+
+export const GoodItem = connect(null, dispatch => ({
+  removeGood: (good_id) => dispatch(removeGood({id: good_id}))
+}))(GoodItemTmpl);
 
 const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id, shop_name,
                          updated_at, created_at, inactive_at, prev_price, subscription_id,
@@ -55,13 +65,13 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           {!!logo ? <Image src={logo} /> : <Icon size='huge' name='image' style={{margin: 30}} /> }
           <div className='floating'>
             {percentDiscount > 0 &&
-            <Label color='orange' size='large' circular>
-              -{roundedPercentDiscount}%
+            <Label title="Скидка в процентах" color='yellow' size='large' circular>
+              {roundedPercentDiscount}%
             </Label>
             }
-            {!!isImportant &&
-            <Label color='green' size='large' circular>
-              Дешево
+            {isImportant &&
+            <Label title="Выгодный вариант" color='red' size='large' circular>
+              <Icon name='fire'/>
             </Label>
             }
           </div>
@@ -71,39 +81,18 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
           <Card.Description>
-            
-            {/*{!!diffPrevPrice &&*/}
-            {/*<Fragment>*/}
-              {/*Динамика&nbsp;*/}
-              {/*<Label color={diffPrevPrice > 0 ? 'red' : 'green'}>*/}
-                {/*{diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽*/}
-              {/*</Label>*/}
-              {/*<br />*/}
-            {/*</Fragment>*/}
-            {/*}*/}
-            
-            {/*{!!price &&*/}
-                {/*<Fragment>*/}
-                  {/*Цена&nbsp;*/}
-                  {/*<Label alt='Цена'>*/}
-                    {/*<span>{price} ₽</span>*/}
-                  {/*</Label>*/}
-                  {/*{!!old_price && <span>&nbsp;<strike>{old_price}₽</strike></span>}*/}
-                  {/*<br />*/}
-                {/*</Fragment>*/}
-            {/*}*/}
             {!!price &&
                 <div style={{marginBottom: 10, marginTop: 10}}>
                   {!!old_price &&
                     <Fragment>
-                      &nbsp;<span style={{fontSize: 16, color: '#ccc'}}><strike>{old_price}₽</strike></span>
+                      &nbsp;<span style={{fontSize: 16, color: '#ccc'}} title="Старая цена"><strike>{old_price}₽</strike></span>
                       {!!diffPrice &&
-                        <Fragment>&nbsp;&nbsp;<span style={{fontSize: 11, color: 'green'}}>{diffPrice} ₽</span></Fragment>
+                        <Fragment>&nbsp;&nbsp;<span style={{fontSize: 11, color: 'green'}} title="Скидка">{diffPrice} ₽</span></Fragment>
                       }
                       <br />
                     </Fragment>
                   }
-                  <span style={{fontSize: 28, lineHeight: 1}}>{price} ₽</span>
+                  <span style={{fontSize: 28, lineHeight: 1}} title="Цена">{price} ₽</span>
                   <br />
                 </div>
             }
@@ -114,57 +103,36 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                 </Fragment>
             }
             
-            {/*{!!min_price &&*/}
-            {/*<Fragment>*/}
-              {/*Мин&nbsp;*/}
-              {/*<Label alt='Минимальная зафиксированная цена'>*/}
-                {/*{min_price} ₽*/}
-              {/*</Label>*/}
-              {/*/!*> <span>{min_price} ₽</span>*!/*/}
-              {/*<br />*/}
-            {/*</Fragment>*/}
-            {/*}*/}
-            
-            {/*{!!diffPrevPrice &&*/}
-            {/*<Fragment>*/}
-              {/*Динамика&nbsp;*/}
-              {/*<Label color={diffPrevPrice > 0 ? 'red' : 'green'}>*/}
-                {/*{diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽*/}
-              {/*</Label>*/}
-              {/*<br />*/}
-            {/*</Fragment>*/}
-            {/*}*/}
-            
           </Card.Description>
         </Card.Content>
         
         <Card.Content extra>
-          <Label floated='right' size='small'><Icon name='shop' />{shop_name}</Label>
-          <Label size='small'><Icon name='history' />{updatedRangeText}</Label>
-          
-          {!!price_discount &&
-          <Label color='orange' size='small'><Icon name='bell outline' />{price_discount} ₽</Label>
-          }
-          
-          {!!percent_discount &&
-          <Label color='orange' size='small'><Icon name='bell outline' />{percent_discount} %</Label>
-          }
-          
+          <Label color='blue' size='small' title="Магазин"><Icon name='shop' />{shop_name}</Label>
+          <Label color="grey" size='small' title="Последнее обновление"><Icon name='history' />{updatedRangeText}</Label>
+
           {!!autobuy_price &&
           <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} ₽</Label>
           }
   
           {!!min_price &&
-          <Label alt='Минимальная зафиксированная цена'>
-          {min_price} ₽
+          <Label color="red" title="Лучшая цена">
+            <Icon name='fire' />{min_price} ₽
           </Label>
           }
-  
+
           {!!diffPrevPrice &&
-          <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
-          {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
+          <Label color={diffPrevPrice > 0 ? 'red' : 'green'} title="Динамика цены/изменение от предыдущего сканирования">
+            <Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽
           </Label>
           }
+          <SubscriptionModal subscription_id={subscription_id} trigger={
+            <Label as='a' color='orange' size='small' title="Оповещение о снижении цены">
+              <Icon name='bell' />
+              {!!percent_discount && <Fragment>{percent_discount} %</Fragment>}
+              {!percent_discount && 'Всегда'}
+            </Label>
+          }/>
+
         </Card.Content>
         
       </Card>
