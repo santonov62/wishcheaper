@@ -1,5 +1,8 @@
 import * as Actions from "../actions/vk.actions";
+import * as UserActions from '../actions/user.actions';
 import {ADD_ERROR} from "../actions/errors.actions";
+import {authWithVk, signOut} from "../actionCreators/user.actionCreators";
+import {clearUser} from "../storage/user.storage";
 
 const processError = (message, dispatch) => {
     dispatch({type: Actions.API_FAILURE});
@@ -23,6 +26,17 @@ export const apiInit = () => dispatch => {
         dispatch({
             type: Actions.API_INITED
         });
+
+        vk.Auth.getLoginStatus(function ({session}) {
+            if (!session) {
+                // dispatch(signOut());
+              clearUser();
+              dispatch({type: UserActions.USER_SIGNED_OUT});
+            } else {
+                console.log('[apiInit]', session)
+            }
+        });
+
     } catch (e) {
         processError(e.message, dispatch);
     }

@@ -97,15 +97,6 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                   </div>
 
                   <div>
-                    {/*{!!min_price &&*/}
-                      {/*<span title="Минимальная зафиксированная цена"><Icon name='money bill alternate outline' />{min_price} ₽</span>*/}
-                    {/*}*/}
-                    {/*{!!diffPrevPrice &&*/}
-                    {/*<span style={{color: diffPrevPrice > 0 ? 'red' : 'green'}} title="Повышение/понижение цены относительно предыдущего обновления">*/}
-                      {/*/!*&nbsp;&nbsp;<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*!/*/}
-                      {/*&nbsp;&nbsp;{diffPrevPrice > 0 ? '+' : '-'}{Math.abs(diffPrevPrice)} ₽*/}
-                    {/*</span>*/}
-                    {/*}*/}
                     {!!min_price &&
                     <Label size='small' color="red" title="Минимальная зафиксированная цена">
                       <Icon name='fire' />{min_price} ₽
@@ -132,7 +123,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
         
         <Card.Content extra>
           {/*<Label color='blue' size='small' title="Магазин"><Icon name='shop' />{shop_name}</Label>*/}
-          <Label color="" size='small' title="Последнее обновление"><Icon name='history' />{updatedRangeText}</Label>
+          <Label size='small' title="Последнее обновление"><Icon name='history' />{updatedRangeText}</Label>
 
           {!!autobuy_price &&
           <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} ₽</Label>
@@ -169,7 +160,7 @@ const InvalidGoodItem = ({good_id, url}) => {
   return (
     
       <Card className='goodItem invalid'>
-        <div className='logo'>
+        <div className='o'>
           <Icon size='huge' name='ban' style={{margin: 30}}/>
         </div>
         <Card.Content>
