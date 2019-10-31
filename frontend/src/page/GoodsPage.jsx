@@ -1,12 +1,13 @@
 import React from 'react';
 import './goodsPage.css'
-import { Button, Header, Icon, Dimmer, Loader, Grid, Image, Item } from 'semantic-ui-react';
+import { Button, Header, Icon, Dimmer, Loader, Grid, Image, Item, Dropdown, Input } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import {authHeader} from "../helpers/auth-header";
 import { connect } from 'react-redux';
 import { userGoods } from '../actionCreators/goods.actionCreators';
 import {GoodItem} from "../component/GoodItem/GoodItem";
+import GoodsFilterMenu from "../component/Menu/GoodsFilterMenu";
 
 class GoodsPage extends React.Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class GoodsPage extends React.Component {
         <div className='goodsPage'>
           <Loader size='large' active={isLoading} content='Loading'/>
           <Header as='h1'>Мои товары</Header>
+          <GoodsFilterMenu />
           <div className='goods'>
             {goodsElements}
           </div>
