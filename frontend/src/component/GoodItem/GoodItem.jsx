@@ -4,18 +4,19 @@ import {removeGood, userGoods} from '../../actionCreators/goods.actionCreators'
 import moment from 'moment';
 import {connect} from 'react-redux';
 import './goodItem.css';
-import GoodMenu from './GoodMenu';
+// import GoodMenu from './GoodMenu';
+import SubscriptionModal from '../Modal/SubscriptionModal';
 
 const isGoodValid = ({title, price, url}) => {
   return !!title && !!url;
 };
 
-export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_name,
+const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_name,
                            updated_at, created_at, inactive_at, prev_price, subscription_id,
-                           price_discount, percent_discount, autobuy_price, min_price}) => {
+                           price_discount, percent_discount, autobuy_price, min_price, removeGood}) => {
   
   const invalidGoodProps = {id, url, updated_at, created_at, inactive_at};
-  const goodMenuProps = {direction: 'left', good_id: id, subscription_id};
+  // const goodMenuProps = {direction: 'left', good_id: id, subscription_id};
   const isInvalidValid = !isGoodValid({url, title, price});
   const shortGoodItemsProps = {id, url, title, logo, price, old_price, shop_id, shop_name,
     updated_at, created_at, inactive_at, prev_price, subscription_id,
@@ -23,8 +24,13 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_
   
   return (
     <div className='goodItemContainer'>
-      <GoodMenu {...goodMenuProps}/>
-      {!!isInvalidValid &&
+      {/*<GoodMenu {...goodMenuProps}/>*/}
+      <Icon link className='menuButton' title="Удалить" name='trash alternate outline' onClick={() => {
+        const isAccepted = window.confirm("Вы действительно хотите удалить товар из отслеживаемых?");
+        if (isAccepted)
+          removeGood(id);
+      }}/>
+      {isInvalidValid &&
           <InvalidGoodItem {...invalidGoodProps} />
       }
       {!isInvalidValid &&
@@ -37,12 +43,17 @@ export const GoodItem = ({id, url, title, logo, price, old_price, shop_id, shop_
   )
 };
 
+export const GoodItem = connect(null, dispatch => ({
+  removeGood: (good_id) => dispatch(removeGood({id: good_id}))
+}))(GoodItemTmpl);
+
 const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id, shop_name,
                          updated_at, created_at, inactive_at, prev_price, subscription_id,
                          price_discount, percent_discount, autobuy_price, min_price}) => {
   
   const isInactive = !!inactive_at;
   const diffPrevPrice = !!prev_price && price - prev_price;
+  const diffPrice = !!old_price && price - old_price;
   const updatedRange = moment(updated_at).fromNow(true);
   const updatedRangeText = `${updatedRange} назад`;
   const percentDiscount = old_price ? 100 - price / (old_price / 100) : 0;
@@ -54,75 +65,101 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           {!!logo ? <Image src={logo} /> : <Icon size='huge' name='image' style={{margin: 30}} /> }
           <div className='floating'>
             {percentDiscount > 0 &&
-            <Label color='orange' size='large' circular>
-              -{roundedPercentDiscount}%
+            <Label title="Скидка в процентах" color='yellow' size='large' circular>
+              {roundedPercentDiscount}%
             </Label>
             }
-            {!!isImportant &&
-            <Label color='green' size='large' circular>
-              Дешево
+            {isImportant &&
+            <Label title="Выгодный вариант" color='red' size='large' circular>
+              <Icon name='fire'/>
             </Label>
             }
           </div>
         </div>
         <Card.Content>
-          <Card.Header as='a' href={url} target='_blank'>{title}</Card.Header>
+          <span style={{color: '#ccc'}}><Icon name='shop' />{shop_name}</span>
+          <Card.Header className='title' as='a' href={url} target='_blank' title={title}>{title}</Card.Header>
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
-          <Card.Description style={{lineHeight: 2.1}}>
-
-            {!!diffPrevPrice &&
-            <Fragment>
-              Динамика&nbsp;
-              <Label color={diffPrevPrice > 0 ? 'red' : 'green'}>
-                {diffPrevPrice > 0 && '+ '}{diffPrevPrice} ₽
-              </Label>
-              <br />
-            </Fragment>
-            }
-            
+          <Card.Description>
             {!!price &&
-                <Fragment>
-                  Цена&nbsp;
-                  <Label alt='Минимальная зафиксированная цена'>
-                    <span>{price} ₽</span>
-                  </Label>
-                  {!!old_price && <span>&nbsp;<strike>{old_price}₽</strike></span>}
-                  <br />
-                </Fragment>
+                <div style={{marginBottom: 10, marginTop: 10}}>
+                  <div>
+                    {!!old_price &&
+                      <div>
+                        &nbsp;<span style={{fontSize: 16, color: '#ccc'}} title="Старая цена"><strike>{old_price}₽</strike></span>
+                        {!!diffPrice &&
+                          <Fragment>&nbsp;&nbsp;<span style={{fontSize: 11, color: 'green'}} title="Скидка">{diffPrice} ₽</span></Fragment>
+                        }
+                      </div>
+                    }
+                    <div style={{fontSize: 30, lineHeight: 1, color: '#000', marginBottom: 10}} title="Цена">{price} ₽</div>
+                  </div>
+
+                  <div>
+                    {/*{!!min_price &&*/}
+                      {/*<span title="Минимальная зафиксированная цена"><Icon name='money bill alternate outline' />{min_price} ₽</span>*/}
+                    {/*}*/}
+                    {/*{!!diffPrevPrice &&*/}
+                    {/*<span style={{color: diffPrevPrice > 0 ? 'red' : 'green'}} title="Повышение/понижение цены относительно предыдущего обновления">*/}
+                      {/*/!*&nbsp;&nbsp;<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*!/*/}
+                      {/*&nbsp;&nbsp;{diffPrevPrice > 0 ? '+' : '-'}{Math.abs(diffPrevPrice)} ₽*/}
+                    {/*</span>*/}
+                    {/*}*/}
+                    {!!min_price &&
+                    <Label size='small' color="yellow" title="Минимальная зафиксированная цена">
+                      <Icon name='fire' />{min_price} ₽
+                    </Label>
+                    }
+  
+                    {!!diffPrevPrice &&
+                    <Label size='small' color={diffPrevPrice > 0 ? 'red' : 'green'} title="Повышение/понижение цены относительно предыдущего обновления">
+                      <Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽
+                    </Label>
+                    }
+                  </div>
+
+                </div>
             }
             {!price &&
-                <Fragment>
+                <div>
                   Нет цены
-                  <br />
-                </Fragment>
+                </div>
             }
-  
-            {!!min_price &&
-            <Fragment>
-              Мин&nbsp;
-              <Label alt='Минимальная зафиксированная цена'>
-                {min_price} ₽
-              </Label>
-              {/*> <span>{min_price} ₽</span>*/}
-              <br />
-            </Fragment>
-            }
+            
           </Card.Description>
         </Card.Content>
+        
         <Card.Content extra>
-          <Label floated='right' size='small'><Icon name='shop' />{shop_name}</Label>
-          <Label size='small'><Icon name='history' />{updatedRangeText}</Label>
-          {!!price_discount &&
-          <Label color='orange' size='small'><Icon name='bell outline' />{price_discount} ₽</Label>
-          }
-          {!!percent_discount &&
-          <Label color='orange' size='small'><Icon name='bell outline' />{percent_discount} %</Label>
-          }
+          {/*<Label color='blue' size='small' title="Магазин"><Icon name='shop' />{shop_name}</Label>*/}
+          <Label color="" size='small' title="Последнее обновление"><Icon name='history' />{updatedRangeText}</Label>
+
           {!!autobuy_price &&
           <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} ₽</Label>
           }
+  
+          {/*{!!min_price &&*/}
+          {/*<Label size='small' color="red" title="Лучшая цена">*/}
+            {/*<Icon name='fire' />{min_price} ₽*/}
+          {/*</Label>*/}
+          {/*}*/}
+
+          {/*{!!diffPrevPrice &&*/}
+          {/*<Label size='small' color={diffPrevPrice > 0 ? 'red' : 'green'} title="Динамика цены/изменение от предыдущего сканирования">*/}
+            {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*/}
+          {/*</Label>*/}
+          {/*}*/}
+          <SubscriptionModal subscription_id={subscription_id} trigger={
+            <Label as='a' color='orange' size='small' title="Оповещение о снижении цены">
+              <Icon name='bell' />
+              {!percent_discount && !price_discount && 'Всегда'}
+              {!!percent_discount && <Fragment>{percent_discount} %</Fragment>}
+              {!!price_discount && <Fragment>{price_discount} ₽</Fragment>}
+            </Label>
+          }/>
+
         </Card.Content>
+        
       </Card>
   )
 };

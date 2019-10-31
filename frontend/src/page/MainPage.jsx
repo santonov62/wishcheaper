@@ -35,13 +35,13 @@ class MainPage extends React.Component{
             <div className='statistic'>
   
               {/*{!user.id &&*/}
-              <Fragment>
-                <br/>
-                <br/>
-                <SignInWithVkButton size='massive' text='Авторизироваться'/>
-              </Fragment>
               {/*}*/}
               <div className='title'>Покупайте любимые товары дешевле</div>
+              <SignInWithVkButton size='massive' text='Авторизироваться'/>
+              <br />
+              <br />
+              <br />
+              <br />
               <div className='stats'>
                 <div className='number'>
                   <div className='decorHeader'>{goods_count}</div>

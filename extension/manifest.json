@@ -1,16 +1,13 @@
 {
-  "name": "Wishcheaper bookmark",
+  "name": "Wishcheaper",
   "version": "1.0",
-  "description": "Build an Extension!",
+  "description": "",
   "permissions": [
     "storage",
     "declarativeContent",
-    "http://*/*",
-    "https://*/*",
-    "identity",
+    "<all_urls>",
     "contextMenus",
-    "tabs",
-    "<all_urls>"
+    "tabs"
   ],
   "background": {
     "scripts": [
@@ -21,17 +18,17 @@
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "images/16.png",
-      "64": "images/64.png",
-      "48": "images/48.png",
-      "128": "images/128.png"
+      "16": "images/percentage.png",
+      "64": "images/percentage.png",
+      "48": "images/percentage.png",
+      "128": "images/percentage.png"
     }
   },
   "icons": {
-    "16": "images/16.png",
-    "64": "images/64.png",
-    "48": "images/48.png",
-    "128": "images/128.png"
+    "16": "images/percentage.png",
+    "64": "images/percentage.png",
+    "48": "images/percentage.png",
+    "128": "images/percentage.png"
   },
   "manifest_version": 2
 }

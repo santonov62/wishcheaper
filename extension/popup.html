@@ -5,12 +5,19 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
-<div id="orders" class="orders">
-    <div class="loader">Loading...</div>
+<div id="content">
+    <div id="buttons">
+        <button id="vk" type="button" class="btn btn-vk waves-effect waves-light hidden">
+            <i class="fab fa-vk pr-1"></i> Авторизоваться
+        </button>
+        <button id="add" type="button" class="btn btn-add waves-effect waves-light hidden">
+            <i class="fab pr-1"></i> Сохранить
+        </button>
+    </div>
+    <div id="message" class="hidden"></div>
 </div>
-<button class="hidden" id="vk">Авторизироваться ВК</button>
-<button class="hidden" id="addByUrl">Отслеживать</button>
-<script src="popup.js"></script>
+<div id="spinner" class="lds-ripple"><div></div><div></div></div>
 
+<script src="popup.js"></script>
 </body>
 </html>
