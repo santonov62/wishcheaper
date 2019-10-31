@@ -47,6 +47,9 @@
 }
 
 .mainPage {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   .findPromo, .addPromo {
     display: flex;
     flex-direction: column;
@@ -127,6 +130,7 @@
     }
   }
   .statistic {
+    width: 800px;
     //background-color: #f9f9f9;
     font-size: 20px;
     //background-image: url('../assets/images/Rise-in-FBT-rate.jpg');
