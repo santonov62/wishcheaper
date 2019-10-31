@@ -78,7 +78,7 @@ const log = (text, params) => {
 };
 
 app.get('/', getAll);
-app.delete('/', authMiddleware.authRequired, remove);
+// app.delete('/', authMiddleware.authRequired, remove);
 app.get('/search', search);
 app.get('/my', authMiddleware.authRequired, my);
 app.get('/statistic', statistic);
