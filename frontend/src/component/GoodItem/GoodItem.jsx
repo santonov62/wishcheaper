@@ -26,7 +26,7 @@ const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_nam
     <div className='goodItemContainer'>
       {/*<GoodMenu {...goodMenuProps}/>*/}
       <Icon link className='menuButton' title="Удалить" name='close' onClick={() => {
-        const isAccepted = window.confirm("Вы действительно хотите удалить товар из подписок?");
+        const isAccepted = window.confirm("Вы действительно хотите удалить товар из отслеживаемых?");
         if (isAccepted)
           removeGood(id);
       }}/>
@@ -77,6 +77,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           </div>
         </div>
         <Card.Content>
+          <span style={{color: '#ccc'}}><Icon name='shop' />{shop_name}</span>
           <Card.Header className='title' as='a' href={url} target='_blank' title={title}>{title}</Card.Header>
           {/*<Card.Meta>*/}
           {/*</Card.Meta>*/}
@@ -92,8 +93,19 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                       <br />
                     </Fragment>
                   }
-                  <span style={{fontSize: 28, lineHeight: 1}} title="Цена">{price} ₽</span>
+                  <span style={{fontSize: 28, lineHeight: 1, color: '#000'}} title="Цена">{price} ₽</span>
                   <br />
+
+                  {!!min_price &&
+                    <span><Icon name='fire' />{min_price} ₽</span>
+                  }
+
+                  {!!diffPrevPrice &&
+                  <span color={diffPrevPrice > 0 ? 'red' : 'green'} title="Динамика цены/изменение от предыдущего сканирования">
+                    <Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽
+                  </span>
+                  }
+
                 </div>
             }
             {!price &&
@@ -107,24 +119,24 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
         </Card.Content>
         
         <Card.Content extra>
-          <Label color='blue' size='small' title="Магазин"><Icon name='shop' />{shop_name}</Label>
+          {/*<Label color='blue' size='small' title="Магазин"><Icon name='shop' />{shop_name}</Label>*/}
           <Label color="grey" size='small' title="Последнее обновление"><Icon name='history' />{updatedRangeText}</Label>
 
           {!!autobuy_price &&
           <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} ₽</Label>
           }
   
-          {!!min_price &&
-          <Label size='small' color="red" title="Лучшая цена">
-            <Icon name='fire' />{min_price} ₽
-          </Label>
-          }
+          {/*{!!min_price &&*/}
+          {/*<Label size='small' color="red" title="Лучшая цена">*/}
+            {/*<Icon name='fire' />{min_price} ₽*/}
+          {/*</Label>*/}
+          {/*}*/}
 
-          {!!diffPrevPrice &&
-          <Label size='small' color={diffPrevPrice > 0 ? 'red' : 'green'} title="Динамика цены/изменение от предыдущего сканирования">
-            <Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽
-          </Label>
-          }
+          {/*{!!diffPrevPrice &&*/}
+          {/*<Label size='small' color={diffPrevPrice > 0 ? 'red' : 'green'} title="Динамика цены/изменение от предыдущего сканирования">*/}
+            {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*/}
+          {/*</Label>*/}
+          {/*}*/}
           <SubscriptionModal subscription_id={subscription_id} trigger={
             <Label as='a' color='orange' size='small' title="Оповещение о снижении цены">
               <Icon name='bell' />
