@@ -138,12 +138,16 @@ FROM
   
   let WHERE = ``;
   if (Object.keys(params).length > 0) {
-    let {user_vk, title} = params;
+    let {user_vk, title, productId} = params;
     WHERE = ` WHERE true`;
     if (user_vk) WHERE += ` AND s.user_vk = ${statementForSql(user_vk)}`;
-    if (title) {
-      title = `%${title}%`;
-      WHERE += ` AND LOWER(g.title) LIKE LOWER(${statementForSql(title)})`;
+    if (!!productId) {
+      WHERE += ` AND g.id = ${statementForSql(productId)}`;
+    } else {
+      if (title) {
+        title = `%${title}%`;
+        WHERE += ` AND LOWER(g.title) LIKE LOWER(${statementForSql(title)})`;
+      }
     }
   }
   const ORDER_BY = ` ORDER BY g.inactive_at DESC, g.price - g.prev_price, percentDiscount DESC NULLS LAST, g.updated_at DESC`;

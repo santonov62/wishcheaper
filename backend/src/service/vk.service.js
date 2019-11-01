@@ -57,13 +57,14 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   const priceDiff = old_price && old_price - price;
   const priceDiffText = !!priceDiff ? `[-${priceDiff}р]` : ``;
   const lastPriceDiff = prev_price - price;
-  const lastPriceDiffText = lastPriceDiff !== 0 ? `Снижение на -${lastPriceDiff}р` : `Появился в наличии`;
+  const lastPriceDiffText = lastPriceDiff !== 0 ? `Снижение -${lastPriceDiff}р` : `Появился в наличии`;
   const percentDiscount = calculatePercentDiscount({old_price, price});
   const percentDiscountText = percentDiscount > 0 ? `[${percentDiscount}%]` : '';
   const shopName = await getShopName(shop_id);
   const importantText = price === min_price ? 'ϟϟϟ' : price <= min_price + price * 0.01 ? `!!!` : ``;
   const minPriceText = !!min_price && `Мин ${min_price}р`;
   const priceText = `Цена ${price}р`;
+  const productUrl = `https://wishcheaper.herokuapp.com/mylist?productId=${id}`;
   const message = `
   ${importantText} ${percentDiscountText} ${price}р ${shopName}
   ${title}
@@ -71,7 +72,10 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   > ${priceText}
   > ${minPriceText}
   > ${oldPriceText} ${price}р ${priceDiffText}
-  ${url}`;
+  Товар
+  ${url}
+  Подписка
+  ${productUrl}`;
 
   return sendVk({message, usersVk});
 };
