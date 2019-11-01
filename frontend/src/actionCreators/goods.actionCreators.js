@@ -29,8 +29,15 @@ const status = (res) => {
 export const userGoods = (params = {}) => async (dispatch, getState) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
-    const {title = ''} = params;
-    const result = await fetch(`/goods/my?title=${title}`, {
+    const {title = '', productId} = params;
+    let url = `/goods/my`;
+    if (!!productId) {
+      url += `?productId=${productId}`;
+    } else {
+      if (!!title)
+        url += `?title=${title}`;
+    }
+    const result = await fetch(url, {
       method: 'GET',
       headers: {
         ...Constants.REQUEST_JSON_HEADERS,
