@@ -28,7 +28,7 @@ class MainPage extends React.Component{
     return (
         <Fragment>
           {!!user && user.id &&
-          <Redirect to={{pathname: '/mylist'}}/>
+          <Redirect to={{pathname: '/my'}}/>
           }
           {!user || !user.id &&
           <div className='mainPage'>

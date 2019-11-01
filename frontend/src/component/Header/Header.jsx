@@ -32,9 +32,9 @@ class Header extends React.Component {
         {/*</Menu.Item>*/}
 
         <Menu.Item
-          name='mylist'
+          name='my'
           as={Link}
-          to="/mylist"
+          to="/my"
           active={activeItem === 'list'}
           onClick={this.handleItemClick}>
           &nbsp;&nbsp;&nbsp;<Icon color='yellow' size='large' name='favorite'/>
