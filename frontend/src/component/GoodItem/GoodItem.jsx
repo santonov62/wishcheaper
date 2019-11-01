@@ -65,7 +65,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           {!!logo ? <Image src={logo} /> : <Icon size='huge' name='image' style={{margin: 30}} /> }
           <div className='floating'>
             {percentDiscount > 0 &&
-            <Label title="Скидка в процентах" color='yellow' size='large' circular>
+            <Label title="Скидка в процентах" color='black' size='large' circular>
               {roundedPercentDiscount}%
             </Label>
             }
@@ -79,7 +79,12 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
 
         <Card.Content>
           <div style={{color: '#91998c', fontSize: '13px', marginBottom: '3px'}}><Icon name='shop' />{shop_name}</div>
-          <Card.Header className='title' as='a' href={url} target='_blank' title={title}>{title}</Card.Header>
+          <Card.Header className='title' as='a' href={url} target='_blank' title={title}>
+            {isImportant &&
+              <Icon title="Выгодная цена" color="red" name='fire'/>
+            }
+            {title}
+          </Card.Header>
           {/*<Card.Meta>*/}
             {/*<Icon name='shop' /> {shop_name}*/}
           {/*</Card.Meta>*/}
@@ -91,14 +96,13 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                       <div>
                         &nbsp;<span style={{fontSize: 16, color: '#91998c'}} title="Старая цена"><strike>{old_price}₽</strike></span>
                         {!!diffPrice &&
-                          <Fragment>&nbsp;&nbsp;<span style={{fontSize: 11, color: 'green'}} title="Скидка">{diffPrice} ₽</span></Fragment>
+                          <Fragment>
+                            &nbsp;&nbsp;<span style={{fontSize: 11, color: 'green'}} title="Скидка">{diffPrice} ₽</span>
+                          </Fragment>
                         }
                       </div>
                     }
-                    <div style={{fontSize: 30, lineHeight: 1, color: '#000', marginBottom: 10}} title="Цена">
-                      {isImportant &&
-                        <Icon title="Выгодная цена" color="red" name='fire' style={{fontSize: '24px'}}/>
-                      }
+                    <div style={{fontSize: 30, lineHeight: 1, color: '#000', marginBottom: 10, whiteSpace: 'nowrap'}} title="Цена">
                       {price} ₽
                       {!!diffPrevPrice &&
                         <span style={{fontSize: '14px', color: diffPrevPrice > 0 ? 'red' : 'green'}}
@@ -111,8 +115,8 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
 
                   <div>
                     {!!min_price &&
-                    <Label size='small' color="black" title="Минимальная зафиксированная цена">
-                      <Icon name='money bill alternate outline' />{min_price} ₽
+                    <Label size='small' color="white" title="Минимальная зафиксированная цена">
+                      <Icon name='area chart' />{min_price} ₽
                     </Label>
                     }
   
