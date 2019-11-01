@@ -78,7 +78,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
         </div>
 
         <Card.Content>
-          <div style={{color: '#91998c', fontSize: '13px'}}><Icon name='shop' />{shop_name}</div>
+          <div style={{color: '#91998c', fontSize: '13px', marginBottom: '3px'}}><Icon name='shop' />{shop_name}</div>
           <Card.Header className='title' as='a' href={url} target='_blank' title={title}>{title}</Card.Header>
           {/*<Card.Meta>*/}
             {/*<Icon name='shop' /> {shop_name}*/}
@@ -89,7 +89,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                   <div>
                     {!!old_price &&
                       <div>
-                        &nbsp;<span style={{fontSize: 16, color: 'darkgrey'}} title="Старая цена"><strike>{old_price}₽</strike></span>
+                        &nbsp;<span style={{fontSize: 16, color: '#91998c'}} title="Старая цена"><strike>{old_price}₽</strike></span>
                         {!!diffPrice &&
                           <Fragment>&nbsp;&nbsp;<span style={{fontSize: 11, color: 'green'}} title="Скидка">{diffPrice} ₽</span></Fragment>
                         }
@@ -111,7 +111,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
 
                   <div>
                     {!!min_price &&
-                    <Label size='small' title="Минимальная зафиксированная цена">
+                    <Label size='small' color="black" title="Минимальная зафиксированная цена">
                       <Icon name='money bill alternate outline' />{min_price} ₽
                     </Label>
                     }
