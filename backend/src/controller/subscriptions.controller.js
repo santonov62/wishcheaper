@@ -19,7 +19,7 @@ const remove = async (req, res) => {
       throw new Error(`userVk required`);
     }
   
-    const subscription = await subscriptionsService.remove({goodId, userVk: vk});
+    const subscription = await subscriptionsService.removeWithProduct({goodId, userVk: vk});
     log(`[remove] done`, subscription);
     res.json(subscription);
   } catch (e) {

@@ -51,16 +51,25 @@ const searchWithGoods = async ({user_vk}) => {
   return result.rows;
 };
 
-const SUBSCRIPTIONS_REMOVE = `DELETE FROM subscriptions
+const SUBSCRIPTIONS_WITH_PRODUCT_REMOVE = `DELETE FROM subscriptions
 WHERE
   good_id = $1 AND user_vk = $2
 RETURNING *`;
-const remove = async({goodId, userVk}) => {
-  const result = await db.query(SUBSCRIPTIONS_REMOVE, [goodId, userVk]);
+const removeWithProduct = async({goodId, userVk}) => {
+  const result = await db.query(SUBSCRIPTIONS_WITH_PRODUCT_REMOVE, [goodId, userVk]);
   const otherSubscriptions = await search({good_id: goodId});
   if (!!otherSubscriptions && !otherSubscriptions[0]) {
     const good = await goodsService.remove({id: goodId});
   }
+  return result.rows && result.rows[0];
+};
+
+const SUBSCRIPTIONS_REMOVE = `DELETE FROM subscriptions
+WHERE
+  good_id = $1
+RETURNING *`;
+const remove = async({goodId}) => {
+  const result = await db.query(SUBSCRIPTIONS_REMOVE, [goodId]);
   return result.rows && result.rows[0];
 };
 
@@ -75,9 +84,6 @@ const save = async ({id, price_discount, percent_discount, autobuy_price}) => {
   const result = await db.query(SAVE_SUBSCRIPTION, [id, price_discount || null, percent_discount || null, autobuy_price || null]);
   return result && result.rows[0];
 };
-
-
-
 
 const calculatePercentDiscount = ({old_price, price}) => {
   return old_price ? Number((100 - price / (old_price / 100)).toFixed()) : 0;
@@ -118,6 +124,7 @@ module.exports = {
   add,
   search,
   searchWithGoods,
+  removeWithProduct,
   remove,
   save,
   requireNotification,

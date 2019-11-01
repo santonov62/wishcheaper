@@ -20,7 +20,7 @@ const loadVkSession = () => {
   return new Promise((resolve, reject) => {
     const vk_api = process.env.REACT_APP_VK_API_VERSION;
     const vk = window.VK;
-    vk.Auth.login((({ session }) => {
+    vk.Auth.login(({ session }) => {
       if (session) {
         vk.Api.call('users.get', {
           user_ids: session.mid,
@@ -43,7 +43,7 @@ const loadVkSession = () => {
       } else {
         reject(`Error load Vk session`);
       }
-    }));
+    });
   })
 };
 
@@ -83,8 +83,8 @@ export const signOut = () => dispatch => {
 
     const vk = window.VK;
     if (!!vk)
-      vk.Auth.logout()
+      vk.Auth.logout();
 
-    dispatch({type: Actions.USER_SIGNED_OUT});
     clearUser();
+    dispatch({type: Actions.USER_SIGNED_OUT});
 };

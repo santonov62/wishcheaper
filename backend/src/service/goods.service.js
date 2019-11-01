@@ -180,7 +180,6 @@ WHERE
   id = $1
 RETURNING *`;
 const remove = async({id}) => {
-  
   const result = await db.query(REMOVE_GOOD, [id]);
   return result && result.rows[0];
 };
