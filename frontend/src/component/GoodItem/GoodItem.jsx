@@ -97,7 +97,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                     }
                     <div style={{fontSize: 30, lineHeight: 1, color: '#000', marginBottom: 10}} title="Цена">
                       {isImportant &&
-                        <Icon title="Выгодная цена" color="red" name='fire' style={{marginLeft: '-8px', fontSize: '28px'}}/>
+                        <Icon title="Выгодная цена" color="red" name='fire' style={{fontSize: '24px'}}/>
                       }
                       {price} ₽
                       {!!diffPrevPrice &&
