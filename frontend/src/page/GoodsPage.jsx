@@ -17,7 +17,10 @@ class GoodsPage extends React.Component {
     }
   }
   componentDidMount() {
-    this.props.userGoods();
+    const url = new URL(window.location.href);
+    this.props.userGoods({
+      productId: url.searchParams.get('productId')
+    });
   }
   render() {
     const {isLoading} = this.state;
@@ -40,5 +43,5 @@ export default connect(state => ({
   user: state.user,
   goods: state.goods.value
 }), dispatch => ({
-  userGoods: () => dispatch(userGoods())
+  userGoods: ({productId}) => dispatch(userGoods({productId}))
 }))(GoodsPage);

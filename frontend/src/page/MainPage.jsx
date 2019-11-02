@@ -28,20 +28,20 @@ class MainPage extends React.Component{
     return (
         <Fragment>
           {!!user && user.id &&
-          <Redirect to={{pathname: '/mylist'}}/>
+          <Redirect to={{pathname: '/my'}}/>
           }
           {!user || !user.id &&
           <div className='mainPage'>
             <div className='statistic'>
   
               {/*{!user.id &&*/}
-              <Fragment>
-                <br/>
-                <br/>
-                <SignInWithVkButton size='massive' text='Авторизироваться'/>
-              </Fragment>
               {/*}*/}
               <div className='title'>Покупайте любимые товары дешевле</div>
+              <SignInWithVkButton size='massive' text='Авторизироваться'/>
+              <br />
+              <br />
+              <br />
+              <br />
               <div className='stats'>
                 <div className='number'>
                   <div className='decorHeader'>{goods_count}</div>

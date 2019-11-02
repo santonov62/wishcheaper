@@ -16,6 +16,7 @@ const beruChecker = require('./beruChecker.service');
 const goodsChecker = require('./goodsChecker.service');
 const lamodaChecker = require('./lamodaChecker.service');
 const wildberriesChecker = require('./wildberriesChecker.service');
+const moment = require('moment');
 
 const checkerList = [
   pandaoChecker,
@@ -145,13 +146,20 @@ const parse = async (url) => {
   return parsedGood
 };
 
-const refresh = async ({url, id, price, prev_price, inactive_at, old_price, autobuy_price, min_price}) => {
+const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old_price, autobuy_price, min_price}) => {
   // console.group(`[checker.service] -> [refresh] good_id: ${id}`);
-  if (!url)
-    throw new Error(`Good url required.`);
   if (!id)
     throw new Error(`Good id required.`);
-  
+
+  let isProductExpired = 40 < moment.duration(moment().diff(new Date(updated_at))).asDays();
+  if (isProductExpired) {
+    await subscriptionService.remove({goodId: id});
+    await goodsService.remove({id});
+  }
+
+  if (!url)
+    throw new Error(`Good url required.`);
+
   const parsedGood = await parse(url);
   
   let good;
@@ -188,8 +196,6 @@ const refresh = async ({url, id, price, prev_price, inactive_at, old_price, auto
       }
     }
 
-
-    
   } else {
     good = await goodsService.inactive({ id });
   }

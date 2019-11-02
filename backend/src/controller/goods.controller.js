@@ -34,8 +34,7 @@ const my = async (req, res) => {
   console.group(`[goods.controller] -> [my]`);
   try {
     const {vk} = req.user;
-    const {title} = req.query;
-    const subscriptionGoods = await goodsService.userGoods({user_vk: vk, title});
+    const subscriptionGoods = await goodsService.userGoods({user_vk: vk, ...req.query});
     res.json(subscriptionGoods);
   } catch (e) {
     res.status(500).json({error: e.message});
@@ -78,7 +77,7 @@ const log = (text, params) => {
 };
 
 app.get('/', getAll);
-app.delete('/', authMiddleware.authRequired, remove);
+// app.delete('/', authMiddleware.authRequired, remove);
 app.get('/search', search);
 app.get('/my', authMiddleware.authRequired, my);
 app.get('/statistic', statistic);

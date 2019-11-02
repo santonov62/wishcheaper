@@ -65,57 +65,80 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           {!!logo ? <Image src={logo} /> : <Icon size='huge' name='image' style={{margin: 30}} /> }
           <div className='floating'>
             {percentDiscount > 0 &&
-            <Label title="Скидка в процентах" color='yellow' size='large' circular>
+            <Label title="Скидка в процентах" color='black' size='large' circular>
               {roundedPercentDiscount}%
             </Label>
             }
-            {isImportant &&
-            <Label title="Выгодный вариант" color='red' size='large' circular>
-              <Icon name='fire'/>
-            </Label>
-            }
+            {/*{isImportant &&*/}
+            {/*<Label title="Выгодный вариант" color='red' size='large' circular>*/}
+              {/*<Icon name='fire'/>*/}
+            {/*</Label>*/}
+            {/*}*/}
           </div>
         </div>
+
         <Card.Content>
-          <span style={{color: '#ccc'}}><Icon name='shop' />{shop_name}</span>
-          <Card.Header className='title' as='a' href={url} target='_blank' title={title}>{title}</Card.Header>
+          <div style={{color: '#91998c', fontSize: '13px', marginBottom: '3px'}}><Icon name='shop' />{shop_name}</div>
+          <Card.Header className='title' as='a' href={url} target='_blank' title={title}>
+            {isImportant &&
+              <Icon title="Выгодная цена" color="red" name='fire'/>
+            }
+            {title}
+          </Card.Header>
           {/*<Card.Meta>*/}
+            {/*<Icon name='shop' /> {shop_name}*/}
           {/*</Card.Meta>*/}
           <Card.Description>
             {!!price &&
                 <div style={{marginBottom: 10, marginTop: 10}}>
                   <div>
                     {!!old_price &&
-                      <Fragment>
-                        &nbsp;<span style={{fontSize: 16, color: '#ccc'}} title="Старая цена"><strike>{old_price}₽</strike></span>
+                      <div>
+                        &nbsp;<span style={{fontSize: 16, color: '#91998c'}} title="Старая цена"><strike>{old_price}₽</strike></span>
                         {!!diffPrice &&
-                          <Fragment>&nbsp;&nbsp;<span style={{fontSize: 11, color: 'green'}} title="Скидка">{diffPrice} ₽</span></Fragment>
+                          <Fragment>
+                            &nbsp;&nbsp;<span style={{fontSize: 11, color: 'green'}} title="Скидка">{diffPrice} ₽</span>
+                          </Fragment>
                         }
-                        <br />
-                      </Fragment>
+                      </div>
                     }
-                    <div style={{fontSize: 30, lineHeight: 1, color: '#000', marginBottom: 10}} title="Цена">{price} ₽</div>
+                    <div style={{fontSize: 30, lineHeight: 1, color: '#000', marginBottom: 10, whiteSpace: 'nowrap'}} title="Цена">
+                      {price} ₽
+                      {!!diffPrevPrice &&
+                        <span style={{fontSize: '14px', color: diffPrevPrice > 0 ? 'red' : 'green'}}
+                              title="Изменения в цене">
+                          &nbsp;<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} style={{margin: 0}}/>{Math.abs(diffPrevPrice)} ₽
+                        </span>
+                      }
+                    </div>
                   </div>
 
                   <div>
                     {!!min_price &&
-                      <span title="Минимальная зафиксированная цена"><Icon name='money bill alternate outline' />{min_price} ₽</span>
+                    <Label size='small' title="Минимальная зафиксированная цена">
+                      <Icon name='area chart' />{min_price} ₽
+                    </Label>
                     }
-                    {!!diffPrevPrice &&
-                    <span style={{color: diffPrevPrice > 0 ? 'red' : 'green'}} title="Повышение/понижение цены относительно предыдущего обновления">
-                      {/*&nbsp;&nbsp;<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*/}
-                      &nbsp;&nbsp;{diffPrevPrice > 0 ? '+' : '-'}{Math.abs(diffPrevPrice)} ₽
-                    </span>
-                    }
+  
+                    {/*{!!diffPrevPrice &&*/}
+                    {/*<Label size='small' color={diffPrevPrice > 0 ? 'red' : 'green'} title="Повышение/понижение цены относительно предыдущего обновления">*/}
+                      {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*/}
+                    {/*</Label>*/}
+                    {/*}*/}
+
+                    {/*{!!diffPrevPrice &&*/}
+                    {/*<span style={{color: diffPrevPrice > 0 ? 'red' : 'green'}} title="Изменения в цене">*/}
+                      {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*/}
+                    {/*</span>*/}
+                    {/*}*/}
                   </div>
 
                 </div>
             }
             {!price &&
-                <Fragment>
+                <div>
                   Нет цены
-                  <br />
-                </Fragment>
+                </div>
             }
             
           </Card.Description>
@@ -123,7 +146,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
         
         <Card.Content extra>
           {/*<Label color='blue' size='small' title="Магазин"><Icon name='shop' />{shop_name}</Label>*/}
-          <Label color="grey" size='small' title="Последнее обновление"><Icon name='history' />{updatedRangeText}</Label>
+          <Label size='small' title="Последнее обновление"><Icon name='history' />{updatedRangeText}</Label>
 
           {!!autobuy_price &&
           <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} ₽</Label>
@@ -160,7 +183,7 @@ const InvalidGoodItem = ({good_id, url}) => {
   return (
     
       <Card className='goodItem invalid'>
-        <div className='logo'>
+        <div className='o'>
           <Icon size='huge' name='ban' style={{margin: 30}}/>
         </div>
         <Card.Content>
