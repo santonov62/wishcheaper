@@ -29,16 +29,11 @@ const status = (res) => {
 export const userGoods = (params = {}) => async (dispatch, getState) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
-    const {title = '', productId, orderBy} = params;
-    let url = `/goods/my?`;
-    if (!!productId) {
-      url += `&productId=${productId}`;
-    } else {
-      if (!!title)
-        url += `&title=${title}`;
-      if (!!orderBy)
-        url += `&orderBy=${orderBy}`;
-    }
+
+    // const {title = '', id} = params;
+    let url = new URL(`${window.location.origin}/goods/my`);
+    Object.keys(params)
+      .forEach(key => url.searchParams.append(key, params[key]));
     const result = await fetch(url, {
       method: 'GET',
       headers: {
@@ -67,7 +62,7 @@ export const userGoods = (params = {}) => async (dispatch, getState) => {
 export const searchGoods = (params) => async (dispatch) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
-    let url = new URL(`${window.location.origin}/goods/`);
+    let url = new URL(`${window.location.origin}/goods/search`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     const result = await fetch(url, {
       method: 'GET'
