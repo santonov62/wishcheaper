@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {Dropdown} from 'semantic-ui-react';
-import {removeGood} from "../../actionCreators/goods.actionCreators";
+import {removeGood, userGoods} from "../../actionCreators/goods.actionCreators";
 import {connect} from 'react-redux';
 // import './goodFilterMenu.css';
 
@@ -29,28 +29,32 @@ class GoodsFilterMenuTemplate extends React.Component {
   constructor(props) {
     super(props);
   }
+  onChange = (event, {value}) => {
+    this.props.userGoods({
+      orderBy: value
+    });
+  };
   render() {
     const {direction, good_id, subscription_id} = this.props;
     return (
         <div className="filterPanel">
           <Dropdown
-              text='Сортировать'
               icon='sort'
               floating
               labeled
               button
               className='icon'
+              options={tagOptions}
+              defaultValue={tagOptions[0].value}
+              onChange={this.onChange}
           >
-            <Dropdown.Menu>
-              {/*<Input icon='search' iconPosition='left' className='search' />*/}
-              {/*<Dropdown.Divider />*/}
-              {/*<Dropdown.Header icon='tags' content='Tag Label' />*/}
-              <Dropdown.Menu scrolling>
-                {tagOptions.map((option) => (
-                    <Dropdown.Item key={option.value} {...option} />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Menu>
+            {/*<Dropdown.Menu>*/}
+              {/*<Dropdown.Menu scrolling>*/}
+                {/*{tagOptions.map((option) => (*/}
+                    {/*<Dropdown.Item key={option.value} {...option} />*/}
+                {/*))}*/}
+              {/*</Dropdown.Menu>*/}
+            {/*</Dropdown.Menu>*/}
           </Dropdown>
         </div>);
   }
@@ -58,7 +62,7 @@ class GoodsFilterMenuTemplate extends React.Component {
 
 
 const GoodsFilterMenu = connect(null, dispatch => ({
-  removeGood: (good_id) => dispatch(removeGood({id: good_id}))
+  userGoods: ({orderBy}) => dispatch(userGoods({orderBy}))
 }))(GoodsFilterMenuTemplate);
 
 export default GoodsFilterMenu;

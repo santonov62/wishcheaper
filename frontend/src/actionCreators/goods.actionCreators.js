@@ -29,13 +29,15 @@ const status = (res) => {
 export const userGoods = (params = {}) => async (dispatch, getState) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
-    const {title = '', productId} = params;
-    let url = `/goods/my`;
+    const {title = '', productId, orderBy} = params;
+    let url = `/goods/my?`;
     if (!!productId) {
-      url += `?productId=${productId}`;
+      url += `&productId=${productId}`;
     } else {
       if (!!title)
-        url += `?title=${title}`;
+        url += `&title=${title}`;
+      if (!!orderBy)
+        url += `&orderBy=${orderBy}`;
     }
     const result = await fetch(url, {
       method: 'GET',
