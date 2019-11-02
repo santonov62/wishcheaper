@@ -2,44 +2,26 @@ import React, {Fragment} from 'react';
 import {Dropdown} from 'semantic-ui-react';
 import {removeGood} from "../../actionCreators/goods.actionCreators";
 import {connect} from 'react-redux';
-import './goodMenu.css';
+// import './goodFilterMenu.css';
 
 const tagOptions = [
   {
-    key: 'Important',
-    text: 'Important',
-    value: 'Important',
-    label: { color: 'red', empty: true, circular: true },
+    key: 'createdAt',
+    text: 'Дате добавления',
+    value: 'createdAt',
+    icon: 'time'
   },
   {
-    key: 'Announcement',
-    text: 'Announcement',
-    value: 'Announcement',
-    label: { color: 'blue', empty: true, circular: true },
+    key: 'price',
+    text: 'Цене',
+    value: 'price',
+    icon: 'money bill alternate outline'
   },
   {
-    key: 'Cannot Fix',
-    text: 'Cannot Fix',
-    value: 'Cannot Fix',
-    label: { color: 'black', empty: true, circular: true },
-  },
-  {
-    key: 'News',
-    text: 'News',
-    value: 'News',
-    label: { color: 'purple', empty: true, circular: true },
-  },
-  {
-    key: 'Enhancement',
-    text: 'Enhancement',
-    value: 'Enhancement',
-    label: { color: 'orange', empty: true, circular: true },
-  },
-  {
-    key: 'Change Declined',
-    text: 'Change Declined',
-    value: 'Change Declined',
-    label: { empty: true, circular: true },
+    key: 'discount',
+    text: 'Скидке',
+    value: 'discount',
+    icon: 'percent'
   }
 ];
 
@@ -52,8 +34,8 @@ class GoodsFilterMenuTemplate extends React.Component {
     return (
         <div className="filterPanel">
           <Dropdown
-              text='Фильтровать'
-              icon='filter'
+              text='Сортировать'
+              icon='sort'
               floating
               labeled
               button
