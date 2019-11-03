@@ -6,6 +6,7 @@ const log = (text, params = '') => {
   console.log(`[goods.service] -> ${text}`, params)
 };
 
+/*for private user */
 const search = async (params) => {
   const statementForSqlParams = [];
   const statementForSql = (param) => {
@@ -120,6 +121,7 @@ const addByUrl = async ({ url }) => {
 //   const result = await db.query(SEARCH_USER_GOODS, [user_vk]);
 //   return result.rows;
 // };
+/* Only for users page */
 const userGoods = async (params) => {
   const statementForSqlParams = [];
   const statementForSql = (param) => {
