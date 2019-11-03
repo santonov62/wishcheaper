@@ -85,7 +85,7 @@ const parse = async (url) => {
 };
 
 const isMyUrl = (url) => {
-  return url.indexOf(SHOP_NAME) !== -1;
+  return url.indexOf(SHOP_NAME) !== -1 && url.indexOf('m.ru.') === -1;
 };
 
 module.exports = {
