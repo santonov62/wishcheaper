@@ -4,8 +4,6 @@ const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'www.asos.com';
 const SHOP_TITLE = 'Asos';
-const devices = require('puppeteer/DeviceDescriptors');
-const iPhone = devices['iPhone 6'];
 
 const log = (text, params = '') => {
   console.log(`[asosChecker.service] -> ${text}`, params);
@@ -38,7 +36,6 @@ const parse = async (url) => {
 
   try {
     const page = await browser.newPage();
-    await page.emulate(iPhone);
 
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
