@@ -64,10 +64,10 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   const importantText = price === min_price ? 'ϟϟϟ' : price <= min_price + price * 0.01 ? `!!!` : ``;
   const minPriceText = !!min_price && `Мин ${min_price}р`;
   const priceText = `Цена ${price}р`;
-  const productUrl = `https://wishcheaper.herokuapp.com/my?productId=${id}`;
+  const productUrl = `https://wishcheaper.herokuapp.com/my?id=${id}`;
   const message = `
-  ${importantText} ${percentDiscountText} ${price}р ${shopName}
-  ${title}
+  ${importantText} ${percentDiscountText} ${shopName}
+  ${title} за ${price}р
   > ${lastPriceDiffText}
   > ${priceText}
   > ${minPriceText}

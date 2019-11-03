@@ -20,8 +20,7 @@ const getAll = async(req, res) => {
 const search = async (req, res) => {
   console.group(`[goods.controller] -> [search]`);
   try {
-    const {vk} = req.query;
-    const goods = await goodsService.search({vk});
+    const goods = await goodsService.search({...req.query});
     res.json(goods);
   } catch (e) {
     res.status(500).json({error: e.message});
@@ -34,8 +33,8 @@ const my = async (req, res) => {
   console.group(`[goods.controller] -> [my]`);
   try {
     const {vk} = req.user;
-    const subscriptionGoods = await goodsService.userGoods({user_vk: vk, ...req.query});
-    res.json(subscriptionGoods);
+    const userGoods = await goodsService.search({vk, ...req.query});
+    res.json(userGoods);
   } catch (e) {
     res.status(500).json({error: e.message});
   } finally {
