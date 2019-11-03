@@ -42,7 +42,11 @@
     }
     &.inactive,
     &.invalid {
-      opacity: 0.2
+      opacity: 0.2;
+      display: flex;
+      .o {
+        align-self: center
+      }
     }
     &.important {
       background-color: #f8fff2;
