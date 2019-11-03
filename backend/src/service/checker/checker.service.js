@@ -17,6 +17,7 @@ const goodsChecker = require('./goodsChecker.service');
 const lamodaChecker = require('./lamodaChecker.service');
 const wildberriesChecker = require('./wildberriesChecker.service');
 const jdChecker = require('./jdChecker.service');
+const asosChecker = require('./asosChecker.service');
 const moment = require('moment');
 
 const checkerList = [
@@ -32,6 +33,7 @@ const checkerList = [
   goodsChecker,
   lamodaChecker,
   jdChecker,
+  asosChecker,
   wildberriesChecker
 ];
 
