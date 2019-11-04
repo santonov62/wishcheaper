@@ -23,12 +23,22 @@ class MainPage extends React.Component{
       .then(statistic => this.setState({...statistic}));
   }
   render() {
-    const {user} = this.props;
+    const {user, location: {state}} = this.props;
     const {goods_count, week_goods_count, users_count} = this.state;
+    const from = state && state.from;
     return (
         <Fragment>
           {!!user && user.id &&
-          <Redirect to={{pathname: '/my'}}/>
+            <Fragment>
+              {!!from ?
+                <Redirect to={{
+                  pathname: from.pathname,
+                  search: from.search
+                }}/>
+                :
+                <Redirect to={{pathname: '/my'}}/>
+              }
+            </Fragment>
           }
           {!user || !user.id &&
           <div className='mainPage'>
