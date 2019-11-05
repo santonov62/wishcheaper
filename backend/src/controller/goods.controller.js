@@ -33,7 +33,7 @@ const my = async (req, res) => {
   console.group(`[goods.controller] -> [my]`);
   try {
     const {vk} = req.user;
-    const userGoods = await goodsService.userGoods({vk, ...req.query});
+    const userGoods = await goodsService.search({vk, ...req.query});
     res.json(userGoods);
   } catch (e) {
     res.status(500).json({error: e.message});

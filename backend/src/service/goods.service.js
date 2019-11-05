@@ -6,32 +6,32 @@ const log = (text, params = '') => {
   console.log(`[goods.service] -> ${text}`, params)
 };
 
-/*for get product with out additional data */
-const search = async (params) => {
-  const statementForSqlParams = [];
-  const statementForSql = (param) => {
-    statementForSqlParams.push(param);
-    return `$${statementForSqlParams.length}`;
-  };
-
-  const SELECT = `SELECT * FROM goods`;
-  let WHERE = ``;
-  if (Object.keys(params).length > 0) {
-    const {url, expireDate, id} = params;
-    WHERE = ` WHERE true`;
-    if (id) WHERE += ` AND "id" = ${statementForSql(id)}`;
-    if (url) WHERE += ` AND "url" = ${statementForSql(url)}`;
-    if (expireDate) {
-      const paramIndex = statementForSql(expireDate);
-      WHERE += ` AND "updated_at" < ${paramIndex} AND ("inactive_at" IS NULL OR "inactive_at" < ${paramIndex})`;
-    }
-  }
-  const SEARCH_QUERY = SELECT + WHERE;
-  const result = await db.query(SEARCH_QUERY, statementForSqlParams);
-  const goods = result && result.rows;
-  // log('[search] done', goods);
-  return goods;
-};
+// /*for get product with out additional data */
+// const search = async (params) => {
+//   const statementForSqlParams = [];
+//   const statementForSql = (param) => {
+//     statementForSqlParams.push(param);
+//     return `$${statementForSqlParams.length}`;
+//   };
+//
+//   const SELECT = `SELECT * FROM goods`;
+//   let WHERE = ``;
+//   if (Object.keys(params).length > 0) {
+//     const {url, expireDate, id} = params;
+//     WHERE = ` WHERE true`;
+//     if (id) WHERE += ` AND "id" = ${statementForSql(id)}`;
+//     if (url) WHERE += ` AND "url" = ${statementForSql(url)}`;
+//     if (expireDate) {
+//       const paramIndex = statementForSql(expireDate);
+//       WHERE += ` AND "updated_at" < ${paramIndex} AND ("inactive_at" IS NULL OR "inactive_at" < ${paramIndex})`;
+//     }
+//   }
+//   const SEARCH_QUERY = SELECT + WHERE;
+//   const result = await db.query(SEARCH_QUERY, statementForSqlParams);
+//   const goods = result && result.rows;
+//   // log('[search] done', goods);
+//   return goods;
+// };
 
 const UPDATE_GOOD = `UPDATE goods as g
 SET
@@ -106,8 +106,45 @@ const addByUrl = async ({ url }) => {
   return good;
 };
 
-/* Only for users goods page */
-const userGoods = async (params) => {
+// /* Only for users goods page */
+// const userGoods = async (params) => {
+//   const statementForSqlParams = [];
+//   const statementForSql = (param) => {
+//     statementForSqlParams.push(param);
+//     return `$${statementForSqlParams.length}`;
+//   };
+//
+//   const SELECT = `SELECT
+//    s.user_vk, s.good_id as id, s.id as subscription_id, s.price_discount, s.percent_discount, s.autobuy_price,
+//    g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price, round(100 - g.price / (g.old_price / 100)) as percentDiscount,
+//    sh.title shop_title, sh.name shop_name, sh.url shop_url
+// FROM
+//   subscriptions s
+//     LEFT JOIN goods g ON (g.id = s."good_id")
+//     LEFT JOIN shops sh ON (sh.id = g."shop_id")`;
+//
+//   let WHERE = ``;
+//   if (Object.keys(params).length > 0) {
+//     let {vk, title, productId} = params;
+//     WHERE = ` WHERE true`;
+//     if (vk) WHERE += ` AND s.user_vk = ${statementForSql(vk)}`;
+//     if (!!productId) {
+//       WHERE += ` AND g.id = ${statementForSql(productId)}`;
+//     } else {
+//       if (title) {
+//         title = `%${title}%`;
+//         WHERE += ` AND LOWER(g.title) LIKE LOWER(${statementForSql(title)})`;
+//       }
+//     }
+//   }
+//   const ORDER_BY = ` ORDER BY g.inactive_at DESC, g.price - g.prev_price, percentDiscount DESC NULLS LAST, g.updated_at DESC`;
+//   const SEARCH_QUERY = SELECT + WHERE + ORDER_BY;
+//   const result = await db.query(SEARCH_QUERY, statementForSqlParams);
+//   const goods = result && result.rows;
+//   return goods;
+// };
+
+const search = async (params) => {
   const statementForSqlParams = [];
   const statementForSql = (param) => {
     statementForSqlParams.push(param);
@@ -115,25 +152,30 @@ const userGoods = async (params) => {
   };
   
   const SELECT = `SELECT
-   s.user_vk, s.good_id as id, s.id as subscription_id, s.price_discount, s.percent_discount, s.autobuy_price,
-   g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price, round(100 - g.price / (g.old_price / 100)) as percentDiscount,
+   s.user_vk, s.good_id, s.id as subscription_id, s.price_discount, s.percent_discount, s.autobuy_price,
+   g.id, g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price, round(100 - g.price / (g.old_price / 100)) as percentDiscount,
    sh.title shop_title, sh.name shop_name, sh.url shop_url
 FROM
-  subscriptions s
-    LEFT JOIN goods g ON (g.id = s."good_id")
+  goods g
+    LEFT JOIN subscriptions s ON s."good_id" = g.id
     LEFT JOIN shops sh ON (sh.id = g."shop_id")`;
   
   let WHERE = ``;
   if (Object.keys(params).length > 0) {
-    let {vk, title, productId} = params;
+    let {vk, title, id, url, expireDate} = params;
     WHERE = ` WHERE true`;
-    if (vk) WHERE += ` AND s.user_vk = ${statementForSql(vk)}`;
-    if (!!productId) {
-      WHERE += ` AND g.id = ${statementForSql(productId)}`;
+    if (!!id) {
+      WHERE += ` AND g.id = ${statementForSql(id)}`;
     } else {
+      if (vk) WHERE += ` AND s.user_vk = ${statementForSql(vk)}`;
       if (title) {
         title = `%${title}%`;
         WHERE += ` AND LOWER(g.title) LIKE LOWER(${statementForSql(title)})`;
+      }
+      if (url) WHERE += ` AND g."url" = ${statementForSql(url)}`;
+      if (expireDate) {
+        const paramIndex = statementForSql(expireDate);
+        WHERE += ` AND g."updated_at" < ${paramIndex} AND (g."inactive_at" IS NULL OR g."inactive_at" < ${paramIndex})`;
       }
     }
   }
@@ -194,7 +236,7 @@ module.exports = {
   update,
   add,
   addByUrl,
-  userGoods,
+  // userGoods,
   inactive,
   statistic,
   remove,
