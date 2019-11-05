@@ -21,8 +21,22 @@ const getAll = async(req, res) => {
     console.groupEnd();
   }
 };
-
 app.get('/', getAll);
+
+const myShops = async(req, res) => {
+  console.group(`[shops.controller]: [myShops]`);
+  try {
+    const {vk} = req.user;
+    const shops = await shopService.myShops({vk});
+    log('[myShops] done', shops);
+    res.json(shops);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  } finally {
+    console.groupEnd();
+  }
+};
+app.get('/my', myShops);
 
 const update = async(req, res) => {
   console.group(`[shops.controller]: [getAll]`);
