@@ -125,24 +125,24 @@ class SubscriptionModalTemplate extends React.Component {
                 />
               </Form.Group>
               
-              <Divider horizontal />
+              {/*<Divider horizontal />*/}
               
-                <Form.Checkbox
-                    name='autobuy'
-                    checked={autobuy}
-                    label='Автоматически покупать'
-                    onChange={this.handleCheckboxChange} />
-                
-                    <Form.Field
-                    disabled={!autobuy}
-                    value={autobuyPrice}
-                    name='autobuyPrice'
-                    label='При сумме ниже'
-                    fluid
-                    icon='ruble sign'
-                    control={Input}
-                    onChange={this.handleChange}
-                />
+                {/*<Form.Checkbox*/}
+                    {/*name='autobuy'*/}
+                    {/*checked={autobuy}*/}
+                    {/*label='Автоматически покупать'*/}
+                    {/*onChange={this.handleCheckboxChange} />*/}
+                {/**/}
+                    {/*<Form.Field*/}
+                    {/*disabled={!autobuy}*/}
+                    {/*value={autobuyPrice}*/}
+                    {/*name='autobuyPrice'*/}
+                    {/*label='При сумме ниже'*/}
+                    {/*fluid*/}
+                    {/*icon='ruble sign'*/}
+                    {/*control={Input}*/}
+                    {/*onChange={this.handleChange}*/}
+                {/*/>*/}
   
             </Form>
           </Modal.Content>

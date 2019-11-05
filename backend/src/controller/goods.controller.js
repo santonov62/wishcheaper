@@ -20,8 +20,7 @@ const getAll = async(req, res) => {
 const search = async (req, res) => {
   console.group(`[goods.controller] -> [search]`);
   try {
-    const {vk} = req.query;
-    const goods = await goodsService.search({vk});
+    const goods = await goodsService.search({...req.query});
     res.json(goods);
   } catch (e) {
     res.status(500).json({error: e.message});
@@ -34,9 +33,8 @@ const my = async (req, res) => {
   console.group(`[goods.controller] -> [my]`);
   try {
     const {vk} = req.user;
-    const {title} = req.query;
-    const subscriptionGoods = await goodsService.userGoods({user_vk: vk, title});
-    res.json(subscriptionGoods);
+    const userGoods = await goodsService.search({vk, ...req.query});
+    res.json(userGoods);
   } catch (e) {
     res.status(500).json({error: e.message});
   } finally {
@@ -78,7 +76,7 @@ const log = (text, params) => {
 };
 
 app.get('/', getAll);
-app.delete('/', authMiddleware.authRequired, remove);
+// app.delete('/', authMiddleware.authRequired, remove);
 app.get('/search', search);
 app.get('/my', authMiddleware.authRequired, my);
 app.get('/statistic', statistic);

@@ -47,6 +47,9 @@
 }
 
 .mainPage {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   .findPromo, .addPromo {
     display: flex;
     flex-direction: column;
@@ -56,77 +59,8 @@
   .addPromo {
     background-color: #f9f9f9;
   }
-  .searchForm {
-    position: relative;
-    //background-image: url('../assets/images/235372.jpg');
-    //height: 400px;
-    //height: 100px;
-    padding: 80px 0 40px 0;
-    //background-size: cover;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    .title {
-      font-size: 40px;
-      //margin: -40px 0 10px 0;
-      line-height: 40px;
-      text-shadow: 0 2px 2px rgba(0,0,0,0.8);
-      color: #fff;
-      padding: 20px;
-      //text-transform: uppercase;
-    }
-    .ui.form {
-      .shop {
-        padding-right: 0;
-        [name=shopId] {
-          border-radius: 15px 0 0 15px;
-          //border-right: 1px dashed #ccc;
-          //border-right: none;
-          border: none;
-          width: 350px;
-        }
-      }
-      .minOrder {
-        padding-left: 0;
-        .ui.input {
-          height: 100%;
-        }
-        .ui.input [name=minOrder] {
-          //border-left: 0;
-          border: none;
-          border-radius: 0;
-          width: 120px;
-          padding: 10px;
-        }
-        [name=minOrderCurrencyId] {
-          border-radius: 0;
-          //font-weight: normal;
-          .menu {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border: none;
-          }
-        }
-      }
-      .searchButton {
-        height: 100%;
-        border-radius: 0 15px 15px 0;
-        margin-right: 0;
-        font-size: 20px;
-      }
-      .fields {
-        box-shadow: 0 2px 28px -4px #000000;
-        border-radius: 15px;
-        margin: 0;
-        .field {
-          padding-left: 0;
-          padding-right: 0;
-        }
-      }
-    }
-  }
   .statistic {
+    max-width: 800px;
     //background-color: #f9f9f9;
     font-size: 20px;
     //background-image: url('../assets/images/Rise-in-FBT-rate.jpg');

@@ -2,11 +2,11 @@ const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
-const SHOP_NAME = 'ru.aliexpress.com';
-const SHOP_TITLE = 'Aliexpress';
+const SHOP_NAME = 'jd.ru';
+const SHOP_TITLE = 'JD';
 
 const log = (text, params = '') => {
-  console.log(`[pandaoChecker.service] -> ${text}`, params);
+  console.log(`[jd.service] -> ${text}`, params);
 };
 
 const init = async () => {
@@ -16,7 +16,7 @@ const init = async () => {
       title: SHOP_TITLE,
       url: `https://${SHOP_NAME}`,
       name: SHOP_NAME,
-      scan_interval: 720})
+      scan_interval: 240});
     log(`[init] added shop`, addedShop);
   }
 };
@@ -39,30 +39,47 @@ const parse = async (url) => {
 
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
-    // log(`done`);
+
+    // Wait product data
+    try {
+      await page.waitFor(() => {
+        const priceEl = document.querySelector('.p-price:nth-child(1) > #sku-price');
+        return !!priceEl && priceEl.innerText
+      }, {timeout: 10000});
+    } catch(e) { }
 
     let title, currentPrice, logo, oldPrice, inactive_at;
+
+    const payButton = await page.$('#addToCart');
+    if (!payButton) {
+      inactive_at = new Date();
+    }
+
     log(`title`);
     try {
-      title = await page.$eval('.product-title', node => node.innerText);
+      title = await page.$eval('.title h1', node => node.innerText);
     } catch (e) { }
     
     log(`price`);
     try {
-      currentPrice = await page.$eval('.product-price-current .product-price-value', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('.p-price:nth-child(1) > #sku-price', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) {
       inactive_at = new Date();
     }
   
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('.product-price-original .product-price-value', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('del', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
     
     log(`logo`);
     try {
-      logo = await page.$eval('.magnifier-image', node => node.getAttribute('src'))
+      logo = await page.$eval('#spec-img', node => node.getAttribute('src'))
     } catch (e) { }
+
+    if (!currentPrice) {
+      inactive_at = new Date();
+    }
     
     const parsedData = {
         url,
@@ -85,7 +102,7 @@ const parse = async (url) => {
 };
 
 const isMyUrl = (url) => {
-  return url.indexOf(SHOP_NAME) !== -1 && url.indexOf('m.ru.') === -1;
+  return url.indexOf(SHOP_NAME) !== -1;
 };
 
 module.exports = {

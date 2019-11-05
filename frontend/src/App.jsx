@@ -61,7 +61,7 @@ const App = () => {
                     <Route path="/" component={ErrorsTracking}/>
                     <Route exact path="/" component={MainPage}/>
                     <Route path="/login" component={LoginPage}/>
-                    <AuthRoute exact path="/mylist" component={GoodsPage}/>
+                    <AuthRoute exact path="/my" component={GoodsPage}/>
                     <AuthRoute adminRequired path="/scanner" component={ScannerPage}/>
                     <AuthRoute adminRequired path="/manageShops" component={ShopsPage}/>
                     {/*<Route path="/" component={Footer}/>*/}

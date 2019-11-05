@@ -29,8 +29,12 @@ const status = (res) => {
 export const userGoods = (params = {}) => async (dispatch, getState) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
-    const {title = ''} = params;
-    const result = await fetch(`/goods/my?title=${title}`, {
+
+    // const {title = '', id} = params;
+    let url = new URL(`${window.location.origin}/goods/my`);
+    Object.keys(params)
+      .forEach(key => url.searchParams.append(key, params[key]));
+    const result = await fetch(url, {
       method: 'GET',
       headers: {
         ...Constants.REQUEST_JSON_HEADERS,
@@ -58,7 +62,7 @@ export const userGoods = (params = {}) => async (dispatch, getState) => {
 export const searchGoods = (params) => async (dispatch) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
-    let url = new URL(`${window.location.origin}/goods/`);
+    let url = new URL(`${window.location.origin}/goods/search`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     const result = await fetch(url, {
       method: 'GET'

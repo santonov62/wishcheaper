@@ -1,4 +1,5 @@
 const DOMAIN = `https://wishcheaper.herokuapp.com`;
+// const DOMAIN = `http://localhost:3000`;
 
 window.onload = () => {
 
@@ -8,9 +9,12 @@ window.onload = () => {
   const addButton = document.getElementById('add');
   addButton.onclick = addCurrent;
 
+  const openButton = document.getElementById('open');
+  openButton.onclick = openProduct;
+
   chrome.storage.local.get(['authData'], ({authData}) => {
     if (!!authData) {
-      // addButton.classList.remove('hidden');
+      hideButtons();
       addCurrent();
     } else {
       vkButton.classList.remove('hidden');
@@ -19,6 +23,15 @@ window.onload = () => {
   });
 
 };
+
+function openProduct() {
+  const {goodItem} = window;
+  const url = `${DOMAIN}/my?id=${goodItem.id}`;
+  chrome.tabs.create({url, selected: true}, (tab) => {
+
+    // chrome.tabs.onUpdated.addListener(vkAuthListener(tab.id));
+  });
+}
 
 function addCurrent() {
   chrome.tabs.query({
@@ -55,13 +68,16 @@ async function addByUrl(url) {
         'Authorization': `Bearer ${authData.user.token}`
       }
     }).then(res => res.json());
+    window.goodItem = good;
     if (good.error)
       throw new Error(good.error);
     console.log("[addUrl] good", good);
-    showMessage(`Товар добавлен`);
+    // showMessage(`Товар теперь в отслеживаемых`);
+    showSuccess();
     return good;
   } catch (e) {
-    showMessage(e.message);
+    console.log(e.message);
+    showError();
   } finally {
     console.groupEnd();
     hideSpinner();
@@ -118,6 +134,15 @@ const hideButtons = () => {
 };
 const showButtons = () => {
   const el = document.getElementById(`buttons`);
+  el.classList.remove(`hidden`);
+};
+
+const showSuccess = () => {
+  const el = document.getElementById(`success`);
+  el.classList.remove(`hidden`);
+};
+const showError = () => {
+  const el = document.getElementById(`error`);
   el.classList.remove(`hidden`);
 };
 

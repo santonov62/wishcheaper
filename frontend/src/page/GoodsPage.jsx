@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import {authHeader} from "../helpers/auth-header";
 import { connect } from 'react-redux';
-import { userGoods } from '../actionCreators/goods.actionCreators';
+import { userGoods, searchGoods } from '../actionCreators/goods.actionCreators';
 import {GoodItem} from "../component/GoodItem/GoodItem";
 import GoodsFilterMenu from "../component/Menu/GoodsFilterMenu";
 
@@ -17,7 +17,16 @@ class GoodsPage extends React.Component {
     }
   }
   componentDidMount() {
-    this.props.userGoods();
+    const url = new URL(window.location.href);
+    const id = url.searchParams.get('id');
+    if (!!id) {
+      this.props.searchGoods({id});
+    } else {
+      this.props.userGoods({
+        id: url.searchParams.get('id')
+      });
+    }
+
   }
   render() {
     const {isLoading} = this.state;
@@ -40,5 +49,6 @@ export default connect(state => ({
   user: state.user,
   goods: state.goods.value
 }), dispatch => ({
-  userGoods: () => dispatch(userGoods())
+  userGoods: () => dispatch(userGoods()),
+  searchGoods: ({id}) => dispatch(searchGoods({id}))
 }))(GoodsPage);
