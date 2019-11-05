@@ -1,45 +1,27 @@
 import React, {Fragment} from 'react';
 import {Dropdown} from 'semantic-ui-react';
-import {removeGood} from "../../actionCreators/goods.actionCreators";
+import {removeGood, userGoods} from "../../actionCreators/goods.actionCreators";
 import {connect} from 'react-redux';
-import './goodMenu.css';
+// import './goodFilterMenu.css';
 
 const tagOptions = [
   {
-    key: 'Important',
-    text: 'Important',
-    value: 'Important',
-    label: { color: 'red', empty: true, circular: true },
+    key: 'createdAt',
+    text: 'Дате добавления',
+    value: 'createdAt',
+    icon: 'time'
   },
   {
-    key: 'Announcement',
-    text: 'Announcement',
-    value: 'Announcement',
-    label: { color: 'blue', empty: true, circular: true },
+    key: 'price',
+    text: 'Цене',
+    value: 'price',
+    icon: 'money bill alternate outline'
   },
   {
-    key: 'Cannot Fix',
-    text: 'Cannot Fix',
-    value: 'Cannot Fix',
-    label: { color: 'black', empty: true, circular: true },
-  },
-  {
-    key: 'News',
-    text: 'News',
-    value: 'News',
-    label: { color: 'purple', empty: true, circular: true },
-  },
-  {
-    key: 'Enhancement',
-    text: 'Enhancement',
-    value: 'Enhancement',
-    label: { color: 'orange', empty: true, circular: true },
-  },
-  {
-    key: 'Change Declined',
-    text: 'Change Declined',
-    value: 'Change Declined',
-    label: { empty: true, circular: true },
+    key: 'discount',
+    text: 'Скидке',
+    value: 'discount',
+    icon: 'percent'
   }
 ];
 
@@ -47,28 +29,32 @@ class GoodsFilterMenuTemplate extends React.Component {
   constructor(props) {
     super(props);
   }
+  onChange = (event, {value}) => {
+    this.props.userGoods({
+      orderBy: value
+    });
+  };
   render() {
     const {direction, good_id, subscription_id} = this.props;
     return (
         <div className="filterPanel">
           <Dropdown
-              text='Фильтровать'
-              icon='filter'
+              icon='sort'
               floating
               labeled
               button
               className='icon'
+              options={tagOptions}
+              defaultValue={tagOptions[0].value}
+              onChange={this.onChange}
           >
-            <Dropdown.Menu>
-              {/*<Input icon='search' iconPosition='left' className='search' />*/}
-              {/*<Dropdown.Divider />*/}
-              {/*<Dropdown.Header icon='tags' content='Tag Label' />*/}
-              <Dropdown.Menu scrolling>
-                {tagOptions.map((option) => (
-                    <Dropdown.Item key={option.value} {...option} />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Menu>
+            {/*<Dropdown.Menu>*/}
+              {/*<Dropdown.Menu scrolling>*/}
+                {/*{tagOptions.map((option) => (*/}
+                    {/*<Dropdown.Item key={option.value} {...option} />*/}
+                {/*))}*/}
+              {/*</Dropdown.Menu>*/}
+            {/*</Dropdown.Menu>*/}
           </Dropdown>
         </div>);
   }
@@ -76,7 +62,7 @@ class GoodsFilterMenuTemplate extends React.Component {
 
 
 const GoodsFilterMenu = connect(null, dispatch => ({
-  removeGood: (good_id) => dispatch(removeGood({id: good_id}))
+  userGoods: ({orderBy}) => dispatch(userGoods({orderBy}))
 }))(GoodsFilterMenuTemplate);
 
 export default GoodsFilterMenu;
