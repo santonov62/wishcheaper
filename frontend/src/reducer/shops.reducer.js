@@ -1,9 +1,9 @@
 import * as Actions from '../actions/shops.actions';
 
-const initialState = [{
+const initialState = {
   isLoading: false,
   value: []
-}];
+};
 
 const shopsReducer = (state = initialState, action) => {
   switch (action.type) {

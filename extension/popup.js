@@ -9,6 +9,9 @@ window.onload = () => {
   const addButton = document.getElementById('add');
   addButton.onclick = addCurrent;
 
+  const openButton = document.getElementById('open');
+  openButton.onclick = openProduct;
+
   chrome.storage.local.get(['authData'], ({authData}) => {
     if (!!authData) {
       hideButtons();
@@ -20,6 +23,15 @@ window.onload = () => {
   });
 
 };
+
+function openProduct() {
+  const {goodItem} = window;
+  const url = `${DOMAIN}/my?id=${goodItem.id}`;
+  chrome.tabs.create({url, selected: true}, (tab) => {
+
+    // chrome.tabs.onUpdated.addListener(vkAuthListener(tab.id));
+  });
+}
 
 function addCurrent() {
   chrome.tabs.query({
@@ -56,6 +68,7 @@ async function addByUrl(url) {
         'Authorization': `Bearer ${authData.user.token}`
       }
     }).then(res => res.json());
+    window.goodItem = good;
     if (good.error)
       throw new Error(good.error);
     console.log("[addUrl] good", good);

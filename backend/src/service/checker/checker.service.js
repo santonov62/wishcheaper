@@ -183,7 +183,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
       id
     });
     
-    const isCorrectProduct = !!parsedGood.url && !!parsedGood.title && !!parsedGood.price;
+    const isCorrectProduct = !!parsedGood.url && !!parsedGood.title && !!parsedGood.price && !parsedGood.inactive_at;
 
     if (isCorrectProduct) {
       const priceShift = price * 0.005; // 0,5%

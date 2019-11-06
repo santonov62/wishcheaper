@@ -41,9 +41,22 @@ const getShopByUrl = async (url) => {
   return result.rows[0];
 };
 
+const MY_SHOPS = `
+SELECT sh.id as "shopId", sh.title, sh.name,
+       COUNT(g.id)
+FROM shops sh
+     INNER JOIN goods g ON g."shop_id" = sh.id
+     INNER JOIN subscriptions s ON s."good_id" = g.id AND s."user_vk" = $1
+GROUP BY "shopId"`;
+const myShops = async({vk}) => {
+  const result = await db.query(MY_SHOPS, [vk]);
+  return result && result.rows;
+};
+
 module.exports = {
   update,
   save,
   getShopByUrl,
-  getAll
+  getAll,
+  myShops
 };
