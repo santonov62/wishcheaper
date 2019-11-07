@@ -6,7 +6,7 @@ const initialState = {
   value: []
 };
 
-const codesReducer = (state = initialState, action) => {
+const goodsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GoodsActions.GOODS_LOADING:
       return {
@@ -73,4 +73,4 @@ const codesReducer = (state = initialState, action) => {
   }
 };
 
-export default codesReducer;
+export default goodsReducer;
