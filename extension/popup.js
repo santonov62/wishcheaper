@@ -6,8 +6,8 @@ window.onload = () => {
   const vkButton = document.getElementById('vk');
   vkButton.onclick = vkAuth;
 
-  const addButton = document.getElementById('add');
-  addButton.onclick = addCurrent;
+  // const addButton = document.getElementById('add');
+  // addButton.onclick = addCurrent;
 
   const openButton = document.getElementById('open');
   openButton.onclick = openProduct;
@@ -17,7 +17,8 @@ window.onload = () => {
       hideButtons();
       addCurrent();
     } else {
-      vkButton.classList.remove('hidden');
+      // vkButton.classList.remove('hidden');
+      showButtons();
     }
     hideSpinner();
   });
@@ -77,7 +78,11 @@ async function addByUrl(url) {
     return good;
   } catch (e) {
     console.log(e.message);
-    showError();
+    if (e && e.message.indexOf('AUTHORIZATION_ERROR') !== -1) {
+      showButtons();
+    } else {
+      showError();
+    }
   } finally {
     console.groupEnd();
     hideSpinner();
