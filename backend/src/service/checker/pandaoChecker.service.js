@@ -92,8 +92,14 @@ const isMyUrl = (url) => {
   return url.indexOf(SHOP_NAME) !== -1;
 };
 
+const getClippedUrl = (url) => {
+  const match = url.match(/((http(s)?(\:\/\/))+(www\.)?([\w\-\.\/])*(\.[a-zA-Z]{2,3}\/?))[^\s\b\n|]*[^.,;:\?\!\@\^\$ -]/g);
+  return match && match[0];
+};
+
 module.exports = {
   parse,
   isMyUrl,
+  getClippedUrl,
   getShopUrl: () => SHOP_NAME
 };
