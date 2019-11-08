@@ -52,7 +52,7 @@ const add = async (req, res) => {
   try {
     let {url} = req.body;
     
-    url = getClippedUrl(url);
+    url = checkerService.getClippedUrl(url);
     if (!url) {
       throw new Error(`incorrect url`)
     }
