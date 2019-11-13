@@ -1,6 +1,7 @@
 @media only screen and (max-width: 768px) {
   .goodItemContainer {
     width: 100%;
+    margin: 10px 0;
     .goodItem {
       width: 100%;
     }
@@ -9,6 +10,7 @@
 
 @media only screen and (min-width: 768px) {
   .goodItemContainer {
+    margin: 10px 7px;
     .goodItem {
       width: 240px;
     }
@@ -17,7 +19,6 @@
 
 .goodItemContainer {
   position: relative;
-  margin: 10px 7px;
   .menuButton {
     position: absolute;
     z-index: 1;
