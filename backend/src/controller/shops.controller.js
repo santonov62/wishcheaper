@@ -36,7 +36,7 @@ const myShops = async(req, res) => {
     console.groupEnd();
   }
 };
-app.get('/my', myShops);
+app.get('/myShops', myShops);
 
 const update = async(req, res) => {
   console.group(`[shops.controller]: [getAll]`);

@@ -36,8 +36,12 @@ class Header extends React.Component {
           as={Link}
           to="/my"
           active={activeItem === 'list'}
-          onClick={this.handleItemClick}>
-          &nbsp;&nbsp;&nbsp;<Icon color='yellow' size='large' name='favorite'/>
+          onClick={(e, opts) => {
+            // this.handleItemClick(e, opts);
+            window.location.href = `/my`;
+          }}>
+          {/*&nbsp;&nbsp;&nbsp;<Icon color='yellow' size='large' name='favorite'/>*/}
+          <Image src='/images/logo.png' size='mini' />
           {/*Мои товары*/}
         </Menu.Item>
 

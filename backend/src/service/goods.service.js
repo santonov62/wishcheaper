@@ -131,7 +131,7 @@ FROM
   let WHERE = ``;
   let ORDER_BY = ``;
   if (Object.keys(params).length > 0) {
-    let {vk, title, id, url, expireDate} = params;
+    let {vk, title, id, url, expireDate, shopId} = params;
     WHERE = ` WHERE true`;
     if (!!id) {
       WHERE += ` AND g.id = ${statementForSql(id)}`;
@@ -146,6 +146,8 @@ FROM
         const paramIndex = statementForSql(expireDate);
         WHERE += ` AND g."updated_at" < ${paramIndex} AND (g."inactive_at" IS NULL OR g."inactive_at" < ${paramIndex})`;
       }
+      if (shopId) WHERE += ` AND g."shop_id" = ${statementForSql(shopId)}`;
+      
       ORDER_BY = ` ORDER BY g.inactive_at DESC, g.price - g.prev_price, percentDiscount DESC NULLS LAST, g.updated_at DESC`;
     }
   }
