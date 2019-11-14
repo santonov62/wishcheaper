@@ -1,5 +1,5 @@
 function getAuthData() {
-  return sessionStorage.getItem('authData');
+  return localStorage.getItem('authData');
 }
 
 chrome.runtime.sendMessage({
