@@ -2,6 +2,7 @@ import React, {Fragment} from 'react';
 import {Dropdown} from 'semantic-ui-react';
 import {removeGood, userGoods} from "../../actionCreators/goods.actionCreators";
 import {connect} from 'react-redux';
+import {clearSearch} from "../../actionCreators/goodsSearch.actionCreators";
 // import './goodFilterMenu.css';
 
 const tagOptions = [
@@ -39,22 +40,15 @@ class GoodsFilterMenuTemplate extends React.Component {
     return (
         <div className="filterPanel">
           <Dropdown
+              placeholder='Сортировать'
               icon='sort'
               floating
               labeled
               button
               className='icon'
               options={tagOptions}
-              defaultValue={tagOptions[0].value}
               onChange={this.onChange}
           >
-            {/*<Dropdown.Menu>*/}
-              {/*<Dropdown.Menu scrolling>*/}
-                {/*{tagOptions.map((option) => (*/}
-                    {/*<Dropdown.Item key={option.value} {...option} />*/}
-                {/*))}*/}
-              {/*</Dropdown.Menu>*/}
-            {/*</Dropdown.Menu>*/}
           </Dropdown>
         </div>);
   }

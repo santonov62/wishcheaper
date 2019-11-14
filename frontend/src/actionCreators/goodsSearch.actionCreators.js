@@ -23,7 +23,7 @@ const processError = (message, dispatch) => {
 export const setSearchTitle = (title) => async (dispatch, getState) => {
   try {
     // dispatch({type: Actions.TITLE});
-    log(`[title]`, title);
+    log(`[setSearchTitle]`, title);
     dispatch({
       type: Actions.TITLE,
       payload: {
@@ -31,6 +31,32 @@ export const setSearchTitle = (title) => async (dispatch, getState) => {
       }
     });
     return title;
+  } catch (e) {
+    processError(e.message, dispatch);
+  }
+};
+
+export const setSearchShopId = (shopId) => async (dispatch, getState) => {
+  try {
+    log(`[setSearchShopId]`, shopId);
+    dispatch({
+      type: Actions.SHOP_ID,
+      payload: {
+        shopId
+      }
+    });
+    return shopId;
+  } catch (e) {
+    processError(e.message, dispatch);
+  }
+};
+
+export const clearSearch = () => async (dispatch, getState) => {
+  try {
+    log(`[clearSearch]`);
+    dispatch({
+      type: Actions.CLEAR
+    });
   } catch (e) {
     processError(e.message, dispatch);
   }

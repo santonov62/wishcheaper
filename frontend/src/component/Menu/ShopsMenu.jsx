@@ -1,9 +1,10 @@
 import React, {Fragment} from 'react';
 import {Dropdown, Icon} from 'semantic-ui-react';
-import {removeGood} from "../../actionCreators/goods.actionCreators";
+import {userGoods} from "../../actionCreators/goods.actionCreators";
 import {connect} from 'react-redux';
 import * as Constants from "../../constants";
 import {authHeader} from "../../helpers/auth-header";
+import {setSearchShopId} from "../../actionCreators/goodsSearch.actionCreators";
 
 class ShopsMenuTemplate extends React.Component {
   constructor(props) {
@@ -33,7 +34,9 @@ class ShopsMenuTemplate extends React.Component {
   
   handleChange = (e, { value }) => {
     this.setState({ value });
-  }
+    this.props.setSearchShopId(value);
+    this.props.userGoods();
+  };
   
   render() {
     const {options, value} = this.state;
@@ -56,7 +59,8 @@ class ShopsMenuTemplate extends React.Component {
 const ShopsMenu = connect(state => ({
   user: state.user
 }), dispatch => ({
-  removeGood: (good_id) => dispatch(removeGood({id: good_id}))
+  userGoods: () => dispatch(userGoods()),
+  setSearchShopId: (shopId) => dispatch(setSearchShopId(shopId))
 }))(ShopsMenuTemplate);
 
 export default ShopsMenu;
