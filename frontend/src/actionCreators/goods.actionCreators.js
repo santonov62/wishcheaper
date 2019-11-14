@@ -29,9 +29,9 @@ const status = (res) => {
 export const userGoods = (params = {}) => async (dispatch, getState) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
-
     // const {title = '', id} = params;
     let url = new URL(`${window.location.origin}/goods/my`);
+    params = {...getState().goodsSearch, ...params};
     Object.keys(params)
       .forEach(key => url.searchParams.append(key, params[key]));
     const result = await fetch(url, {
@@ -59,10 +59,11 @@ export const userGoods = (params = {}) => async (dispatch, getState) => {
   }
 };
 
-export const searchGoods = (params) => async (dispatch) => {
+export const searchGoods = (params) => async (dispatch, getState) => {
   try {
     dispatch({type: Actions.GOODS_LOADING});
     let url = new URL(`${window.location.origin}/goods/search`);
+    params = {...getState().goodsSearch, ...params};
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     const result = await fetch(url, {
       method: 'GET'

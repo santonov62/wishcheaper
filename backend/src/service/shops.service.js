@@ -42,12 +42,12 @@ const getShopByUrl = async (url) => {
 };
 
 const MY_SHOPS = `
-SELECT sh.id as "shopId", sh.title, sh.name,
-       COUNT(g.id)
+SELECT sh.id, sh.title, sh.name,
+       COUNT(g.id) as "count"
 FROM shops sh
      INNER JOIN goods g ON g."shop_id" = sh.id
      INNER JOIN subscriptions s ON s."good_id" = g.id AND s."user_vk" = $1
-GROUP BY "shopId"`;
+GROUP BY sh.id`;
 const myShops = async({vk}) => {
   const result = await db.query(MY_SHOPS, [vk]);
   return result && result.rows;

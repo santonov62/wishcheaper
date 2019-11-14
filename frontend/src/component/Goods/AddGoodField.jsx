@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as Constants from "../../constants";
 import {addByUrl} from "../../actionCreators/goods.actionCreators";
 import { userGoods } from '../../actionCreators/goods.actionCreators';
+import { setSearchTitle } from '../../actionCreators/goodsSearch.actionCreators';
 
 class AddGoodField extends React.Component {
     state = {
@@ -25,7 +26,9 @@ class AddGoodField extends React.Component {
         
         clearTimeout(this.searchTimeout);
         this.searchTimeout = setTimeout(() => {
-            this.props.userGoods({title: value});
+            // this.props.userGoods({title: value});
+            this.props.setSearchTitle(value);
+            this.props.userGoods();
         },1500);
     };
     addByUrl = async () => {
@@ -67,7 +70,8 @@ class AddGoodField extends React.Component {
 export default connect(({user}) => ({user}),
         dispatch => ({
             addByUrl: url => dispatch(addByUrl(url)),
-            userGoods: ({title}) => dispatch(userGoods({title}))
+            userGoods: () => dispatch(userGoods()),
+            setSearchTitle: (title) => dispatch(setSearchTitle(title))
         })
 )(AddGoodField);
 
