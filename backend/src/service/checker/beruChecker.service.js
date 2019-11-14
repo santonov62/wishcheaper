@@ -56,7 +56,9 @@ const parse = async (url) => {
     log(`price`);
     try {
       currentPrice = await page.$eval('[data-zone-name="offer-cart"] .section> div> div> div> span > span:nth-child(1)> span', node => parseInt(node.innerText.replace(/\s/g, '')));
-    } catch (e) { }
+    } catch (e) {
+      inactive_at = new Date();
+    }
   
     log(`oldPrice`);
     try {
