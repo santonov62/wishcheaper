@@ -35,3 +35,19 @@ export const setSearchTitle = (title) => async (dispatch, getState) => {
     processError(e.message, dispatch);
   }
 };
+
+export const setSearchShopId = (shopId) => async (dispatch, getState) => {
+  try {
+    // dispatch({type: Actions.TITLE});
+    log(`[title]`, shopId);
+    dispatch({
+      type: Actions.SHOP_ID,
+      payload: {
+        shopId
+      }
+    });
+    return shopId;
+  } catch (e) {
+    processError(e.message, dispatch);
+  }
+};

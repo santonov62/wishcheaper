@@ -11,7 +11,11 @@ const goodsSearch = (state = initialState, action) => {
         title
       };
     case GoodsSearch.SHOP_ID:
-      break;
+      const {shopId} = action.payload;
+      return {
+        ...state,
+        shopId
+      };
     case GoodsSearch.ORDER_BY:
       break;
     default:
