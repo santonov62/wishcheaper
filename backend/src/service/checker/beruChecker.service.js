@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const isDebugMode = true;
+const isVisible = true;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'beru.ru';
 const SHOP_TITLE = 'Беру';
@@ -29,7 +29,7 @@ const parse = async (url) => {
     throw new Error(`Url required.`);
 
   let launchParams = { args: [ `--no-sandbox` ], headless: true };
-  if (isDebugMode)
+  if (isVisible)
     launchParams = { ...launchParams, headless: false };
 
   const browser = await puppeteer.launch(launchParams);
@@ -86,7 +86,7 @@ const parse = async (url) => {
   } catch (e) {
     throw new Error(e);
   } finally {
-    if (!isDebugMode)
+    if (!isVisible)
       await browser.close();
   }
 };
