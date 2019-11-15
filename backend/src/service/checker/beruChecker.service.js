@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const isDebugMode = false;
+const isDebugMode = true;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'beru.ru';
 const SHOP_TITLE = 'Беру';
@@ -55,14 +55,14 @@ const parse = async (url) => {
     
     log(`price`);
     try {
-      currentPrice = await page.$eval('[data-zone-name="offer-cart"] .section> div> div> div> span > span:nth-child(1)> span', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('[data-zone-name="offer-cart"] [data-auto="price"]', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) {
       inactive_at = new Date();
     }
   
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('[data-zone-name="offer-cart"] .section> div> div> div> span > span:nth-child(2)> span', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('[data-zone-name="offer-cart"] [data-auto="old-price"]', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
     
     log(`logo`);
@@ -86,7 +86,8 @@ const parse = async (url) => {
   } catch (e) {
     throw new Error(e);
   } finally {
-    await browser.close();
+    if (!isDebugMode)
+      await browser.close();
   }
 };
 
