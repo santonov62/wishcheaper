@@ -40,6 +40,7 @@ class ShopsMenuTemplate extends React.Component {
   
   render() {
     const {options, value} = this.state;
+    const {shopId} = this.props;
     return (
           <Dropdown
               placeholder='Магазин'
@@ -49,7 +50,7 @@ class ShopsMenuTemplate extends React.Component {
               button
               className='icon'
               options={options}
-              value={value}
+              value={value || shopId}
               onChange={this.handleChange}
           />);
   }
@@ -57,7 +58,8 @@ class ShopsMenuTemplate extends React.Component {
 
 
 const ShopsMenu = connect(state => ({
-  user: state.user
+  user: state.user,
+  shopId: state.goodsSearch.shopId
 }), dispatch => ({
   userGoods: () => dispatch(userGoods()),
   setSearchShopId: (shopId) => dispatch(setSearchShopId(shopId))
