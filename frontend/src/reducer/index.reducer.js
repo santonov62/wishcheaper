@@ -1,6 +1,6 @@
 import shopsReducer from './shops.reducer';
 import goodsReducer from './goods.reducer';
-// import currencyReducer from './currency.reducer';
+import goodsSearchReducer from './goodsSearch.reducer';
 import userReducer from './user.reducer';
 import errorsReducer from './errors.reducer';
 import vkReducer from './vk.reducer';
@@ -10,10 +10,10 @@ import { reducer as form } from 'redux-form';
 export default {
   shops: shopsReducer,
   goods: goodsReducer,
-  // currency: currencyReducer,
   user: userReducer,
   errors: errorsReducer,
   vk: vkReducer,
+  goodsSearch: goodsSearchReducer,
   // payments: paymentsReducer,
   form,
 }

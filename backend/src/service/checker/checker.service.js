@@ -253,7 +253,7 @@ const log = (text, params = '') => {
 
 const getClippedUrl = (url) => {
   const checker = getCheckerForUrl(url);
-  if (!!checker.getClippedUrl) {
+  if (!!checker && !!checker.getClippedUrl) {
    return checker.getClippedUrl(url);
   } else {
     const match = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#//=]*)/g);

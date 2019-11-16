@@ -58,7 +58,9 @@ const parse = async (url) => {
     log(`$eval price`);
     try {
       currentPrice = await page.$eval('.sel-product-tile-price', node => parseInt(node.innerText.replace(/\s+/g, '')));
-    } catch (e) { }
+    } catch (e) {
+      inactive_at = new Date();
+    }
   
     //OLD PRICE
     log(`$eval oldPrice`);
