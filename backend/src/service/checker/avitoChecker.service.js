@@ -62,7 +62,7 @@ const parse = async (url, attempts = 0) => {
     //     return await parse(url, attempts);
     // }
     // log(`done`);
-    await page.goto('https://avito.ru', {waitUntil: 'domcontentloaded'});
+    // await page.goto('https://avito.ru', {waitUntil: 'domcontentloaded'});
     await page.goto(url, {waitUntil: 'domcontentloaded'});
     log(`done`);
 
