@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const isVisible = false;
+const isVisible = true;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'beru.ru';
 const SHOP_TITLE = 'Беру';
@@ -38,6 +38,7 @@ const parse = async (url) => {
     const page = await browser.newPage();
 
     log(`goto: `, url);
+    await page.goto('https://beru.ru', {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     await page.goto(url, {waitUntil: 'networkidle0', timeout: TIMEOUT_DELAY});
     // log(`done`);
 
@@ -86,7 +87,7 @@ const parse = async (url) => {
   } catch (e) {
     throw new Error(e);
   } finally {
-    if (!isVisible)
+    // if (!isVisible)
       await browser.close();
   }
 };

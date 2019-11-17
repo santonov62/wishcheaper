@@ -38,7 +38,7 @@ const parse = async (url) => {
     const page = await browser.newPage();
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
+    await page.goto(url, {waitUntil: 'networkidle0', timeout: TIMEOUT_DELAY});
     // log(`done`);
 
     let title, currentPrice, logo, oldPrice, inactive_at;
