@@ -18,6 +18,7 @@ const lamodaChecker = require('./lamodaChecker.service');
 const wildberriesChecker = require('./wildberriesChecker.service');
 const jdChecker = require('./jdChecker.service');
 const asosChecker = require('./asosChecker.service');
+const citilinkChecker = require('./citilinkChecker.service');
 const moment = require('moment');
 
 const checkerList = [
@@ -34,7 +35,8 @@ const checkerList = [
   lamodaChecker,
   jdChecker,
   asosChecker,
-  wildberriesChecker
+  wildberriesChecker,
+  citilinkChecker
 ];
 
 let processGoods = [];
