@@ -43,11 +43,12 @@ SET
   "updated_at" = $7,
   "prev_price" = $8,
   "inactive_at" = $9,
-  "min_price" = $10
+  "min_price" = $10,
+  "currency" = $11
 WHERE
   g.id = $1
 RETURNING *`;
-const update = async ({ id, url, title, logo, price, old_price, prev_price, inactive_at, min_price }) => {
+const update = async ({ id, url, title, logo, price, old_price, prev_price, inactive_at, min_price, currency }) => {
   const result = await db.query(UPDATE_GOOD, [
     id,
     url,
@@ -58,7 +59,8 @@ const update = async ({ id, url, title, logo, price, old_price, prev_price, inac
     new Date(),
     prev_price,
     inactive_at,
-    min_price
+    min_price,
+    currency
   ]);
   const good = result.rows[0];
   // log('[update] done', good);
