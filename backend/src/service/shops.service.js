@@ -47,7 +47,8 @@ SELECT sh.id, sh.title, sh.name,
 FROM shops sh
      INNER JOIN goods g ON g."shop_id" = sh.id
      INNER JOIN subscriptions s ON s."good_id" = g.id AND s."user_vk" = $1
-GROUP BY sh.title`;
+GROUP BY sh.id
+ORDER BY sh.title`;
 const myShops = async({vk}) => {
   const result = await db.query(MY_SHOPS, [vk]);
   return result && result.rows;

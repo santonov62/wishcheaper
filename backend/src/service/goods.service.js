@@ -121,7 +121,7 @@ const search = async (params) => {
   
   const SELECT = `SELECT
    s.user_vk, s.good_id, s.id as subscription_id, s.price_discount, s.percent_discount, s.autobuy_price,
-   g.id, g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price, round(100 - g.price / (g.old_price / 100)) as percentDiscount,
+   g.id, g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price, round(100 - g.price / (g.old_price / 100)) as percentDiscount, g.currency,
    sh.title shop_title, sh.name shop_name, sh.url shop_url
 FROM
   goods g
