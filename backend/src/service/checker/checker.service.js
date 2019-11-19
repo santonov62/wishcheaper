@@ -193,17 +193,17 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
     const isCorrectProduct = !!parsedGood.url && !!parsedGood.title && !!parsedGood.price && !parsedGood.inactive_at;
 
     if (isCorrectProduct) {
-      const priceShift = price * 0.005; // 0,5%
+      const priceShift = !!parsedGood.currency ? 1 : price * 0.005; // 0,5%
       const priceWithShifting = price + priceShift;
       const isDiscountedProductBecameAvailable = !!inactive_at && (priceWithShifting < old_price || priceWithShifting < prev_price);
       const isProductBecameCheaper = newPrice + priceShift < price;
       if (isProductBecameCheaper || isDiscountedProductBecameAvailable) {
         const notifySubscriptions = await subscriptionService.requireNotification({...good});
         vkService.notifyGoodBecameCheaper({good: {...good, prev_price}, subscriptions: notifySubscriptions});
-        const buySubscriptions = await subscriptionService.requireBuy({...good});
-        if (buySubscriptions && buySubscriptions.length > 0) {
-          autobuyService.buy({good: {...good, prev_price}, subscriptions: buySubscriptions});
-        }
+        // const buySubscriptions = await subscriptionService.requireBuy({...good});
+        // if (buySubscriptions && buySubscriptions.length > 0) {
+        //   autobuyService.buy({good: {...good, prev_price}, subscriptions: buySubscriptions});
+        // }
       }
     }
 
