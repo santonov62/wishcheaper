@@ -12,25 +12,19 @@ import GoodsSearchToolbar from "../component/Goods/GoodsSearchToolbar";
 class GoodsPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: true
-    }
   }
   componentDidMount() {
     const url = new URL(window.location.href);
     const id = url.searchParams.get('id');
     if (!!id) {
-      this.props.searchGoods({id}).finally(() => this.setState({isLoading: false}));
+      this.props.searchGoods({id});
     } else {
-      this.props.userGoods({
-        id: url.searchParams.get('id')
-      }).finally(() => this.setState({isLoading: false}));
+      this.props.userGoods({ id: url.searchParams.get('id') });
     }
 
   }
   render() {
-    const {isLoading} = this.state;
-    const {goods = []} = this.props;
+    const {isLoading, goods = []} = this.props;
     const goodsElements = goods.map((good, index) => <GoodItem key={index} {...good}/>);
     return (
         <div className='goodsPage'>
@@ -88,7 +82,8 @@ class GoodsPage extends React.Component {
 
 export default connect(state => ({
   user: state.user,
-  goods: state.goods.value
+  goods: state.goods.value,
+  isLoading: state.goods.isLoading
 }), dispatch => ({
   userGoods: () => dispatch(userGoods()),
   searchGoods: ({id}) => dispatch(searchGoods({id}))

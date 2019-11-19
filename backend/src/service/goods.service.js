@@ -43,11 +43,12 @@ SET
   "updated_at" = $7,
   "prev_price" = $8,
   "inactive_at" = $9,
-  "min_price" = $10
+  "min_price" = $10,
+  "currency" = $11
 WHERE
   g.id = $1
 RETURNING *`;
-const update = async ({ id, url, title, logo, price, old_price, prev_price, inactive_at, min_price }) => {
+const update = async ({ id, url, title, logo, price, old_price, prev_price, inactive_at, min_price, currency }) => {
   const result = await db.query(UPDATE_GOOD, [
     id,
     url,
@@ -58,7 +59,8 @@ const update = async ({ id, url, title, logo, price, old_price, prev_price, inac
     new Date(),
     prev_price,
     inactive_at,
-    min_price
+    min_price,
+    currency
   ]);
   const good = result.rows[0];
   // log('[update] done', good);
@@ -121,7 +123,7 @@ const search = async (params) => {
   
   const SELECT = `SELECT
    s.user_vk, s.good_id, s.id as subscription_id, s.price_discount, s.percent_discount, s.autobuy_price,
-   g.id, g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price, round(100 - g.price / (g.old_price / 100)) as percentDiscount,
+   g.id, g.url, g.title, g.logo, g.price, g.old_price, g.shop_id, g.created_at, g.updated_at, g.inactive_at, g.prev_price, g.min_price, round(100 - g.price / (g.old_price / 100)) as percentDiscount, g.currency,
    sh.title shop_title, sh.name shop_name, sh.url shop_url
 FROM
   goods g

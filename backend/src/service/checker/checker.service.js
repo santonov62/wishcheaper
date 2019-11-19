@@ -19,6 +19,8 @@ const wildberriesChecker = require('./wildberriesChecker.service');
 const jdChecker = require('./jdChecker.service');
 const asosChecker = require('./asosChecker.service');
 const leroymerlinChecker = require('./leroymerlinChecker.service');
+const citilinkChecker = require('./citilinkChecker.service');
+const computeruniverseChecker = require('./computeruniverseChecker.service');
 const moment = require('moment');
 
 const checkerList = [
@@ -36,7 +38,10 @@ const checkerList = [
   jdChecker,
   asosChecker,
   wildberriesChecker,
-  leroymerlinChecker
+  leroymerlinChecker,
+  wildberriesChecker,
+  citilinkChecker,
+  computeruniverseChecker
 ];
 
 let processGoods = [];
@@ -255,7 +260,7 @@ const log = (text, params = '') => {
 
 const getClippedUrl = (url) => {
   const checker = getCheckerForUrl(url);
-  if (!!checker.getClippedUrl) {
+  if (!!checker && !!checker.getClippedUrl) {
    return checker.getClippedUrl(url);
   } else {
     const match = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#//=]*)/g);

@@ -13,14 +13,14 @@ const isGoodValid = ({title, price, url}) => {
 
 const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_name,
                            updated_at, created_at, inactive_at, prev_price, subscription_id,
-                           price_discount, percent_discount, autobuy_price, min_price, removeGood}) => {
+                           price_discount, percent_discount, autobuy_price, min_price, removeGood, currency}) => {
   
   const invalidGoodProps = {id, url, updated_at, created_at, inactive_at};
   // const goodMenuProps = {direction: 'left', good_id: id, subscription_id};
   const isInvalidValid = !isGoodValid({url, title, price});
   const shortGoodItemsProps = {id, url, title, logo, price, old_price, shop_id, shop_name,
     updated_at, created_at, inactive_at, prev_price, subscription_id,
-    price_discount, percent_discount, autobuy_price, min_price};
+    price_discount, percent_discount, autobuy_price, min_price, currency};
   
   return (
     <div className='goodItemContainer'>
@@ -49,8 +49,8 @@ export const GoodItem = connect(null, dispatch => ({
 
 const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id, shop_name,
                          updated_at, created_at, inactive_at, prev_price, subscription_id,
-                         price_discount, percent_discount, autobuy_price, min_price}) => {
-  
+                         price_discount, percent_discount, autobuy_price, min_price, currency}) => {
+  currency = currency || '₽';
   const isInactive = !!inactive_at;
   const diffPrevPrice = !!prev_price && price - prev_price;
   const diffPrice = !!old_price && price - old_price;
@@ -59,6 +59,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
   const percentDiscount = old_price ? 100 - price / (old_price / 100) : 0;
   const roundedPercentDiscount = Number((percentDiscount).toFixed());
   const isImportant = !!roundedPercentDiscount && !!min_price && price < min_price + min_price * 0.015;
+
   return (
       <Card className={`goodItem ${isInactive ? 'inactive' : ''} ${isImportant ? 'important' : ''}`}>
         <div className='logo'>
@@ -94,20 +95,20 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                   <div>
                     {!!old_price && old_price !== price &&
                       <div>
-                        &nbsp;<span style={{fontSize: 16, color: '#91998c'}} title="Старая цена"><strike>{old_price}₽</strike></span>
+                        &nbsp;<span style={{fontSize: 16, color: '#91998c'}} title="Старая цена"><strike>{old_price}{currency}</strike></span>
                         {!!diffPrice &&
                           <Fragment>
-                            &nbsp;&nbsp;<span style={{fontSize: 11, color: diffPrice < 0 ? 'green' : 'red'}} title="Скидка">{diffPrice} ₽</span>
+                            &nbsp;&nbsp;<span style={{fontSize: 11, color: diffPrice < 0 ? 'green' : 'red'}} title="Скидка">{diffPrice} {currency}</span>
                           </Fragment>
                         }
                       </div>
                     }
                     <div style={{fontSize: 30, lineHeight: 1, color: '#000', marginBottom: 10, whiteSpace: 'nowrap'}} title="Цена">
-                      {price} ₽
+                      {price} {currency}
                       {!!diffPrevPrice &&
                         <span style={{fontSize: '14px', color: diffPrevPrice > 0 ? 'red' : 'green'}}
                               title="Изменения в цене">
-                          &nbsp;<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} style={{margin: 0}}/>{Math.abs(diffPrevPrice)} ₽
+                          &nbsp;<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} style={{margin: 0}}/>{Math.abs(diffPrevPrice)} {currency}
                         </span>
                       }
                     </div>
@@ -116,19 +117,19 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                   <div>
                     {!!min_price &&
                     <Label size='small' title="Минимальная зафиксированная цена">
-                      <Icon name='area chart' />{min_price} ₽
+                      <Icon name='area chart' />{min_price} {currency}
                     </Label>
                     }
   
                     {/*{!!diffPrevPrice &&*/}
                     {/*<Label size='small' color={diffPrevPrice > 0 ? 'red' : 'green'} title="Повышение/понижение цены относительно предыдущего обновления">*/}
-                      {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*/}
+                      {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} {currency}*/}
                     {/*</Label>*/}
                     {/*}*/}
 
                     {/*{!!diffPrevPrice &&*/}
                     {/*<span style={{color: diffPrevPrice > 0 ? 'red' : 'green'}} title="Изменения в цене">*/}
-                      {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*/}
+                      {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} {currency}*/}
                     {/*</span>*/}
                     {/*}*/}
                   </div>
@@ -149,18 +150,18 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
           <Label size='small' title="Последнее обновление"><Icon name='history' />{updatedRangeText}</Label>
 
           {!!autobuy_price &&
-          <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} ₽</Label>
+          <Label color='blue' size='small'><Icon name='handshake outline' />{autobuy_price} {currency}</Label>
           }
   
           {/*{!!min_price &&*/}
           {/*<Label size='small' color="red" title="Лучшая цена">*/}
-            {/*<Icon name='fire' />{min_price} ₽*/}
+            {/*<Icon name='fire' />{min_price} {currency}*/}
           {/*</Label>*/}
           {/*}*/}
 
           {/*{!!diffPrevPrice &&*/}
           {/*<Label size='small' color={diffPrevPrice > 0 ? 'red' : 'green'} title="Динамика цены/изменение от предыдущего сканирования">*/}
-            {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} ₽*/}
+            {/*<Icon name={diffPrevPrice > 0 ? 'caret up' : 'caret down'} />{Math.abs(diffPrevPrice)} {currency}*/}
           {/*</Label>*/}
           {/*}*/}
           <SubscriptionModal subscription_id={subscription_id} trigger={
@@ -168,7 +169,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
               <Icon name='bell' />
               {!percent_discount && !price_discount && 'Всегда'}
               {!!percent_discount && <Fragment>{percent_discount} %</Fragment>}
-              {!!price_discount && <Fragment>{price_discount} ₽</Fragment>}
+              {!!price_discount && <Fragment>{price_discount} {currency}</Fragment>}
             </Label>
           }/>
 

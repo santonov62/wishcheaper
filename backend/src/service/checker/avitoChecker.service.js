@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const proxyHolderService = require('./proxyHolder.service');
+// const proxyHolderService = require('./proxyHolder.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'avito.ru';
@@ -27,22 +27,22 @@ init();
 let proxy;
 
 const parse = async (url, attempts = 0) => {
-  attempts++;
+  // attempts++;
   if (!url)
     throw new Error(`Url required.`);
 
-  if (!proxy) {
-    try {
-      proxy = await proxyHolderService.pullProxy();
-    } catch (e) {
-      return {};
-    }
-  }
+  // if (!proxy) {
+  //   try {
+  //     proxy = await proxyHolderService.pullProxy();
+  //   } catch (e) {
+  //     return {};
+  //   }
+  // }
 
-  let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
+  // let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
 
   // const proxy = await proxyHolderService.pullProxy();
-  // let launchParams = { args: [ `--no-sandbox` ] };
+  let launchParams = { args: [ `--no-sandbox` ] };
 
   if (isDebugMode)
     launchParams = { ...launchParams, headless: false };
@@ -53,14 +53,17 @@ const parse = async (url, attempts = 0) => {
     const page = await browser.newPage();
 
     log(`goto: `, url);
-    try {
-      await page.goto(url, {waitUntil: 'domcontentloaded', timeout: 15000});
-    } catch (e) {
-      proxy = null;
-      browser.close();
-      if (attempts < 5)
-        return await parse(url, attempts);
-    }
+    // try {
+    //   await page.goto(url, {waitUntil: 'domcontentloaded', timeout: 15000});
+    // } catch (e) {
+    //   proxy = null;
+    //   browser.close();
+    //   if (attempts < 5)
+    //     return await parse(url, attempts);
+    // }
+    // log(`done`);
+    // await page.goto('https://avito.ru', {waitUntil: 'domcontentloaded'});
+    await page.goto(url, {waitUntil: 'domcontentloaded'});
     log(`done`);
 
     // await page.waitFor(`.gallery-img-frame`);
@@ -96,8 +99,8 @@ const parse = async (url, attempts = 0) => {
     };
     
     log(`[parse] done`, parsedData);
-    if (!!title)
-      proxyHolderService.unshiftProxy(proxy);
+    // if (!!title)
+    //   proxyHolderService.unshiftProxy(proxy);
 
     return parsedData;
 

@@ -2,11 +2,11 @@ const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
-const SHOP_NAME = 'tmall.aliexpress.com';
-const SHOP_TITLE = 'Tmall Aliexpress';
+const SHOP_NAME = 'citilink.ru';
+const SHOP_TITLE = 'Citilink';
 
 const log = (text, params = '') => {
-  console.log(`[pandaoChecker.service] -> ${text}`, params);
+  console.log(`[citilinkChecker.service] -> ${text}`, params);
 };
 
 const init = async () => {
@@ -24,7 +24,7 @@ const init = async () => {
 init();
 
 const parse = async (url) => {
-  
+
   if (!url)
     throw new Error(`Url required.`);
 
@@ -38,38 +38,45 @@ const parse = async (url) => {
     const page = await browser.newPage();
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'networkidle0', timeout: TIMEOUT_DELAY});
+    await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     // log(`done`);
+
+    let inactive_at;
+    const payButton = await page.$('.product-sidebar__line-box .add_to_cart');
+    if (!payButton) {
+      inactive_at = new Date();
+    }
 
     let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
-      title = await page.$eval('.product-name', node => node.innerText);
+      title = await page.$eval('.product_header h1', node => node.innerText);
     } catch (e) { }
-    
+
     log(`price`);
     try {
-      currentPrice = await page.$eval('.p-current-price .p-price', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('.product-sidebar__line-box .price.price_break', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
-  
+
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('.p-del-price-content .p-price', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('.product-sidebar__line-box .price.old-price', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
-    
+
     log(`logo`);
     try {
-      logo = await page.$eval('.ui-image-viewer-thumb-frame img', node => node.getAttribute('src'))
+      logo = await page.$eval('.image_gallery .full_content img', node => node.getAttribute('src'))
     } catch (e) { }
-    
+
     const parsedData = {
-        url,
-        title,
-        price: currentPrice,
-        old_price: oldPrice,
-        logo
+      url,
+      title,
+      price: currentPrice,
+      old_price: oldPrice,
+      logo,
+      inactive_at
     };
-    
+
     log(`[parse] done`, parsedData);
 
     return parsedData;

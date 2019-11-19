@@ -133,9 +133,7 @@ function generateToken(user) {
     admin: user.admin && user.admin.toString(),
     vk: user.vk && user.vk.toString()
   };
-  return jwt.sign(u, JWT_SECRET, {
-    expiresIn: 60 * 60 * (24 * 7) // expires in one week
-  });
+  return jwt.sign(u, JWT_SECRET);
 }
 
 const isVkSessionCorrect = (session) => {
