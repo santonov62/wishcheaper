@@ -7,6 +7,7 @@ const TIMEOUT_DELAY = 30000;
 
 const parseProxydockerProxies = async () => {
   log(`parseProxydockerProxies`);
+  let proxies = [];
   const browser = await puppeteer.launch({args: [`--no-sandbox`], headless: true});
   try {
     const page = await browser.newPage();
@@ -22,7 +23,7 @@ const parseProxydockerProxies = async () => {
     await page.waitForFunction(selector => document.querySelectorAll(selector).length > 1, {}, selector);
 
     log(`eval`, '.proxylist_table tbody tr');
-    let proxies = await page.$$eval(selector, (trs) => {
+    proxies = await page.$$eval(selector, (trs) => {
       const ips = [];
       trs.forEach(tr => {
         const ip = tr.querySelector('td:first-child:not([colspan])').textContent.trim();
@@ -36,15 +37,18 @@ const parseProxydockerProxies = async () => {
     });
     log(`done`);
 
-    proxies = [...new Set([...proxiesList, ...proxies])];
-    log(`proxies`, proxies);
+    // proxies = [...new Set([...proxiesList, ...proxies])];
+    // log(`proxies`, proxies);
     lastUpdateTime = Date.now();
-    return proxies;
+    // return proxies;
   } catch (e) {
     throw new Error(e);
   } finally {
     browser.close();
   }
+  proxies = [...new Set([...proxiesList, ...proxies])];
+  log(`proxies`, proxies);
+  return proxies;
 };
 const updateProxies = async () => {
   if (!parseProxiesPromise) {
