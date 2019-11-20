@@ -33,6 +33,4 @@ app.get('/*', (req, res) => res.sendFile(path.join(routes.fs.frontend, 'index.ht
 
 const server = app.listen(PORT, () => console.log(`Running at ${PORT}`));
 
-checkerService.start();
-
 module.exports = app;

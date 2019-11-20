@@ -62,90 +62,6 @@ const isShopSupported = (url) => {
   return checkerList.some(checker => checker.isMyUrl(url));
 };
 
-const backgroundProcess = async () => {
-    const result = [];
-    try {
-        state.isParsing = true;
-        while (processGoods.length > 0) {
-            const good = processGoods.shift();
-            const refreshedGood = await refresh(good);
-            result.push(refreshedGood);
-        }
-        state.lastParseTime = Date.now();
-        state.isParsing = false;
-        log(`[backgroundProcess] done parsed: `, result.length);
-        return result;
-    } catch (e) {
-        state.isParsing = false;
-        log(`[backgroundProcess] error`, e.message);
-        return result;
-    }
-}
-
-
-const scan = async () => {
-  shops = await getAllShops();
-
-  const goods = await goodsService.expired(shops);
-  // const goods = await goodsService.search({id: 17});
-  if (goods.length > 0) {
-    push(goods);
-    if (!state.isParsing) {
-      backgroundProcess();
-    }
-    log(`[scan] done`, state);
-  } else {
-    log(`[scan] nothing to parse`, state);
-  }
-  return state;
-}
-
-let shops;
-const getAllShops = async (force) => {
-  if(!shops || force)
-    shops = await shopsService.getAll();
-  return shops;
-};
-
-const start = async () => {
-  const shops = await getAllShops(true);
-  const intervalMin = Math.min.apply(null, shops.map(shop => shop.scan_interval)) || 720;
-  scan();
-  interval = setInterval(() => {
-    scan();
-  }, intervalMin / 2 * 60000);
-  state.isStarted = true;
-  state.time = Date.now();
-  log(`[start] done`, state);
-  return state;
-}
-
-
-const stop = () => {
-  clearInterval(interval);
-  state.isStarted = false;
-  state.time = Date.now();
-  log(`[stop] done`, state);
-  return state;
-}
-
-const push = (goods) => {
-  if (!goods)
-    return;
-
-  goods = [].concat(goods);
-
-  const filteredGoods = goods.filter(good => {
-    return !processGoods.some(processGood => {
-      return processGood.id === good.id
-    })
-  });
-
-  processGoods = processGoods.concat(filteredGoods);
-
-  return processGoods;
-}
-
 const parse = async (url) => {
   // console.group(`[checker.service] -> [parse]`);
   if (!isShopSupported(url))
@@ -234,11 +150,6 @@ const additionalGoodData = async ({id, user_vk}) => {
   return result.rows && result.rows[0];
 };
 
-const status = () => {
-  log(`[status] done`, state);
-  return state;
-};
-
 const addByUrl = async (url) => {
 
   if (!url)
@@ -269,12 +180,8 @@ const getClippedUrl = (url) => {
 };
 
 module.exports = {
-  // parse,
-  start,
-  stop,
-  scan,
-  status,
   addByUrl,
   additionalGoodData,
-  getClippedUrl
+  getClippedUrl,
+  refresh
 };
