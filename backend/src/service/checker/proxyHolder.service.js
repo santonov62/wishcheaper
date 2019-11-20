@@ -17,17 +17,12 @@ const parseProxydockerProxies = async () => {
     await page.goto(url, {waitUntil: 'domcontentloaded'});
     log(`done`);
   
-    // log(`waitForNavigation: `, '.proxylist_table');
-    // await page.waitFor('.proxylist_table tr td:first-child:not([colspan])', {visible: true});
-    // log(`done`);
-  
-    // await page.waitFor('.proxylist_table tbody tr', {visible: true});
-    log(`waitFor: `, '.proxylist_table tbody tr');
-    const selector = '.proxylist_table tbody tr';
-    await page.waitFor(selector => document.querySelectorAll(selector).length > 0, {}, selector);
-    
+    const selector = '#proxylist_table tr';
+    log(`waitFor: `, selector);
+    await page.waitForFunction(selector => document.querySelectorAll(selector).length > 1, {}, selector);
+
     log(`eval`, '.proxylist_table tbody tr');
-    let proxies = await page.$$eval('.proxylist_table tbody tr', (trs) => {
+    let proxies = await page.$$eval(selector, (trs) => {
       const ips = [];
       trs.forEach(tr => {
         const ip = tr.querySelector('td:first-child:not([colspan])').textContent.trim();
