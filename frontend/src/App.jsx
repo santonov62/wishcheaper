@@ -13,6 +13,7 @@ import AppLoader from './component/AppLoader';
 import LoadingTracking from './component/LoadingTracking/LoadingTracking';
 import ErrorsTracking from './component/ErrorsTracking/ErrorsTracking';
 import VkCommunity from './component/VkCommunity';
+import SocketCommunity from './component/SocketCommunity';
 import LoginPage from './page/LoginPage';
 import MainPage from './page/MainPage';
 import ScannerPage from './page/ScannerPage';
@@ -54,11 +55,13 @@ const App = () => {
               ]}
             />
             <LoadingTracking/>
+            <VkCommunity/>
+            <SocketCommunity/>
             <AppLoader>
               <Router>
                 <Fragment>
                   <UserContextProvider>
-                    <Route path="/" component={VkCommunity}/>
+                    {/*<Route path="/" component={VkCommunity}/>*/}
                     <AuthRoute withoutRedirect path="/" component={Header}/>
                     <Route path="/" component={ErrorsTracking}/>
                     <Route exact path="/" component={MainPage}/>
