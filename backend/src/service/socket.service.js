@@ -8,9 +8,16 @@ const init = (server) => {
     log('Socket connected');
     socket.on('disconnect', () => {
       log('Socket disconnected');
-      sockets = sockets.filter(socket => !!socket.connected);
+      sockets = sockets.filter(socket => socket.connected);
     });
     sockets.push(socket);
+  });
+};
+
+const emitAll = (action, data) => {
+  log(`emitAll`, {action, data});
+  sockets.forEach(socket => {
+    socket.emit(action, data);
   });
 };
 
@@ -19,5 +26,6 @@ const log = (text, params = '') => {
 };
 
 module.exports = {
-  init
+  init,
+  emitAll
 };

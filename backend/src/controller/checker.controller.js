@@ -3,6 +3,7 @@ const authMiddleware = require('../middleware/auth.middleware');
 const checkerService = require('../service/checker/checker.service');
 const goodsService = require('../service/goods.service');
 const subscriptionService = require('../service/subscriptions.service');
+const socketService = require('../service/socket.service');
 const app = express();
 
 const start = async (req, res) => {
@@ -76,13 +77,15 @@ const add = async (req, res) => {
         });
     }
     
-    good = await checkerService.refresh(good);
-  
-    const additionalData = await checkerService.additionalGoodData({...good, user_vk: user.vk});
-    good = {
-      ...good,
-      ...additionalData
-    };
+    checkerService.refresh(good)
+      .then(async good => {
+        const additionalData = await checkerService.additionalGoodData({...good, user_vk: user.vk});
+        good = {
+          ...good,
+          ...additionalData
+        };
+        socketService.emitAll(`good`, good);
+      });
     
     res.json(good);
   } catch (e) {
