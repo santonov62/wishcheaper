@@ -82,6 +82,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
   if (isProductExpired) {
     await subscriptionService.remove({goodId: id});
     await goodsService.remove({id});
+    throw new Error(`Product expired and removed.`);
   }
 
   if (!url)
@@ -159,8 +160,7 @@ const addByUrl = async (url) => {
   if (!isShopSupported(url))
     throw new Error(`Shop doesn't supported.`);
   
-  const addedGood = await goodsService.addByUrl({url});
-  let good = await refresh(addedGood);
+  const good = await goodsService.addByUrl({url});
   log(`[addByUrl] done`, good);
   return good;
 };

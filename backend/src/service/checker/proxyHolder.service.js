@@ -3,10 +3,10 @@ const puppeteer = require('puppeteer');
 let lastUpdateTime = 0;
 let proxiesList = [];
 let parseProxiesPromise = null;
-const TIMEOUT_DELAY = 30000;
 
 const parseProxydockerProxies = async () => {
   log(`parseProxydockerProxies`);
+  let proxies = [];
   const browser = await puppeteer.launch({args: [`--no-sandbox`], headless: true});
   try {
     const page = await browser.newPage();
@@ -14,20 +14,15 @@ const parseProxydockerProxies = async () => {
     const url = `https://www.proxydocker.com/en/proxylist/search?type=http&anonymity=all&port=&country=Russia&city=&state=all&need=all`;
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'domcontentloaded'});
+    await page.goto(url, {waitUntil: 'networkidle0'});
     log(`done`);
   
-    // log(`waitForNavigation: `, '.proxylist_table');
-    // await page.waitFor('.proxylist_table tr td:first-child:not([colspan])', {visible: true});
-    // log(`done`);
-  
-    // await page.waitFor('.proxylist_table tbody tr', {visible: true});
-    log(`waitFor: `, '.proxylist_table tbody tr');
-    const selector = '.proxylist_table tbody tr';
-    await page.waitFor(selector => document.querySelectorAll(selector).length > 0, {}, selector);
-    
+    const selector = '#proxylist_table tr';
+    log(`waitFor: `, selector);
+    await page.waitForFunction(selector => document.querySelectorAll(selector).length > 1, {}, selector);
+
     log(`eval`, '.proxylist_table tbody tr');
-    let proxies = await page.$$eval('.proxylist_table tbody tr', (trs) => {
+    proxies = await page.$$eval(selector, (trs) => {
       const ips = [];
       trs.forEach(tr => {
         const ip = tr.querySelector('td:first-child:not([colspan])').textContent.trim();
@@ -41,6 +36,7 @@ const parseProxydockerProxies = async () => {
     });
     log(`done`);
 
+    
     proxies = [...new Set([...proxiesList, ...proxies])];
     log(`proxies`, proxies);
     lastUpdateTime = Date.now();
@@ -52,11 +48,14 @@ const parseProxydockerProxies = async () => {
   }
 };
 const updateProxies = async () => {
-  if (!parseProxiesPromise) {
-    parseProxiesPromise = parseProxydockerProxies();
+  try {
+    if (!parseProxiesPromise) {
+      parseProxiesPromise = parseProxydockerProxies();
+    }
+    proxiesList = await parseProxiesPromise;
+  } finally {
+    parseProxiesPromise = null;
   }
-  proxiesList = await parseProxiesPromise;
-  parseProxiesPromise = null;
 };
 const pullProxy = async () => {
   if (isProxiesNeedUpdate()) {
@@ -75,9 +74,6 @@ const unshiftProxy = (proxy) => {
   log(`unshiftProxy`, proxy)
 };
 const isProxiesNeedUpdate = () => {
-  if (proxiesList > 1000)
-    return;
-
   const isExpired = Date.now() - lastUpdateTime > 60000 * 10;
   const isPoor = proxiesList.length < 10;
   return isExpired || isPoor;
