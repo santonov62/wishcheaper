@@ -10,10 +10,11 @@ import io from 'socket.io-client';
 moment.updateLocale('ru', ru);
 console.log(moment.locale());
 
-// let host = window.location.origin.replace(/^http/, 'ws');
-// if (!!process.env.REACT_APP_SOCKET_PORT)
-//   host = host.replace(/:3000/, `:${process.env.REACT_APP_SOCKET_PORT}`);
-// window.ws = io(host);
+let host = window.location.origin.replace(/^http/, 'ws');
+if (!!process.env.REACT_APP_DEV_SOCKET_PORT)
+  host = host.replace(/:3000/, `:${process.env.REACT_APP_DEV_SOCKET_PORT}`);
+
+window.ws = io(host);
 
 ReactDOM.render(
   <App />,
