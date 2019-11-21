@@ -13,7 +13,7 @@ class SocketCommunity extends React.Component {
     }
     const ws = io(host);
     ws.on('good', good => {
-      console.log('SocketCommunity -> good: ', good);
+      console.log('[SocketCommunity] -> good: ', good);
 
       this.props.dispatch({
         type: Actions.GOODS_SAVED,

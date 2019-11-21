@@ -45,7 +45,6 @@ const scan = async () => {
   shops = await getAllShops();
   
   const goods = await goodsService.expired(shops);
-  // const goods = await goodsService.search({id: 17});
   if (goods.length > 0) {
     push(goods);
     if (!state.isParsing) {
