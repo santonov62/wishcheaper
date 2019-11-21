@@ -166,6 +166,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
   if (isProductExpired) {
     await subscriptionService.remove({goodId: id});
     await goodsService.remove({id});
+    throw new Error(`Product expired and removed.`);
   }
 
   if (!url)

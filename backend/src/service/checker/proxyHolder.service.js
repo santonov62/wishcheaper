@@ -37,25 +37,26 @@ const parseProxydockerProxies = async () => {
     });
     log(`done`);
 
-    // proxies = [...new Set([...proxiesList, ...proxies])];
-    // log(`proxies`, proxies);
+    
+    proxies = [...new Set([...proxiesList, ...proxies])];
+    log(`proxies`, proxies);
     lastUpdateTime = Date.now();
-    // return proxies;
+    return proxies;
   } catch (e) {
     throw new Error(e);
   } finally {
     browser.close();
   }
-  proxies = [...new Set([...proxiesList, ...proxies])];
-  log(`proxies`, proxies);
-  return proxies;
 };
 const updateProxies = async () => {
-  if (!parseProxiesPromise) {
-    parseProxiesPromise = parseProxydockerProxies();
+  try {
+    if (!parseProxiesPromise) {
+      parseProxiesPromise = parseProxydockerProxies();
+    }
+    proxiesList = await parseProxiesPromise;
+  } finally {
+    parseProxiesPromise = null;
   }
-  proxiesList = await parseProxiesPromise;
-  parseProxiesPromise = null;
 };
 const pullProxy = async () => {
   if (isProxiesNeedUpdate()) {
@@ -74,9 +75,6 @@ const unshiftProxy = (proxy) => {
   log(`unshiftProxy`, proxy)
 };
 const isProxiesNeedUpdate = () => {
-  if (proxiesList > 1000)
-    return;
-
   const isExpired = Date.now() - lastUpdateTime > 60000 * 10;
   const isPoor = proxiesList.length < 10;
   return isExpired || isPoor;
