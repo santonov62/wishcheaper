@@ -75,7 +75,7 @@ const unshiftProxy = (proxy) => {
 };
 const isProxiesNeedUpdate = () => {
   const isExpired = Date.now() - lastUpdateTime > 60000 * 10;
-  const isPoor = proxiesList.length < 10;
+  const isPoor = !proxiesList || proxiesList.length < 10;
   return isExpired || isPoor;
 };
 
