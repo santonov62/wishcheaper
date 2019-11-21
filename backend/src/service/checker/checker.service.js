@@ -249,8 +249,7 @@ const addByUrl = async (url) => {
   if (!isShopSupported(url))
     throw new Error(`Shop doesn't supported.`);
   
-  const addedGood = await goodsService.addByUrl({url});
-  let good = await refresh(addedGood);
+  const good = await goodsService.addByUrl({url});
   log(`[addByUrl] done`, good);
   return good;
 };
@@ -277,5 +276,6 @@ module.exports = {
   status,
   addByUrl,
   additionalGoodData,
-  getClippedUrl
+  getClippedUrl,
+  refresh
 };

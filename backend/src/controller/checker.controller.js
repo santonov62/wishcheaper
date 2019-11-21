@@ -62,16 +62,21 @@ const add = async (req, res) => {
     if (!good) {
       good = await checkerService.addByUrl(url);
     }
-    let subscriptions = await subscriptionService.search({
-      good_id: good.id,
-      user_vk: user.vk
-    });
-    if (subscriptions.length === 0)
-      await subscriptionService.add({
+    
+    if (good) {
+      let subscriptions = await subscriptionService.search({
         good_id: good.id,
-        user_id: user.id,
         user_vk: user.vk
       });
+      if (subscriptions.length === 0)
+        await subscriptionService.add({
+          good_id: good.id,
+          user_id: user.id,
+          user_vk: user.vk
+        });
+    }
+    
+    good = await checkerService.refresh(good);
   
     const additionalData = await checkerService.additionalGoodData({...good, user_vk: user.vk});
     good = {

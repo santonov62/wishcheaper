@@ -19,14 +19,12 @@ const goodsReducer = (state = initialState, action) => {
         value: state.value.concat(action.payload.goods)
       };
     case GoodsActions.GOODS_SAVED:
-      const goods = state.value.slice();
-      const savedGood = action.payload.goods;
-      const isExist = state.value.find(({id}) => savedGood.id === id);
-      if (!isExist)
-        goods.unshift(savedGood);
+      const savedGoods = [].concat(action.payload.goods);
+      let mergedGoods = state.value.filter(good => savedGoods.some(newGood => newGood.id !== good.id));
+      mergedGoods = savedGoods.concat(mergedGoods);
       return {
         isLoading: false,
-        value: goods
+        value: mergedGoods
       };
     case GoodsActions.GOODS_SAVING:
     // case GoodsActions.GOODS_UPDATING:

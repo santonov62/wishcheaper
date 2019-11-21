@@ -3,7 +3,6 @@ const puppeteer = require('puppeteer');
 let lastUpdateTime = 0;
 let proxiesList = [];
 let parseProxiesPromise = null;
-const TIMEOUT_DELAY = 30000;
 
 const parseProxydockerProxies = async () => {
   log(`parseProxydockerProxies`);
@@ -15,7 +14,7 @@ const parseProxydockerProxies = async () => {
     const url = `https://www.proxydocker.com/en/proxylist/search?type=http&anonymity=all&port=&country=Russia&city=&state=all&need=all`;
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'domcontentloaded'});
+    await page.goto(url, {waitUntil: 'networkidle0'});
     log(`done`);
   
     const selector = '#proxylist_table tr';

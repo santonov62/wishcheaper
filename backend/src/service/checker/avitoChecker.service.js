@@ -53,7 +53,7 @@ const parse = async (url, attempts = 0) => {
     log(`goto: `, url);
     try {
       await page.emulate(iPhone);
-      await page.goto(url, {waitUntil: 'domcontentloaded', timeout: 15000});
+      await page.goto(url, {waitUntil: 'domcontentloaded'});
     } catch (e) {
       proxy = null;
       browser.close();
