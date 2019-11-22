@@ -47,10 +47,50 @@ const parseProxydockerProxies = async () => {
     browser.close();
   }
 };
+
+const parseSpysone = async () => {
+  log(`parseSpysone`);
+  let proxies = [];
+  const browser = await puppeteer.launch({args: [`--no-sandbox`], headless: false});
+  try {
+    const page = await browser.newPage();
+    const url = `http://spys.one/free-proxy-list/RU/`;
+
+    log(`goto: `, url);
+    await page.goto(url, {waitUntil: 'networkidle0'});
+    log(`done`);
+
+    log(`.spy1xx[onmouseover], .spy1x[onmouseover]`);
+    proxies = await page.$$eval(`.spy1xx[onmouseover], .spy1x[onmouseover]`, trs => {
+      return trs.map(tr => {
+        const ip = tr.querySelector(`tr>td:nth-child(1)`).innerText;
+        const ping = tr.querySelector(`tr>td:nth-child(6)`).innerText;
+        return {
+          ip,
+          ping
+        }
+      });
+    });
+    log(`done `);
+
+    log(`done`);
+    proxies = [...new Set([...proxiesList, ...proxies])];
+    log(`proxies`, proxies);
+    lastUpdateTime = Date.now();
+    return proxies;
+  } catch (e) {
+    log(`Error `, e.message);
+    throw new Error(e);
+  } finally {
+    browser.close();
+  }
+};
+
 const updateProxies = async () => {
   try {
     if (!parseProxiesPromise) {
-      parseProxiesPromise = parseProxydockerProxies();
+      // parseProxiesPromise = parseProxydockerProxies();
+      parseProxiesPromise = parseSpysone();
     }
     proxiesList = await parseProxiesPromise;
   } finally {
