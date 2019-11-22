@@ -27,25 +27,16 @@ const init = async () => {
 
 init();
 
-let proxy;
-
 const parse = async (url, attempts = 0) => {
   attempts++;
   if (!url)
     throw new Error(`Url required.`);
 
-  let launchParams = { args: [ `--no-sandbox` ] };
-  if (!proxy || !proxy.ip) {
-    try {
-      proxy = await proxyHolderService.pullProxy();
-      launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
-    } catch (e) { }
+  let launchParams = {args: [`--no-sandbox`]};
+  const proxy = await proxyHolderService.pullProxy();
+  if (!!proxy && !!proxy.ip) {
+    launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
   }
-
-  // let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
-
-  // const proxy = await proxyHolderService.pullProxy();
-  // let launchParams = { args: [ `--no-sandbox` ] };
 
   if (isDebugMode)
     launchParams = { ...launchParams, headless: false };
@@ -101,8 +92,9 @@ const parse = async (url, attempts = 0) => {
     };
     
     log(`[parse] done`, parsedData);
-    if (!!title)
+    if (!!title) {
       proxyHolderService.unshiftProxy(proxy);
+    }
 
     return parsedData;
 
