@@ -51,7 +51,7 @@ const parseProxydockerProxies = async () => {
 const parseSpysone = async () => {
   log(`parseSpysone`);
   let proxies = [];
-  const browser = await puppeteer.launch({args: [`--no-sandbox`], headless: false});
+  const browser = await puppeteer.launch({args: [`--no-sandbox`], headless: true});
   try {
     const page = await browser.newPage();
     const url = `http://spys.one/free-proxy-list/RU/`;

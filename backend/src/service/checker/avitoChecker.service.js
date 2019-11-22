@@ -12,6 +12,7 @@ const log = (text, params = '') => {
   console.log(`[avitoChecker.service] -> ${text}`, params);
 };
 
+
 const init = async () => {
   const shop = await shopService.getShopByUrl(SHOP_NAME);
   if (!shop) {
