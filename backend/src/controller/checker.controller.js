@@ -62,7 +62,6 @@ const add = async (req, res) => {
     let good = (await goodsService.search({url}))[0];
     if (!good) {
       good = await checkerService.addByUrl(url);
-      good.isNew = 1;
     }
     
     if (good) {
@@ -77,7 +76,8 @@ const add = async (req, res) => {
           user_vk: user.vk
         });
     }
-    
+
+    good.isRefreshing = 1;
     checkerService.refresh(good)
       .then(async good => {
         const additionalData = await checkerService.additionalGoodData({...good, user_vk: user.vk});

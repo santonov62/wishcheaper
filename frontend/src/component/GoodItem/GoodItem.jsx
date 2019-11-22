@@ -13,7 +13,7 @@ const isGoodValid = ({title, price, url}) => {
 
 const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_name,
                            updated_at, created_at, inactive_at, prev_price, subscription_id,
-                           price_discount, percent_discount, autobuy_price, min_price, removeGood, currency, isNew}) => {
+                           price_discount, percent_discount, autobuy_price, min_price, removeGood, currency, isRefreshing}) => {
   
   const invalidGoodProps = {id, url, updated_at, created_at, inactive_at};
   // const goodMenuProps = {direction: 'left', good_id: id, subscription_id};
@@ -30,7 +30,7 @@ const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_nam
         if (isAccepted)
           removeGood(id);
       }}/>
-      {isNew &&
+      {!!isRefreshing &&
       <Dimmer active inverted style={{borderRadius: '15px', backgroundColor: 'transparent'}}>
         <Loader>Loading</Loader>
       </Dimmer>
