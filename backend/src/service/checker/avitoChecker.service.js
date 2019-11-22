@@ -101,12 +101,16 @@ const parse = async (url, attempts = 0) => {
     };
     
     log(`[parse] done`, parsedData);
-    if (!!title)
+    if (!!title) {
       proxyHolderService.unshiftProxy(proxy);
+    } else {
+      throw new Error(`Proxy in black list`)
+    }
 
     return parsedData;
 
   } catch (e) {
+    proxy = null;
     throw new Error(e);
   } finally {
     await browser.close();
