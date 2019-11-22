@@ -65,6 +65,17 @@ const pullProxy = async () => {
   log(`pullProxy`, proxy);
   return proxy;
 };
+
+const populateProxies = async () => {
+  try {
+    const minProxiesCount = 10;
+    if (isProxiesNeedUpdate(minProxiesCount)) {
+      await updateProxies();
+    }
+  } catch (e) {
+    log(`Error -> [populateProxies] `, e.message);
+  }
+};
 const pushProxy = (proxy) => {
   proxiesList.push(proxy);
   log(`pushProxy`, proxy)
@@ -73,9 +84,9 @@ const unshiftProxy = (proxy) => {
   proxiesList.unshift(proxy);
   log(`unshiftProxy`, proxy)
 };
-const isProxiesNeedUpdate = () => {
+const isProxiesNeedUpdate = (minProxiesCount = 1) => {
   const isExpired = Date.now() - lastUpdateTime > 60000 * 10;
-  const isPoor = !proxiesList || proxiesList.length === 0;
+  const isPoor = !proxiesList || proxiesList.length < minProxiesCount;
   return isExpired || isPoor;
 };
 
@@ -86,5 +97,6 @@ const log = (text, params = '') => {
 module.exports = {
   pushProxy,
   unshiftProxy,
-  pullProxy
+  pullProxy,
+  populateProxies
 };

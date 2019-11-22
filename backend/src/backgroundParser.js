@@ -1,6 +1,7 @@
 const goodsService = require('./service/goods.service');
 const checkerService = require('./service/checker/checker.service');
 const shopsService = require('./service/shops.service');
+const proxyHolderService = require('./service/checker/proxyHolder.service');
 
 let processGoods = [];
 let interval;
@@ -42,6 +43,8 @@ const backgroundProcess = async () => {
 
 
 const scan = async () => {
+  
+  proxyHolderService.populateProxies();
   shops = await getAllShops();
   
   const goods = await goodsService.expired(shops);
