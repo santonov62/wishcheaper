@@ -9,7 +9,7 @@ class SocketCommunity extends React.Component {
   componentDidMount() {
     let host = window.location.origin.replace(/^http/, 'ws');
     if (!!process.env.REACT_APP_BACKEND_PORT) {
-      host = host.replace(`:${process.env.PORT}`, `:${process.env.REACT_APP_BACKEND_PORT}`);
+      host = host.replace(`:${process.env.REACT_APP_PORT}`, `:${process.env.REACT_APP_BACKEND_PORT}`);
     }
     const ws = io(host);
     ws.on('good', good => {
