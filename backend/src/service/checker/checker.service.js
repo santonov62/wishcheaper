@@ -78,7 +78,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
   if (!id)
     throw new Error(`Good id required.`);
 
-  let isProductExpired = 40 < moment.duration(moment().diff(new Date(updated_at))).asDays();
+  let isProductExpired = 20 < moment.duration(moment().diff(new Date(updated_at))).asDays();
   if (isProductExpired) {
     await subscriptionService.remove({goodId: id});
     await goodsService.remove({id});
