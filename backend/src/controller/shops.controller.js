@@ -36,7 +36,7 @@ const myShops = async(req, res) => {
     console.groupEnd();
   }
 };
-app.get('/myShops', myShops);
+app.get('/myShops', authMiddleware.authRequired, myShops);
 
 const update = async(req, res) => {
   console.group(`[shops.controller]: [getAll]`);
@@ -50,7 +50,7 @@ const update = async(req, res) => {
     console.groupEnd();
   }
 };
-app.put('/', update);
+app.put('/', authMiddleware.adminAuthRequired, update);
 
 // app.put('/', authMiddleware.adminAuthRequired, imageUpload.single('logo'), async(req, res) => {
 //   try {

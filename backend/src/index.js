@@ -21,7 +21,7 @@ app.use('/*', authMiddleware.checkAuth);
 app.use('/checker', checkerController);
 app.use('/goods', goodsController);
 app.use('/subscriptions', authMiddleware.authRequired, subscriptionsController);
-app.use('/shops', authMiddleware.adminAuthRequired, shopsController);
+app.use('/shops', shopsController);
 app.use('/auth', authContoller);
 // app.use('/pay', payContoller);
 

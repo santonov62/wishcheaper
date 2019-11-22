@@ -4,7 +4,7 @@ document.querySelector('body').innerHTML += `
     font-family: "Font Awesome 5 Brands";
     font-style: normal;
     font-weight: 400;
-    src: url(fa-brands-400.woff2) format("woff2")
+    src: url(style/fa-brands-400.woff2) format("woff2")
 }
 #spinner {
     align-self: center;
@@ -114,17 +114,25 @@ document.querySelector('body').innerHTML += `
 </style>
 
 <div class="modal">
-    <div id="content">
-    <div id="buttons">
-        <button id="vk" type="button" class="btn btn-vk waves-effect waves-light hidden">
-            <i class="fab fa-vk pr-1"></i> Авторизоваться
-        </button>
-        <button id="add" type="button" class="btn btn-add waves-effect waves-light hidden">
-            <i class="fab pr-1"></i> Сохранить
-        </button>
-    </div>
-    <div id="message" class="hidden"></div>
-</div>
-<div id="spinner" class="lds-ripple"><div></div><div></div></div>
+  <div id="content">
+      <div id="buttons" class="hidden">
+          <button id="vk" type="button" class="btn btn-vk waves-effect waves-light">
+              <i class="fab fa-vk pr-1"></i> Авторизоваться
+          </button>
+      </div>
+      <div id="message" class="hidden"></div>
+      <div id="success" class="hidden">
+          Добавлено!
+          <br />
+          <button id="open" >Открыть</button>
+      </div>
+      <div id="error" class="hidden">
+          <div>Не получилось добавить :(</div>
+      </div>
+  </div>
+  <div id="spinner" class="lds-ring">
+      <div></div><div></div><div></div><div></div>
+      Добавляем...
+  </div>
 </div>
 `;

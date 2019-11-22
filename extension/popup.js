@@ -1,8 +1,15 @@
-const DOMAIN = `https://wishcheaper.herokuapp.com`;
-// const DOMAIN = `http://localhost:3000`;
+// const DOMAIN = `https://wishcheaper.herokuapp.com`;
+const DOMAIN = `http://localhost:3000`;
 
-window.onload = () => {
+let shops = [];
+const shopsPromise = fetch(`${DOMAIN}/shops`, {
+      method: 'GET'
+    }).then(res => res.json());
 
+window.onload = async () => {
+  
+  shops = await shopsPromise;
+  
   const vkButton = document.getElementById('vk');
   vkButton.onclick = vkAuth;
 
@@ -11,6 +18,11 @@ window.onload = () => {
 
   const openButton = document.getElementById('open');
   openButton.onclick = openProduct;
+  
+  const supportedShops = document.getElementById('supportedShops');
+  supportedShops.onclick = () => {
+    alert(shops.map(shop => `${shop.name} - ${shop.title}`).join('\n'))
+  };
 
   chrome.storage.local.get(['authData'], ({authData}) => {
     if (!!authData) {
@@ -40,9 +52,19 @@ function addCurrent() {
     currentWindow: true
   }, (tabs) => {
     const tab = tabs[0];
+    const url = tab.url;
     console.log(tab)
+    if (isShopSupported(url)) {
       addByUrl(tab.url)
+    } else {
+      showShopsSupported()
+    }
   })
+}
+
+function isShopSupported(url) {
+  // const shops = await shopsPromise;
+  return shops.some(shop => url.indexOf(shop.name) !== -1);
 }
 
 function vkAuth() {
@@ -148,6 +170,10 @@ const showSuccess = () => {
 };
 const showError = () => {
   const el = document.getElementById(`error`);
+  el.classList.remove(`hidden`);
+};
+const showShopsSupported = () => {
+  const el = document.getElementById(`shopsSupported`);
   el.classList.remove(`hidden`);
 };
 
