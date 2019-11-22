@@ -51,7 +51,6 @@ const parse = async (url, attempts = 0) => {
       await page.emulate(iPhone);
       await page.goto(url, {waitUntil: 'domcontentloaded'});
     } catch (e) {
-      proxy = null;
       browser.close();
       if (attempts < 5)
         return await parse(url, attempts);
@@ -64,24 +63,28 @@ const parse = async (url, attempts = 0) => {
       // title = await page.$eval('.title-info-title-text', node => node.innerText);
       title = await page.$eval('[data-marker="item-description/title"]', node => node.innerText);
     } catch (e) { }
+    log(`done`);
 
-      log(`$eval price`);
+    log(`$eval price`);
     try {
       // currentPrice = await page.$eval('.js-item-price', node => parseInt(node.getAttribute('content')));
       currentPrice = await page.$eval('[data-marker="item-description/price"]', node => parseInt(node.innerText.replace(/[^0-9]/g, '')));
     } catch (e) { }
+    log(`done`);
 
     log(`$eval oldPrice`);
     try {
       // oldPrice = await page.$eval('.item-price-old', node => parseInt(node.innerText.replace(/\s+/g, '')));
       oldPrice = await page.$eval('[data-marker="item-description/old-price"]', node => parseInt(node.innerText.replace(/[^0-9]/g, '')));
     } catch (e) { }
+    log(`done`);
 
     log(`logo`);
     try {
       // logo = await page.$eval('.gallery-img-frame img', node => node.getAttribute('src').replace(/\/\//, 'https://'));
       logo = await page.$eval('.lazy-load-image-background img', node => node.src);
     } catch (e) { }
+    log(`done`);
 
     const parsedData = {
         url,
