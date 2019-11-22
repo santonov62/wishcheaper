@@ -33,11 +33,15 @@ const parse = async (url, attempts = 0) => {
   if (!url)
     throw new Error(`Url required.`);
 
-  if (!proxy) {
+  let launchParams = { args: [ `--no-sandbox` ] };
+  if (!proxy || !proxy.ip) {
+    try {
       proxy = await proxyHolderService.pullProxy();
+      launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
+    } catch (e) { }
   }
 
-  let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
+  // let launchParams = { args: [ `--proxy-server=${proxy.ip}`, `--no-sandbox` ] };
 
   // const proxy = await proxyHolderService.pullProxy();
   // let launchParams = { args: [ `--no-sandbox` ] };
