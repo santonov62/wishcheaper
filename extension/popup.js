@@ -1,5 +1,5 @@
-// const DOMAIN = `https://wishcheaper.herokuapp.com`;
-const DOMAIN = `http://localhost:3000`;
+const DOMAIN = `https://wishcheaper.herokuapp.com`;
+// const DOMAIN = `http://localhost:3000`;
 
 let shops = [];
 const shopsPromise = fetch(`${DOMAIN}/shops`, {
@@ -21,7 +21,7 @@ window.onload = async () => {
   
   const supportedShops = document.getElementById('supportedShops');
   supportedShops.onclick = () => {
-    alert(shops.map(shop => `${shop.name} - ${shop.title}`).join('\n'))
+    alert(shops.map(shop => `${shop.title} - ${shop.name}`).join('\n'))
   };
 
   chrome.storage.local.get(['authData'], ({authData}) => {
