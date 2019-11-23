@@ -49,7 +49,7 @@ const parseProxydockerProxies = async () => {
 };
 
 const parseSpysone = async () => {
-  log(`parseSpysone`);
+  log(`[parseSpysone]`);
   let proxies = [];
   const browser = await puppeteer.launch({args: [`--no-sandbox`], headless: true});
   try {
@@ -71,19 +71,17 @@ const parseSpysone = async () => {
         }
       });
     });
-    log(`done `);
 
-    log(`done`);
-    proxies = [...new Set([...proxiesList, ...proxies])];
-    log(`proxies`, proxies);
     lastUpdateTime = Date.now();
-    return proxies;
+
   } catch (e) {
     log(`Error `, e.message);
-    throw new Error(e);
+    // throw new Error(e);
   } finally {
     browser.close();
   }
+  log(`[parseSpysone]`, proxies);
+  return proxies;
 };
 
 const updateProxies = async () => {
@@ -92,11 +90,50 @@ const updateProxies = async () => {
       // parseProxiesPromise = parseProxydockerProxies();
       parseProxiesPromise = parseSpysone();
     }
-    proxiesList = await parseProxiesPromise;
+    const proxies = await parseProxiesPromise;
+    proxiesList = proxies
+      .filter(proxy => !proxiesList.some(({ip}) => ip === proxy.ip))
+      .concat(proxiesList);
   } finally {
     parseProxiesPromise = null;
   }
 };
+const isProxyValid = async (proxy) => {
+  log(`[isProxyValid]`, proxy);
+  if (!proxy)
+    return false;
+
+  const browser = await puppeteer.launch({args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]});
+  try {
+    const page = await browser.newPage();
+    await page.goto(`https://www.avito.ru`, {timeout: 15000});
+    log(`[isProxyValid] done`, proxy);
+    return true;
+  } catch (e) {
+    log(`[isProxyValid] Error: ${e.message}`, proxy);
+  } finally {
+    browser.close();
+  }
+  return false;
+};
+const filterInvalidProxies = async () => {
+  log(`[filterInvalidProxies]`);
+  const proxiesCount = proxiesList.length;
+  for (let i = 0; i <= proxiesCount; i++) {
+    const proxy = proxiesList.pop();
+    if (await isProxyValid(proxy)) {
+      proxiesList.unshift(proxy);
+    }
+  }
+  log(`[filterInvalidProxies] done`, proxiesList);
+};
+const keepProxiesAlive = async () => {
+  if (isProxiesNeedUpdate(10)) {
+    await updateProxies();
+  }
+  await filterInvalidProxies();
+};
+
 const pullProxy = async () => {
   if (isProxiesNeedUpdate()) {
     await updateProxies();
@@ -113,9 +150,9 @@ const unshiftProxy = (proxy) => {
   proxiesList.unshift(proxy);
   log(`unshiftProxy`, proxy)
 };
-const isProxiesNeedUpdate = () => {
+const isProxiesNeedUpdate = (minProxiesCount = 1) => {
   const isExpired = Date.now() - lastUpdateTime > 60000 * 10;
-  const isPoor = !proxiesList || proxiesList.length < 10;
+  const isPoor = !proxiesList || proxiesList.length < minProxiesCount;
   return isExpired || isPoor;
 };
 
@@ -126,5 +163,6 @@ const log = (text, params = '') => {
 module.exports = {
   pushProxy,
   unshiftProxy,
-  pullProxy
+  pullProxy,
+  keepProxiesAlive
 };

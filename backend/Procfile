@@ -1,2 +1,3 @@
 web: node src/index.js
 worker: node src/backgroundParser.js
+worker: node src/backgroundProxyChecker.js

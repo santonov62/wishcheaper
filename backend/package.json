@@ -27,6 +27,7 @@
   },
   "scripts": {
     "background-parser-start": "node_modules/.bin/nf run node src/backgroundParser.js",
+    "background-proxy-checker-start": "node_modules/.bin/nf run node src/backgroundProxyChecker.js",
     "start": "node_modules/.bin/nf start",
     "dev": "node_modules/.bin/nf start --procfile Procfile_dev",
     "test": "node_modules/.bin/mocha && exit 1",
