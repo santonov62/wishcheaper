@@ -58,6 +58,7 @@ const scan = async () => {
 }
 
 const start = async () => {
+  log(`[start]`);
   const shops = await getAllShops(true);
   const intervalMin = Math.min.apply(null, shops.map(shop => shop.scan_interval)) || 720;
   scan();
