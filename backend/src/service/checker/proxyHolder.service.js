@@ -90,10 +90,9 @@ const updateProxies = async () => {
       // parseProxiesPromise = parseProxydockerProxies();
       parseProxiesPromise = parseSpysone();
     }
-    const proxies = await parseProxiesPromise;
-    proxiesList = proxies
-      .filter(proxy => !proxiesList.some(({ip}) => ip === proxy.ip))
-      .concat(proxiesList);
+    let proxies = await parseProxiesPromise;
+    proxies = proxies.filter(proxy => !proxiesList.some(({ip}) => ip === proxy.ip));
+    proxiesList = proxiesList.concat(proxies);
   } finally {
     parseProxiesPromise = null;
   }
@@ -106,7 +105,7 @@ const isProxyValid = async (proxy) => {
   const browser = await puppeteer.launch({args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]});
   try {
     const page = await browser.newPage();
-    await page.goto(`https://www.avito.ru`, {timeout: 15000});
+    await page.goto(`https://www.google.ru`, {timeout: 15000});
     log(`[isProxyValid] done`, proxy);
     return true;
   } catch (e) {
@@ -151,7 +150,7 @@ const unshiftProxy = (proxy) => {
   log(`unshiftProxy`, proxy)
 };
 const isProxiesNeedUpdate = (minProxiesCount = 1) => {
-  const isExpired = Date.now() - lastUpdateTime > 60000 * 10;
+  const isExpired = Date.now() - lastUpdateTime > 60000 * 60 * 24;
   const isPoor = !proxiesList || proxiesList.length < minProxiesCount;
   return isExpired || isPoor;
 };
