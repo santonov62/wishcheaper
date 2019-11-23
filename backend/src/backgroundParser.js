@@ -42,8 +42,8 @@ const parse = async () => {
 
 const parseExpiredGoods = async () => {
   shops = await getAllShops();
-  
   const goods = await goodsService.expired(shops);
+  log(`[parseExpiredGoods] expiredGoods`, goods.length);
   if (goods.length > 0) {
     push(goods);
     if (!state.isParsing) {
