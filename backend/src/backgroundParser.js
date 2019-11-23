@@ -26,19 +26,20 @@ const backgroundProcess = async () => {
     state.isParsing = true;
     while (processGoods.length > 0) {
       const good = processGoods.shift();
-      const refreshedGood = await checkerService.refresh(good);
-      result.push(refreshedGood);
+      try {
+        const refreshedGood = await checkerService.refresh(good);
+        result.push(refreshedGood);
+      } catch (e) {
+        log(`[backgroundProcess] error`, e.message);
+      }
     }
+  } finally {
+    state.isParsing = false;
     state.lastParseTime = Date.now();
-    state.isParsing = false;
-    log(`[backgroundProcess] done parsed: `, result.length);
-    return result;
-  } catch (e) {
-    state.isParsing = false;
-    log(`[backgroundProcess] error`, e.message);
-    return result;
   }
-}
+  log(`[backgroundProcess] done parsed: `, result.length);
+  return result;
+};
 
 
 const scan = async () => {

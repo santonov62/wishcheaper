@@ -6,7 +6,7 @@ const SHOP_NAME = 'tmall.aliexpress.com';
 const SHOP_TITLE = 'Tmall Aliexpress';
 
 const log = (text, params = '') => {
-  console.log(`[pandaoChecker.service] -> ${text}`, params);
+  console.log(`[tmallAliexpressChecker.service] -> ${text}`, params);
 };
 
 const init = async () => {
