@@ -127,7 +127,7 @@ const filterInvalidProxies = async () => {
   log(`[filterInvalidProxies] done`, proxiesList);
 };
 const keepProxiesAlive = async () => {
-  if (isProxiesNeedUpdate(10)) {
+  if (isProxiesNeedUpdate(5)) {
     await updateProxies();
   }
   await filterInvalidProxies();
