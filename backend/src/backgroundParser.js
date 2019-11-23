@@ -21,24 +21,24 @@ const getAllShops = async (force) => {
 };
 
 const backgroundProcess = async () => {
-  const result = [];
   try {
     state.isParsing = true;
+    const result = [];
     while (processGoods.length > 0) {
       const good = processGoods.shift();
-      try {
-        const refreshedGood = await checkerService.refresh(good);
+      const refreshedGood = await checkerService.refresh(good);
+      if (!!refreshedGood)
         result.push(refreshedGood);
-      } catch (e) {
-        log(`[backgroundProcess] error`, e.message);
-      }
     }
+    log(`[backgroundProcess] done parsed: `, result.length);
+  } catch (e) {
+      log(`[backgroundProcess] error`, e.message);
   } finally {
     state.isParsing = false;
     state.lastParseTime = Date.now();
   }
-  log(`[backgroundProcess] done parsed: `, result.length);
-  return result;
+  // log(`[backgroundProcess] done parsed: `, result.length);
+  // return result;
 };
 
 
