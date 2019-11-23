@@ -129,6 +129,9 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
     }
     log(`[refresh] done`, good);
   } catch (e) {
+    if (!!id){
+      good = await goodsService.inactive({id});
+    }
     log(`[refresh] ERROR`, e.message);
   } finally {
     console.groupEnd();

@@ -47,14 +47,14 @@ const parse = async (url, attempts = 0) => {
     const page = await browser.newPage();
 
     log(`goto: `, url);
-    // try {
+    try {
       await page.emulate(iPhone);
       await page.goto(url, {waitUntil: 'domcontentloaded'});
-    // } catch (e) {
-    //   browser.close();
-    //   if (attempts < 5)
-    //     return await parse(url, attempts);
-    // }
+    } catch (e) {
+      browser.close();
+      if (attempts < 5)
+        return await parse(url, attempts);
+    }
 
     let title, currentPrice, logo, oldPrice;
 
@@ -102,11 +102,7 @@ const parse = async (url, attempts = 0) => {
     return parsedData;
 
   } catch (e) {
-    if (attempts < 5) {
-      return await parse(url, attempts);
-    } else {
-      throw new Error(e);
-    }
+    throw new Error(e);
   } finally {
     await browser.close();
   }

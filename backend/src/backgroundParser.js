@@ -30,9 +30,9 @@ const parse = async () => {
       if (!!refreshedGood)
         result.push(refreshedGood);
     }
-    log(`[backgroundProcess] done parsed: `, result.length);
+    log(`[parse] done parsed: `, result.length);
   } catch (e) {
-      log(`[backgroundProcess] error`, e.message);
+      log(`[parse] error`, e.message);
   } finally {
     state.isParsing = false;
     state.lastParseTime = Date.now();
@@ -42,8 +42,8 @@ const parse = async () => {
 
 const parseExpiredGoods = async () => {
   shops = await getAllShops();
-  
   const goods = await goodsService.expired(shops);
+  log(`[parseExpiredGoods] expiredGoods`, goods.length);
   if (goods.length > 0) {
     push(goods);
     if (!state.isParsing) {
