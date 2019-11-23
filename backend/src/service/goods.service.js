@@ -153,7 +153,8 @@ FROM
       ORDER_BY = ` ORDER BY g.inactive_at DESC, g.price - g.prev_price, percentDiscount DESC NULLS LAST, g.updated_at DESC`;
     }
   }
-  const SEARCH_QUERY = SELECT + WHERE + ORDER_BY;
+  const LIMIT = ` LIMIT 99`;
+  const SEARCH_QUERY = SELECT + WHERE + ORDER_BY + LIMIT;
   const result = await db.query(SEARCH_QUERY, statementForSqlParams);
   const goods = result && result.rows;
   return goods;
