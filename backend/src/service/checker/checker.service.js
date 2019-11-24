@@ -110,10 +110,10 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
       const isCorrectProduct = !!parsedGood.url && !!parsedGood.title && !!parsedGood.price && !parsedGood.inactive_at;
 
       if (isCorrectProduct) {
-        const priceShift = !!parsedGood.currency ? 1 : price * 0.005; // 0,5%
-        const priceWithShifting = price + priceShift;
-        const isDiscountedProductBecameAvailable = !!inactive_at && (priceWithShifting < old_price || priceWithShifting < prev_price);
-        const isProductBecameCheaper = newPrice + priceShift < price;
+        const priceShift = !!parsedGood.currency ? 1 : newPrice * 0.005; // 0,5%
+        const newPriceWithShifting = newPrice + priceShift;
+        const isDiscountedProductBecameAvailable = !!inactive_at && (newPriceWithShifting < old_price || newPriceWithShifting < prev_price);
+        const isProductBecameCheaper = newPriceWithShifting < price;
         if (isProductBecameCheaper || isDiscountedProductBecameAvailable) {
           const notifySubscriptions = await subscriptionService.requireNotification({...good});
           vkService.notifyGoodBecameCheaper({good: {...good, prev_price}, subscriptions: notifySubscriptions});

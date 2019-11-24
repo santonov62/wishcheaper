@@ -9,8 +9,8 @@ class ProxyHolder {
     this.parseProxiesPromise = null;
     this.minAliveProxies = 5;
     this.proxiesExpiredMinutes = 60 * 24;
-    this.updateProxiesMinutes = 15;
-    this.keepProxiesAlive();
+    this.updateProxiesMinutes = 30;
+    // this.keepProxiesAlive();
   }
 
   async parseProxydockerProxies () {
@@ -100,13 +100,13 @@ class ProxyHolder {
     }
   };
 
-  async _isProxyValid (proxy) {
+  async _isProxyValid (proxy, requestCheckUrl = 'https://www.google.ru') {
     if (!proxy)
       return false;
     this._log(`[isProxyValid] check`, proxy);
     const [address, port] = proxy.ip.split(':');
     let pc = new ProxyChecker(address, port, {
-      requestCheckUrl: 'https://avito.ru',
+      requestCheckUrl,
       checkResponse: function(proxyHost, proxyPort, requestUrl, rawResponse, realIp) {
         let response = this.constructor.parseHttpResponse(rawResponse);
         return !!response.body;
@@ -130,21 +130,22 @@ class ProxyHolder {
     }, this.updateProxiesMinutes * 60000);
   };
 
-  async _filterInvalidProxies () {
+  async _filterInvalidProxies (requestCheckUrl) {
     this._log(`[filterInvalidProxies]`);
     const proxiesCount = this.proxiesList.length;
     const promises = [];
     for (let i = 0; i <= proxiesCount; i++) {
       const proxy = this.proxiesList.pop();
-      promises.push(this._isProxyValid(proxy).then(isValid => isValid && this.proxiesList.unshift(proxy)));
+      promises.push(this._isProxyValid(proxy, requestCheckUrl).then(isValid => isValid && this.proxiesList.unshift(proxy)));
     }
     await Promise.all(promises);
     this._log(`[filterInvalidProxies] done`, this.proxiesList);
   };
 
-  async pullProxy () {
+  async pullProxy (requestCheckUrl) {
     if (this._isProxiesNeedUpdate()) {
       await this._updateProxies();
+      await this._filterInvalidProxies(requestCheckUrl);
     }
     const proxy = this.proxiesList.shift();
     this._log(`[pullProxy]`, proxy);

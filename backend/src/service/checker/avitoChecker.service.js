@@ -33,7 +33,7 @@ const parse = async (url, attempts = 0) => {
     throw new Error(`Url required.`);
 
   let launchParams = {args: [`--no-sandbox`]};
-  const proxy = await proxyHolder.pullProxy();
+  const proxy = await proxyHolder.pullProxy(url);
   if (!!proxy && !!proxy.ip) {
     launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
   }
