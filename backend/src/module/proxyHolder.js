@@ -9,7 +9,7 @@ class ProxyHolder {
     this.parseProxiesPromise = null;
     this.minAliveProxies = 5;
     this.proxiesExpiredMinutes = 60 * 24;
-    this.updateProxiesMinutes = 15;
+    this.updateProxiesMinutes = 30;
     this.keepProxiesAlive();
   }
 
