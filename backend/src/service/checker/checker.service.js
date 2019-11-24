@@ -112,11 +112,14 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
       if (isCorrectProduct) {
         const priceShift = !!parsedGood.currency ? 1 : newPrice * 0.005; // 0,5%
         const newPriceWithShifting = newPrice + priceShift;
-        const isDiscountedProductBecameAvailable = !!inactive_at && (newPriceWithShifting < old_price || newPriceWithShifting < prev_price);
+        const isDiscountedProductBecameAvailable = !!inactive_at && !parsedGood.inactive_at && (newPriceWithShifting < old_price || newPriceWithShifting < prev_price);
         const isProductBecameCheaper = newPriceWithShifting < price;
         if (isProductBecameCheaper || isDiscountedProductBecameAvailable) {
           const notifySubscriptions = await subscriptionService.requireNotification({...good});
-          vkService.notifyGoodBecameCheaper({good: {...good, prev_price}, subscriptions: notifySubscriptions});
+          vkService.notifyGoodBecameCheaper({
+            good: {...good, prev_price, isDiscountedProductBecameAvailable},
+            subscriptions: notifySubscriptions
+          });
           // const buySubscriptions = await subscriptionService.requireBuy({...good});
           // if (buySubscriptions && buySubscriptions.length > 0) {
           //   autobuyService.buy({good: {...good, prev_price}, subscriptions: buySubscriptions});
