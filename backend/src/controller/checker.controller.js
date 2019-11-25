@@ -80,12 +80,14 @@ const add = async (req, res) => {
     good.isRefreshing = 1;
     checkerService.refresh(good)
       .then(async good => {
-        const additionalData = await checkerService.additionalGoodData({...good, user_vk: user.vk});
-        good = {
-          ...good,
-          ...additionalData
-        };
-        socketService.emitAll(`good`, good);
+        if (!!good) {
+          const additionalData = await checkerService.additionalGoodData({...good, user_vk: user.vk});
+          good = {
+            ...good,
+            ...additionalData
+          };
+          socketService.emitAll(`good`, good);
+        }
       });
     
     res.json(good);
