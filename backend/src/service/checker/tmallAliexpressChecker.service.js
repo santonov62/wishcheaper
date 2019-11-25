@@ -6,7 +6,7 @@ const SHOP_NAME = 'tmall.aliexpress.com';
 const SHOP_TITLE = 'Tmall Aliexpress';
 
 const log = (text, params = '') => {
-  console.log(`[pandaoChecker.service] -> ${text}`, params);
+  console.log(`[tmallAliexpressChecker.service] -> ${text}`, params);
 };
 
 const init = async () => {
@@ -38,7 +38,7 @@ const parse = async (url) => {
     const page = await browser.newPage();
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'networkidle0', timeout: TIMEOUT_DELAY});
+    await page.goto(url, {waitUntil: 'domcontentloaded'});
     // log(`done`);
 
     let title, currentPrice, logo, oldPrice;

@@ -20,49 +20,49 @@ const getAllShops = async (force) => {
   return shops;
 };
 
-const backgroundProcess = async () => {
-  const result = [];
+const parse = async () => {
   try {
     state.isParsing = true;
+    const result = [];
     while (processGoods.length > 0) {
       const good = processGoods.shift();
       const refreshedGood = await checkerService.refresh(good);
-      result.push(refreshedGood);
+      if (!!refreshedGood)
+        result.push(refreshedGood);
     }
-    state.lastParseTime = Date.now();
-    state.isParsing = false;
-    log(`[backgroundProcess] done parsed: `, result.length);
-    return result;
+    log(`[parse] done parsed: `, result.length);
   } catch (e) {
+      log(`[parse] error`, e.message);
+  } finally {
     state.isParsing = false;
-    log(`[backgroundProcess] error`, e.message);
-    return result;
+    state.lastParseTime = Date.now();
   }
-}
+};
 
 
-const scan = async () => {
+const parseExpiredGoods = async () => {
   shops = await getAllShops();
-  
   const goods = await goodsService.expired(shops);
+  log(`[parseExpiredGoods] expiredGoods`, goods.length);
   if (goods.length > 0) {
     push(goods);
     if (!state.isParsing) {
-      backgroundProcess();
+      parse();
     }
-    log(`[scan] done`, state);
+    log(`[parseExpiredGoods] done`, state);
   } else {
-    log(`[scan] nothing to parse`, state);
+    log(`[parseExpiredGoods] nothing to parse`, state);
   }
   return state;
 }
 
 const start = async () => {
+  log(`[start]`);
   const shops = await getAllShops(true);
   const intervalMin = Math.min.apply(null, shops.map(shop => shop.scan_interval)) || 720;
-  scan();
+  parseExpiredGoods();
   interval = setInterval(() => {
-    scan();
+    parseExpiredGoods();
   }, intervalMin * 60000 / 2);
   state.isStarted = true;
   state.time = Date.now();
