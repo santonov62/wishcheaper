@@ -38,17 +38,24 @@ const parse = async (url) => {
     const page = await browser.newPage();
 
     log(`goto: `, url);
-    await page.goto('https://beru.ru', {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
+    // await page.goto('https://beru.ru', {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     await page.goto(url, {waitUntil: 'networkidle0', timeout: TIMEOUT_DELAY});
     // log(`done`);
-
-    let inactive_at;
-    const payButton = await page.$('[data-zone-name="offer-cart"] .section button');
-    if (!payButton) {
+    //
+    // let inactive_at;
+    // const payButton = await page.$('[data-zone-name="offer-cart"] .section button');
+    // if (!payButton) {
+    //   inactive_at = new Date();
+    // }
+    
+    let title, currentPrice, logo, oldPrice, inactive_at;
+  
+    log(`inactive_at`);
+    const unavalibleEl = await page.$('[data-zone-name="skuAvailability"]>div>span');
+    if (!!unavalibleEl) {
       inactive_at = new Date();
     }
     
-    let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
       title = await page.$eval('.section > div > h1', node => node.innerText);
@@ -57,9 +64,7 @@ const parse = async (url) => {
     log(`price`);
     try {
       currentPrice = await page.$eval('[data-zone-name="offer-cart"] [data-auto="price"]', node => parseInt(node.innerText.replace(/\s/g, '')));
-    } catch (e) {
-      inactive_at = new Date();
-    }
+    } catch (e) { }
   
     log(`oldPrice`);
     try {
