@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const isVisible = false;
+const isVisible = true;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'beru.ru';
 const SHOP_TITLE = 'Беру';
