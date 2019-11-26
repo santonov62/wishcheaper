@@ -52,26 +52,29 @@ const sendVk = async ({message, usersVk}) => {
     });
 };
 
-const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersVk, prev_price, shop_id, min_price}) => {
-  const oldPriceText = !!old_price ? `${old_price}р ->` : ``;
+const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersVk, prev_price,
+                                         shop_id, min_price, currency, isDiscountedProductBecameAvailable}) => {
+  currency = currency || '₽';
+  const oldPriceText = !!old_price ? `${old_price} ${currency} ->` : ``;
   const priceDiff = old_price && old_price - price;
-  const priceDiffText = !!priceDiff ? `[-${priceDiff}р]` : ``;
+  const priceDiffText = !!priceDiff ? `[-${priceDiff} ${currency}]` : ``;
   const lastPriceDiff = prev_price - price;
-  const lastPriceDiffText = lastPriceDiff !== 0 ? `Снижение -${lastPriceDiff}р` : `Появился в наличии`;
+  // const lastPriceDiffText = lastPriceDiff !== 0 ? `Снижение -${lastPriceDiff}${currency}` : `Появился в наличии`;
+  const lastPriceDiffText = !isDiscountedProductBecameAvailable ? `Снижение -${lastPriceDiff}${currency}` : `Появился в наличии`;
   const percentDiscount = calculatePercentDiscount({old_price, price});
   const percentDiscountText = percentDiscount > 0 ? `[${percentDiscount}%]` : '';
   const shopName = await getShopName(shop_id);
   const importantText = price === min_price ? 'ϟϟϟ' : price <= min_price + price * 0.01 ? `!!!` : ``;
-  const minPriceText = !!min_price && `Мин ${min_price}р`;
-  const priceText = `Цена ${price}р`;
+  const minPriceText = !!min_price && `Мин ${min_price} ${currency}`;
+  const priceText = `Цена ${price} ${currency}`;
   const productUrl = `https://wishcheaper.herokuapp.com/my?id=${id}`;
   const message = `
   ${importantText} ${percentDiscountText} ${shopName}
-  ${title} за ${price}р
+  ${title} за ${price} ${currency}
   > ${lastPriceDiffText}
   > ${priceText}
   > ${minPriceText}
-  > ${oldPriceText} ${price}р ${priceDiffText}
+  > ${oldPriceText} ${price} ${currency} ${priceDiffText}
   Товар
   ${url}
   Подписка

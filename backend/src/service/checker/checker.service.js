@@ -74,62 +74,71 @@ const parse = async (url) => {
 };
 
 const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old_price, autobuy_price, min_price}) => {
-  // console.group(`[checker.service] -> [refresh] good_id: ${id}`);
-  if (!id)
-    throw new Error(`Good id required.`);
-
-  let isProductExpired = 20 < moment.duration(moment().diff(new Date(updated_at))).asDays();
-  if (isProductExpired) {
-    await subscriptionService.remove({goodId: id});
-    await goodsService.remove({id});
-    throw new Error(`Product expired and removed.`);
-  }
-
-  if (!url)
-    throw new Error(`Good url required.`);
-
-  const parsedGood = await parse(url);
-  
+  console.group(`[checker.service] -> [refresh] url: ${url}`);
   let good;
-  const isCorrectUrl = !!parsedGood.url && !!parsedGood.title;
-  if (isCorrectUrl) {
-    
-    const newPrice = parsedGood.price;
-    if (!prev_price || newPrice !== price)
-      prev_price = price;
-    
-    const minPrice = !min_price || newPrice < min_price ? newPrice : min_price;
-    
-    good = await goodsService.update({
-      ...parsedGood,
-      min_price: minPrice,
-      prev_price,
-      id
-    });
-    
-    const isCorrectProduct = !!parsedGood.url && !!parsedGood.title && !!parsedGood.price && !parsedGood.inactive_at;
+  try {
+    if (!id)
+      throw new Error(`Good id required.`);
 
-    if (isCorrectProduct) {
-      const priceShift = !!parsedGood.currency ? 1 : price * 0.005; // 0,5%
-      const priceWithShifting = price + priceShift;
-      const isDiscountedProductBecameAvailable = !!inactive_at && (priceWithShifting < old_price || priceWithShifting < prev_price);
-      const isProductBecameCheaper = newPrice + priceShift < price;
-      if (isProductBecameCheaper || isDiscountedProductBecameAvailable) {
-        const notifySubscriptions = await subscriptionService.requireNotification({...good});
-        vkService.notifyGoodBecameCheaper({good: {...good, prev_price}, subscriptions: notifySubscriptions});
-        // const buySubscriptions = await subscriptionService.requireBuy({...good});
-        // if (buySubscriptions && buySubscriptions.length > 0) {
-        //   autobuyService.buy({good: {...good, prev_price}, subscriptions: buySubscriptions});
-        // }
-      }
+    let isProductExpired = 20 < moment.duration(moment().diff(new Date(updated_at))).asDays();
+    if (isProductExpired) {
+      await subscriptionService.remove({goodId: id});
+      await goodsService.remove({id});
+      throw new Error(`Product expired and removed.`);
     }
 
-  } else {
-    good = await goodsService.inactive({ id });
-  }
+    if (!url)
+      throw new Error(`Good url required.`);
 
-  log(`[refresh] done`, good);
-  // console.groupEnd();
+    const parsedGood = await parse(url);
+
+    if (!!parsedGood.title) {
+
+      const newPrice = parsedGood.price;
+      if (!prev_price || newPrice !== price)
+        prev_price = price;
+
+      const minPrice = !min_price || newPrice < min_price ? newPrice : min_price;
+
+      good = await goodsService.update({
+        ...parsedGood,
+        min_price: minPrice,
+        prev_price,
+        id
+      });
+
+      const isCorrectProduct = !!parsedGood.url && !!parsedGood.title && !!parsedGood.price && !parsedGood.inactive_at;
+
+      if (isCorrectProduct) {
+        const priceShift = !!parsedGood.currency ? 1 : newPrice * 0.005; // 0,5%
+        const newPriceWithShifting = newPrice + priceShift;
+        const isDiscountedProductBecameAvailable = !!inactive_at && !parsedGood.inactive_at && (newPriceWithShifting < old_price || newPriceWithShifting < prev_price);
+        const isProductBecameCheaper = newPriceWithShifting < price;
+        if (isProductBecameCheaper || isDiscountedProductBecameAvailable) {
+          const notifySubscriptions = await subscriptionService.requireNotification({...good});
+          vkService.notifyGoodBecameCheaper({
+            good: {...good, prev_price, isDiscountedProductBecameAvailable},
+            subscriptions: notifySubscriptions
+          });
+          // const buySubscriptions = await subscriptionService.requireBuy({...good});
+          // if (buySubscriptions && buySubscriptions.length > 0) {
+          //   autobuyService.buy({good: {...good, prev_price}, subscriptions: buySubscriptions});
+          // }
+        }
+      }
+
+    } else {
+      good = await goodsService.inactive({id});
+    }
+    log(`[refresh] done`, good);
+  } catch (e) {
+  //   if (!!id){
+  //     good = await goodsService.inactive({id});
+  //   }
+    log(`[refresh] ERROR`, e.message);
+  } finally {
+    console.groupEnd();
+  }
   return good;
 };
 

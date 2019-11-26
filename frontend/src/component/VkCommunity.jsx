@@ -9,12 +9,12 @@ class VkCommunity extends React.Component {
     const { isApiInited } = this.props;
     const communityId = process.env.REACT_APP_VK_COMMUNITY_ID;
     if (isApiInited && !this.state.isWidgetInited) {
-      window.VK.Widgets.CommunityMessages("vk_community_messages", communityId, {tooltipButtonText: "Есть вопрос?"});
+      window.VK.Widgets.CommunityMessages("vk_community_messages", communityId, {expanded: "0", disableButtonTooltip: "1"});
       this.setState({isWidgetInited: true});
     }
     return (
         <Fragment>
-          <div id="vk_community_messages"></div>
+          <div id="vk_community_messages" />
         </Fragment>
     );
   }
