@@ -58,12 +58,13 @@ const parseExpiredGoods = async () => {
 
 const start = async () => {
   log(`[start]`);
-  const shops = await getAllShops(true);
-  const intervalMin = Math.min.apply(null, shops.map(shop => shop.scan_interval)) || 720;
+  // const shops = await getAllShops(true);
+  // const intervalMin = Math.min.apply(null, shops.map(shop => shop.scan_interval)) || 720;
   parseExpiredGoods();
   interval = setInterval(() => {
     parseExpiredGoods();
-  }, intervalMin * 60000 / 2);
+  // }, intervalMin * 60000 / 2);
+  }, 5 * 60000);
   state.isStarted = true;
   state.time = Date.now();
   log(`[start] done`, state);
