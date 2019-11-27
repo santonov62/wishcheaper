@@ -29,10 +29,10 @@ const parse = async (url, attempts = 0) => {
     throw new Error(`Url required.`);
   
   let launchParams = {args: [`--no-sandbox`]};
-  const proxy = await proxyHolder.pullProxy(url);
-  if (!!proxy && !!proxy.ip) {
-    launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
-  }
+  // const proxy = await proxyHolder.pullProxy(url);
+  // if (!!proxy && !!proxy.ip) {
+  //   launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
+  // }
   
   if (isVisible)
     launchParams = { ...launchParams, headless: false };
@@ -43,13 +43,13 @@ const parse = async (url, attempts = 0) => {
     const page = await browser.newPage();
   
     log(`goto: `, url);
-    try {
+    // try {
       await page.goto(url, {waitUntil: 'domcontentloaded'});
-    } catch (e) {
-      browser.close();
-      if (attempts < 5)
-        return await parse(url, attempts);
-    }
+    // } catch (e) {
+    //   browser.close();
+    //   if (attempts < 5)
+    //     return await parse(url, attempts);
+    // }
     
     // log(`done`);
     //
@@ -100,17 +100,16 @@ const parse = async (url, attempts = 0) => {
     log(`[parse] done`, parsedData);
   
     log(`[parse] done`, parsedData);
-    if (!!title) {
-      proxyHolder.unshiftProxy(proxy);
-    }
+    // if (!!title) {
+    //   proxyHolder.unshiftProxy(proxy);
+    // }
     
     return parsedData;
 
   } catch (e) {
     throw new Error(e);
   } finally {
-    // if (!isVisible)
-      await browser.close();
+    await browser.close();
   }
 };
 
