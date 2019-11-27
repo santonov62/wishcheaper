@@ -72,3 +72,25 @@ export const saveSubscriptions = ({id, price_discount, percent_discount, autobuy
     processError(e.message, dispatch);
   }
 };
+
+export const removeSubscription = (goodId) => async (dispatch, getState) => {
+  dispatch({type: Actions.SUBSCRIPTIONS_SAVING});
+  try {
+    const subscription = await fetch(`/subscriptions/unsubscribe`, {
+      method: 'DELETE',
+      body: JSON.stringify({goodId}),
+      headers: {
+        ...Constants.REQUEST_JSON_HEADERS,
+        ...authHeader(getState().user)
+      }
+    }).then(response => response.json());
+
+    dispatch({
+      type: Actions.SUBSCRIPTIONS_SAVED,
+      payload: {subscriptions: subscription}
+    });
+    return subscription;
+  } catch (e) {
+    processError(e.message, dispatch);
+  }
+};

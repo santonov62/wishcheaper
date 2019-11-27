@@ -1,10 +1,10 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET;
 const usersService = require('../service/users.service');
 const md5 = require('md5');
 const app = express();
 const VK_SECRET_KEY = process.env.VK_SECRET_KEY;
-const JWT_SECRET = process.env.JWT_SECRET;
 const fetch = require('node-fetch');
 
 if (!JWT_SECRET) {
@@ -96,7 +96,7 @@ const authByJwtToken = async (req, res) => {
       return res.status(401).json({message: 'Must pass token'});
     }
     // Check token that was passed by decoding token using secret
-    jwt.verify(token, process.env.JWT_SECRET, async (err, userData) => {
+    jwt.verify(token, JWT_SECRET, async (err, userData) => {
       if (err) throw err;
       //return user using the id from w/in JWTToken
       const {id} = userData;

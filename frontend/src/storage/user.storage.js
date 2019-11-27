@@ -3,6 +3,7 @@ import { AUTH_DATA } from '../constants'
 export const saveUser = (user) => {
   try {
     localStorage.setItem(AUTH_DATA, JSON.stringify(user));
+    return user;
   }
   catch (error) {
     console.log('saveUser', error);

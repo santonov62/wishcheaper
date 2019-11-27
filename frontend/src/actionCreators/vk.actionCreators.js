@@ -27,9 +27,8 @@ export const apiInit = () => dispatch => {
             type: Actions.API_INITED
         });
 
-        vk.Auth.getLoginStatus(function ({session}) {
+        vk.Auth.getLoginStatus(({session}) => {
             if (!session) {
-                // dispatch(signOut());
               clearUser();
               dispatch({type: UserActions.USER_SIGNED_OUT});
             } else {

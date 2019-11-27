@@ -1,6 +1,5 @@
 const fetch = require('node-fetch');
 const FormData = require('form-data');
-const subscriptionService = require('./subscriptions.service');
 const shopService = require('./shops.service');
 
 const apiVersion = process.env.VK_API_VERSION;
@@ -67,7 +66,8 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   const importantText = price === min_price ? 'ϟϟϟ' : price <= min_price + price * 0.01 ? `!!!` : ``;
   const minPriceText = !!min_price && `Мин ${min_price} ${currency}`;
   const priceText = `Цена ${price} ${currency}`;
-  const productUrl = `https://wishcheaper.herokuapp.com/my?id=${id}`;
+  // const productUrl = `https://wishcheaper.herokuapp.com/my?id=${id}`;
+  const unsubscribeUrl = `https://wishcheaper.herokuapp.com/unsubscribe?id=${id}`;
   const message = `
   ${importantText} ${percentDiscountText} ${shopName}
   ${title} за ${price} ${currency}
@@ -77,8 +77,8 @@ const notifyGoodBecameCheaper = async ({id, url, price, old_price, title, usersV
   > ${oldPriceText} ${price} ${currency} ${priceDiffText}
   Товар
   ${url}
-  Подписка
-  ${productUrl}`;
+  Отписаться
+  ${unsubscribeUrl}`;
 
   return sendVk({message, usersVk});
 };

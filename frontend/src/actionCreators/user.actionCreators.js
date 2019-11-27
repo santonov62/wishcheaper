@@ -62,9 +62,10 @@ export const authWithVk = () => async (dispatch, getState) => {
         token: authData.token
       }
     });
-    saveUser({
+    const user = saveUser({
       user: getState().user
     });
+    return Promise.resolve(user);
 
   } catch (ex) {
     dispatch({type: Actions.USER_FAILURE});

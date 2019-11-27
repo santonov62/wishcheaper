@@ -19,6 +19,7 @@ import MainPage from './page/MainPage';
 import ScannerPage from './page/ScannerPage';
 import GoodsPage from './page/GoodsPage';
 import ShopsPage from './page/ShopsPage';
+import UnsubscribePage from './page/UnsubscribePage';
 import AuthRoute from './component/AuthRoute';
 import UserContextProvider from './component/UserContextProvider';
 import { loadUser } from './storage/user.storage';
@@ -62,6 +63,7 @@ const App = () => {
                 <Fragment>
                   <UserContextProvider>
                     {/*<Route path="/" component={VkCommunity}/>*/}
+                    <AuthRoute exact path="/unsubscribe" component={UnsubscribePage}/>
                     <AuthRoute withoutRedirect path="/" component={Header}/>
                     <Route path="/" component={ErrorsTracking}/>
                     <Route exact path="/" component={MainPage}/>
