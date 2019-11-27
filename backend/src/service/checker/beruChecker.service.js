@@ -1,9 +1,9 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const isVisible = true;
-const TIMEOUT_DELAY = 30000;
+const isVisible = false;
 const SHOP_NAME = 'beru.ru';
 const SHOP_TITLE = 'Беру';
+const proxyHolder = require('../../module/proxyHolder');
 
 const log = (text, params = '') => {
   console.log(`[beruChecker.service] -> ${text}`, params);
@@ -16,19 +16,24 @@ const init = async () => {
       title: SHOP_TITLE,
       url: `https://${SHOP_NAME}`,
       name: SHOP_NAME,
-      scan_interval: 720})
+      scan_interval: 720});
     log(`[init] added shop`, addedShop);
   }
 };
 
 init();
 
-const parse = async (url) => {
-  
+const parse = async (url, attempts = 0) => {
+  attempts++;
   if (!url)
     throw new Error(`Url required.`);
-
-  let launchParams = { args: [ `--no-sandbox` ], headless: true };
+  
+  let launchParams = {args: [`--no-sandbox`]};
+  const proxy = await proxyHolder.pullProxy(url);
+  if (!!proxy && !!proxy.ip) {
+    launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
+  }
+  
   if (isVisible)
     launchParams = { ...launchParams, headless: false };
 
@@ -36,10 +41,16 @@ const parse = async (url) => {
 
   try {
     const page = await browser.newPage();
-
+  
     log(`goto: `, url);
-    // await page.goto('https://beru.ru', {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
-    await page.goto(url, {waitUntil: 'networkidle0', timeout: TIMEOUT_DELAY});
+    try {
+      await page.goto(url, {waitUntil: 'domcontentloaded'});
+    } catch (e) {
+      browser.close();
+      if (attempts < 5)
+        return await parse(url, attempts);
+    }
+    
     // log(`done`);
     //
     // let inactive_at;
@@ -51,15 +62,16 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice, inactive_at;
   
     log(`inactive_at`);
-    const unavalibleEl = await page.$('[data-zone-name="skuAvailability"]>div>span');
-    if (!!unavalibleEl) {
-      inactive_at = new Date();
-    }
+    try {
+      const el = await page.$eval('[data-zone-name="skuAvailability"]>div>span', node => node.innerText.indexOf('товар разобрали') !== -1);
+      if (!!el)
+        inactive_at = new Date();
+    } catch (e) { }
     
     log(`title`);
-    try {
+    // try {
       title = await page.$eval('.section > div > h1', node => node.innerText);
-    } catch (e) { }
+    // } catch (e) { }
     
     log(`price`);
     try {
@@ -86,7 +98,12 @@ const parse = async (url) => {
     };
     
     log(`[parse] done`, parsedData);
-
+  
+    log(`[parse] done`, parsedData);
+    if (!!title) {
+      proxyHolder.unshiftProxy(proxy);
+    }
+    
     return parsedData;
 
   } catch (e) {
