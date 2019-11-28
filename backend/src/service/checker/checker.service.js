@@ -127,7 +127,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
         }
       }
 
-    } else if (!!parsedGood.inactive_at) {
+    } else if (!inactive_at && !!parsedGood.inactive_at) {
       good = await goodsService.inactive({id});
     }
     // else {
