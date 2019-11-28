@@ -56,7 +56,14 @@ const parse = async (url, attempts = 0) => {
         return await parse(url, attempts);
     }
 
-    let title, currentPrice, logo, oldPrice;
+    let title, currentPrice, logo, oldPrice, inactive_at;
+
+    log(`inactive_at`);
+    try {
+      const el = await page.$eval('.b-404', node => node);
+      if (!!el)
+        inactive_at = new Date();
+    } catch (e) { }
 
     log(`$eval title`);
     try {
@@ -91,7 +98,8 @@ const parse = async (url, attempts = 0) => {
         title,
         price: currentPrice,
         old_price: oldPrice,
-        logo
+        logo,
+        inactive_at
     };
     
     log(`[parse] done`, parsedData);
