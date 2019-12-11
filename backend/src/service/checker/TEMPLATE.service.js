@@ -55,12 +55,12 @@ const parse = async (url) => {
 
     log(`price`);
     try {
-      currentPrice = await page.$eval('***********************', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('***********************', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
     } catch (e) { }
 
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('***********************', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('***********************', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
     } catch (e) { }
 
     log(`logo`);
