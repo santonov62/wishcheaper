@@ -46,16 +46,6 @@ const checkerList = [
   computeruniverseChecker
 ];
 
-let processGoods = [];
-let interval;
-
-const state = {
-  isStarted: false,
-  isParsing: false,
-  time: null,
-  lastParseTime: null
-};
-
 const getCheckerForUrl = (url) => {
   return checkerList.find(checker => checker.isMyUrl(url));
 };
