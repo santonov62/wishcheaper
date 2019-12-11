@@ -21,6 +21,7 @@ const asosChecker = require('./asosChecker.service');
 const leroymerlinChecker = require('./leroymerlinChecker.service');
 const citilinkChecker = require('./citilinkChecker.service');
 const computeruniverseChecker = require('./computeruniverseChecker.service');
+const playstationStoreChecker = require('./playstationStoreChecker.service');
 const moment = require('moment');
 
 const checkerList = [
@@ -41,18 +42,9 @@ const checkerList = [
   leroymerlinChecker,
   wildberriesChecker,
   citilinkChecker,
+  playstationStoreChecker,
   computeruniverseChecker
 ];
-
-let processGoods = [];
-let interval;
-
-const state = {
-  isStarted: false,
-  isParsing: false,
-  time: null,
-  lastParseTime: null
-};
 
 const getCheckerForUrl = (url) => {
   return checkerList.find(checker => checker.isMyUrl(url));
