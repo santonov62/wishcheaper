@@ -76,9 +76,7 @@ const parse = async (url, attempts = 0) => {
     try {
       // currentPrice = await page.$eval('.js-item-price', node => parseInt(node.getAttribute('content')));
       currentPrice = await page.$eval('[data-marker="item-description/price"]', node => parseInt(node.innerText.replace(/[^0-9]/g, '')));
-    } catch (e) {
-      inactive_at = new Date();
-    }
+    } catch (e) { }
     log(`done`);
 
     log(`$eval oldPrice`);
