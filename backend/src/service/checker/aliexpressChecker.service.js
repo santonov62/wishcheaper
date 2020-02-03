@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
-const SHOP_NAME = 'ru.aliexpress.com';
+const SHOP_NAME = 'aliexpress.ru';
 const SHOP_TITLE = 'Aliexpress';
 
 const log = (text, params = '') => {
