@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
-const SHOP_NAME = 'store.playstation.com/ru-ru';
+const SHOP_NAME = 'store.playstation.com';
 const SHOP_TITLE = 'Playstation Store';
 
 const log = (text, params = '') => {
@@ -43,7 +43,7 @@ const parse = async (url) => {
 
     let inactive_at;
     const payButton = await page.$('.desktop-cta--add-to-cart');
-    if (!!payButton) {
+    if (!payButton) {
       inactive_at = new Date();
     }
 
@@ -55,12 +55,12 @@ const parse = async (url) => {
 
     log(`price`);
     try {
-      currentPrice = await page.$eval('.sku-info__price-display .price-display__price', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('.sku-info__price-display .price-display__price', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
     } catch (e) { }
 
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('.sku-info__price-display .price-display__strikethrough', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('.sku-info__price-display .price-display__strikethrough', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
     } catch (e) { }
 
     log(`logo`);
