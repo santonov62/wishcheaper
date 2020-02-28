@@ -7,6 +7,7 @@ const SHOP_NAME = 'avito.ru';
 const SHOP_TITLE = 'Avito';
 const devices = require('puppeteer/DeviceDescriptors');
 const iPhone = devices['iPhone 6'];
+const HEADLESS = !!process.env.HEADLESS;
 
 const log = (text, params = '') => {
   console.log(`[avitoChecker.service] -> ${text}`, params);
@@ -38,10 +39,7 @@ const parse = async (url, attempts = 0) => {
     launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
   }
 
-  if (isDebugMode)
-    launchParams = { ...launchParams, headless: false };
-
-  const browser = await puppeteer.launch(launchParams);
+  const browser = await puppeteer.launch({ ...launchParams, headless: HEADLESS });
 
   try {
     const page = await browser.newPage();
