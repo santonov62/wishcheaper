@@ -13,7 +13,6 @@ const log = (text, params = '') => {
   console.log(`[avitoChecker.service] -> ${text}`, params);
 };
 
-
 const init = async () => {
   const shop = await shopService.getShopByUrl(SHOP_NAME);
   if (!shop) {
@@ -58,8 +57,11 @@ const parse = async (url, attempts = 0) => {
 
     log(`inactive_at`);
     try {
-      const el = await page.$eval('.b-404', node => node);
-      if (!!el)
+      const isInactive = await Promise.all([
+          page.evaluate(() => !!document.querySelector('.b-404')),
+          page.evaluate(() => !!document.querySelector('[data-marker="search-title/counter"]'))
+      ]);
+      if (isInactive)
         inactive_at = new Date();
     } catch (e) { }
 
