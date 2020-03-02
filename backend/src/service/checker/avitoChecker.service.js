@@ -57,11 +57,11 @@ const parse = async (url, attempts = 0) => {
 
     log(`inactive_at`);
     try {
-      const isInactive = await Promise.all([
+      const inactive = await Promise.all([
           page.evaluate(() => !!document.querySelector('.b-404')),
           page.evaluate(() => !!document.querySelector('[data-marker="search-title/counter"]'))
       ]);
-      if (isInactive)
+      if (inactive.includes(true))
         inactive_at = new Date();
     } catch (e) { }
 
