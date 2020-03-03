@@ -66,7 +66,7 @@ const parse = async (url) => {
     
     log(`logo`);
     try {
-      logo = await page.$eval('.img.magnifier-image.shown img', node => node.getAttribute('src'))
+      logo = await page.$eval('.magnifier-container img', node => node.getAttribute('src'));
     } catch (e) { }
 
     if (!currentPrice) {
