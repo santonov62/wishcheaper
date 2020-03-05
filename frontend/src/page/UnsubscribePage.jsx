@@ -33,7 +33,7 @@ class UnsubscribePage extends React.Component{
     const {isRemoved, isLoading} = this.state;
     return (
       <div className='unsubscribePage'>
-        <Header as='h1'>Отписаться</Header>
+        {/*<Header as='h1'>Отписаться</Header>*/}
         {isRemoved &&
           <div>
             Подписка удалена
@@ -44,7 +44,7 @@ class UnsubscribePage extends React.Component{
         }
         {!isRemoved &&
             <div>
-              <Button onClick={() => this.remove()}>Удалить подписку</Button>
+              <Button onClick={() => this.remove()} size='big'>Отписаться</Button>
             </div>
         }
       </div>
