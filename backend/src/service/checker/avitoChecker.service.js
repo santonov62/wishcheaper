@@ -7,11 +7,11 @@ const SHOP_NAME = 'avito.ru';
 const SHOP_TITLE = 'Avito';
 const devices = require('puppeteer/DeviceDescriptors');
 const iPhone = devices['iPhone 6'];
+const HEADLESS = !!process.env.HEADLESS;
 
 const log = (text, params = '') => {
   console.log(`[avitoChecker.service] -> ${text}`, params);
 };
-
 
 const init = async () => {
   const shop = await shopService.getShopByUrl(SHOP_NAME);
@@ -38,10 +38,7 @@ const parse = async (url, attempts = 0) => {
     launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
   }
 
-  if (isDebugMode)
-    launchParams = { ...launchParams, headless: false };
-
-  const browser = await puppeteer.launch(launchParams);
+  const browser = await puppeteer.launch({ ...launchParams, headless: HEADLESS });
 
   try {
     const page = await browser.newPage();
@@ -56,7 +53,17 @@ const parse = async (url, attempts = 0) => {
         return await parse(url, attempts);
     }
 
-    let title, currentPrice, logo, oldPrice;
+    let title, currentPrice, logo, oldPrice, inactive_at;
+
+    log(`inactive_at`);
+    try {
+      const inactive = await Promise.all([
+          page.evaluate(() => !!document.querySelector('.b-404')),
+          page.evaluate(() => !!document.querySelector('[data-marker="search-title/counter"]'))
+      ]);
+      if (inactive.includes(true))
+        inactive_at = new Date();
+    } catch (e) { }
 
     log(`$eval title`);
     try {
@@ -91,7 +98,8 @@ const parse = async (url, attempts = 0) => {
         title,
         price: currentPrice,
         old_price: oldPrice,
-        logo
+        logo,
+        inactive_at
     };
     
     log(`[parse] done`, parsedData);

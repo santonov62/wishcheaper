@@ -27,7 +27,7 @@ const parse = async (url, attempts = 0) => {
   attempts++;
   if (!url)
     throw new Error(`Url required.`);
-  
+
   let launchParams = {args: [`--no-sandbox`]};
   // const proxy = await proxyHolder.pullProxy(url);
   // if (!!proxy && !!proxy.ip) {
@@ -41,7 +41,7 @@ const parse = async (url, attempts = 0) => {
 
   try {
     const page = await browser.newPage();
-  
+
     log(`goto: `, url);
     // try {
       await page.goto(url, {waitUntil: 'domcontentloaded'});
@@ -50,8 +50,8 @@ const parse = async (url, attempts = 0) => {
     //   if (attempts < 5)
     //     return await parse(url, attempts);
     // }
-    
-    // log(`done`);
+    log(`done`);
+
     //
     // let inactive_at;
     // const payButton = await page.$('[data-zone-name="offer-cart"] .section button');
@@ -97,8 +97,6 @@ const parse = async (url, attempts = 0) => {
         inactive_at
     };
     
-    log(`[parse] done`, parsedData);
-  
     log(`[parse] done`, parsedData);
     // if (!!title) {
     //   proxyHolder.unshiftProxy(proxy);

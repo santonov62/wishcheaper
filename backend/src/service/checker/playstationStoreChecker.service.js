@@ -2,11 +2,11 @@ const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
-const SHOP_NAME = 'ozon.ru';
-const SHOP_TITLE = 'Ozone';
+const SHOP_NAME = 'store.playstation.com';
+const SHOP_TITLE = 'Playstation Store';
 
 const log = (text, params = '') => {
-  console.log(`[ozonChecker.service] -> ${text}`, params);
+  console.log(`[playstationStoreChecker.service] -> ${text}`, params);
 };
 
 const init = async () => {
@@ -24,7 +24,7 @@ const init = async () => {
 init();
 
 const parse = async (url) => {
-  
+
   if (!url)
     throw new Error(`Url required.`);
 
@@ -40,48 +40,43 @@ const parse = async (url) => {
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     // log(`done`);
-  
-    // let inactive_at;
-    // const payButton = await page.$('[data-test-id=saleblock-subscribe-button]');
-    // if (!!payButton) {
-    //   inactive_at = new Date();
-    // }
-    
-    let title, currentPrice, logo, oldPrice, inactive_at;
-    log(`title`);
-    try {
-      title = await page.$eval('.top-base-column-top h1', node => node.innerText);
-    } catch (e) { }
-    
-    log(`price`);
-    try {
-      currentPrice = await page.$eval('.top-sale-block>div>div:nth-child(1)>div>div>div>div span:nth-of-type(1)', node => parseInt(node.innerText.replace(/\s/g, '')));
-    } catch (e) { }
-  
-    log(`oldPrice`);
-    try {
-      // oldPrice = await page.$eval('.top-sale-block div div div div div', node => parseInt(node.innerText.replace(/\s/g, '')));
-      oldPrice = await page.$eval('.top-sale-block>div>div:nth-child(1)>div>div>div>div span:nth-of-type(2)', node => parseInt(node.innerText.replace(/\s/g, '')));
-    } catch (e) { }
-    
-    log(`logo`);
-    try {
-      logo = await page.$eval('.magnifier-container img', node => node.getAttribute('src'));
-    } catch (e) { }
 
-    if (!currentPrice) {
+    let inactive_at;
+    const payButton = await page.$('.desktop-cta--add-to-cart');
+    if (!payButton) {
       inactive_at = new Date();
     }
-    
+
+    let title, currentPrice, logo, oldPrice;
+    log(`title`);
+    try {
+      title = await page.$eval('.pdp__title', node => node.innerText);
+    } catch (e) { }
+
+    log(`price`);
+    try {
+      currentPrice = await page.$eval('.sku-info__price-display .price-display__price', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
+    } catch (e) { }
+
+    log(`oldPrice`);
+    try {
+      oldPrice = await page.$eval('.sku-info__price-display .price-display__strikethrough', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
+    } catch (e) { }
+
+    log(`logo`);
+    try {
+      logo = await page.$eval('.pdp__thumbnail-img .product-image__img .product-image__img--main img', node => node.getAttribute('src'))
+    } catch (e) { }
+
     const parsedData = {
-        url,
-        title,
-        price: currentPrice,
-        old_price: oldPrice,
-        logo,
-        inactive_at
+      url,
+      title,
+      price: currentPrice,
+      old_price: oldPrice,
+      logo,
+      inactive_at
     };
-    
+
     log(`[parse] done`, parsedData);
 
     return parsedData;

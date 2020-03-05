@@ -10,7 +10,8 @@ import { setSearchTitle } from '../../actionCreators/goodsSearch.actionCreators'
 class AddGoodField extends React.Component {
     state = {
         value: '',
-        isLoading: false
+        isLoading: false,
+        currentUrl: ''
     };
     searchTimeout = null;
     
@@ -40,18 +41,24 @@ class AddGoodField extends React.Component {
                 isLoading: false
             }));
     };
-    // onFocus = () => {
-    //     document.querySelectorAll('.headerMenu > :not(.addGoodItem)').forEach(el => {
-    //         el.classList.add("forceHidden");
-    //     });
-    // };
-    // onBlur = () => {
-    //     setTimeout(() => {
-    //         document.querySelectorAll('.headerMenu > :not(.addGoodItem)').forEach(el => {
-    //             el.classList.remove("forceHidden");
-    //         });
-    //     }, 1000);
-    // };
+    componentDidMount() {
+        window.addEventListener('focus', async () => {
+            try {
+                const {currentUrl} = this.state;
+                const text = await navigator.clipboard.readText();
+                const isNewUrl = !!text && this.isUrl(text) && currentUrl !== text;
+                if (isNewUrl) {
+                    this.setState({
+                        currentUrl: text,
+                        value: text
+                    });
+                    console.log('window.focus => url pasted.')
+                }
+            } catch(e) {
+                console.warn('Something went wrong', e.message);
+            }
+        });
+    }
     render() {
         const { value, isLoading } = this.state;
     
