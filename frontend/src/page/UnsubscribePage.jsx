@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { removeGood } from "../actionCreators/goods.actionCreators";
 import { authWithVk } from "../actionCreators/user.actionCreators";
 import {Loader, Button, Segment, Container, Header} from 'semantic-ui-react';
+import './unsubscribePage.css';
 
 class UnsubscribePage extends React.Component{
 

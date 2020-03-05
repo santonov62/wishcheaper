@@ -62,15 +62,24 @@ const App = () => {
               <Router>
                 <Fragment>
                   <UserContextProvider>
-                    {/*<Route path="/" component={VkCommunity}/>*/}
-                    <AuthRoute exact path="/unsubscribe" component={UnsubscribePage}/>
-                    <AuthRoute withoutRedirect path="/" component={Header}/>
                     <Route path="/" component={ErrorsTracking}/>
+                    {/*<Route path="/" component={VkCommunity}/>*/}
+                    {/*<AuthRoute withoutRedirect path="/" component={Header}/>*/}
                     <Route exact path="/" component={MainPage}/>
                     <Route path="/login" component={LoginPage}/>
-                    <AuthRoute exact path="/my" component={GoodsPage}/>
-                    <AuthRoute adminRequired path="/scanner" component={ScannerPage}/>
-                    <AuthRoute adminRequired path="/manageShops" component={ShopsPage}/>
+                    <AuthRoute exact path="/unsubscribe" component={UnsubscribePage}/>
+                    <AuthRoute exact path="/my">
+                      <Header />
+                      <GoodsPage/>
+                    </AuthRoute>
+                    <AuthRoute adminRequired path="/scanner">
+                      <Header />
+                      <ScannerPage/>
+                    </AuthRoute>
+                    <AuthRoute adminRequired path="/manageShops">
+                      <Header />
+                      <ShopsPage />
+                    </AuthRoute>
                     {/*<Route path="/" component={Footer}/>*/}
                   </UserContextProvider>
                 </Fragment>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import UserContext from '../context/UserContext';
 
-const AuthRoute = ({component: Component, ...rest}) => (
+const AuthRoute = ({component: Component, children,  ...rest}) => (
   <UserContext.Consumer>
     {user => (
       <Route {...rest} render={props => {
@@ -13,14 +13,19 @@ const AuthRoute = ({component: Component, ...rest}) => (
           const isAdmin = !!user.admin;
           const signedIn = !!user.id;
           const hasAccess = isAdminRequired ? isAdmin : signedIn;
-          return hasAccess
-            ? <Component {...props} /> : !withoutRedirect ? redirect : ''
+          if (hasAccess){
+            return !!Component
+                ? <Component {...props} />
+                : <Fragment>{children}</Fragment>;
+          } else if (!withoutRedirect) {
+            return redirect;
+          }
+          return '';
         } catch (e) {
           console.error(e.message);
           return redirect;
         }
-      }
-      }/>
+      }}/>
     )}
 
   </UserContext.Consumer>
