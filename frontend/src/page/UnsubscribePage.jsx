@@ -1,36 +1,50 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { removeSubscription } from "../actionCreators/subscriptions.actionCreators";
+import { removeGood } from "../actionCreators/goods.actionCreators";
 import { authWithVk } from "../actionCreators/user.actionCreators";
+import {Loader, Button, Segment, Container, Header} from 'semantic-ui-react';
 
 class UnsubscribePage extends React.Component{
 
   state = {
-    isRemoved: false
-  }
+    isRemoved: false,
+    isLoading: false
+  };
 
-  componentDidMount() {
-    this.props.authWithVk(() => {
+  async componentDidMount() {
+    this.remove();
+  }
+  remove = async() => {
+    try {
+      this.setState({isLoading: true});
       const url = new URL(window.location.href);
       const id = url.searchParams.get('id');
-      this.props.removeSubscription(id).then(() => {
-        this.setState({isRemoved: true});
-      })
-    });
-  }
-
+      const subscription = await this.props.removeGood(id);
+      if (!!subscription)
+          this.setState({isRemoved: true});
+      return Promise.resolve(true)
+    } finally {
+      this.setState({isLoading: false});
+    }
+    return Promise.reject();
+  };
   render() {
-    const {isRemoved} = this.state;
+    const {isRemoved, isLoading} = this.state;
     return (
       <div className='unsubscribePage'>
+        <Header as='h1'>Отписаться</Header>
         {isRemoved &&
           <div>
             Подписка удалена
           </div>
         }
-        {!isRemoved &&
+        {!!isLoading &&
           <Loader size='large' active={true} content='Loading' />
+        }
+        {!isRemoved &&
+            <div>
+              <Button onClick={() => this.remove()}>Удалить подписку</Button>
+            </div>
         }
       </div>
     )
@@ -39,10 +53,11 @@ class UnsubscribePage extends React.Component{
 
 const mapState = (state) => ({
   isSignedIn: !!state.user.id,
-  vk: state.user.vk
+  vk: state.user.vk,
+  user: state.user
 });
 
 export default connect(mapState, dispatch => ({
-  removeSubscription: (goodId) => dispatch(removeSubscription({id: goodId})),
+  removeGood: (goodId) => dispatch(removeGood({id: goodId})),
   authWithVk: () => dispatch(authWithVk())
 }))(UnsubscribePage);
