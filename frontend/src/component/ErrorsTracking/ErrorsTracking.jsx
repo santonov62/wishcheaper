@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Message, List, Button, Icon, Segment, Header, Modal} from 'semantic-ui-react';
 import * as Actions from "../../actions/errors.actions";
-import './errorsTracking.css';
 
 class ErrorsTracking extends React.Component {
   onClose = () => {
