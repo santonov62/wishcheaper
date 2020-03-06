@@ -1,7 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Message, List, Button, Icon, Segment} from 'semantic-ui-react';
+import {Message, List, Button, Icon, Segment, Header, Modal} from 'semantic-ui-react';
 import * as Actions from "../../actions/errors.actions";
+import './errorsTracking.css';
 
 class ErrorsTracking extends React.Component {
   onClose = () => {
@@ -12,17 +13,25 @@ class ErrorsTracking extends React.Component {
     const errorsElements = errors.map((error, index) => <List.Item key={index}>{error.message}</List.Item>);
     const isErrorsExist = errors.length > 0;
     return (
-          <div className='errors'>
-            {isErrorsExist &&
-              <Segment negative>
-                <Icon size='large' name='close' onClick={this.onClose}/>
-                <Message.Header>Ошибка</Message.Header>
-                <List bulleted>
-                  {errorsElements}
-                </List>
-              </Segment>
-            }
-          </div>
+      <Modal
+        open={isErrorsExist}
+        onClose={this.onClose}
+        dimmer='inverted'
+        size='small'
+        closeIcon
+      >
+        <Header icon='error' content='Что-то пошло не так' />
+        <Modal.Content>
+            <List bulleted>
+              {errorsElements}
+            </List>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button color='green' onClick={this.onClose} inverted>
+            <Icon name='checkmark' /> Ok
+          </Button>
+        </Modal.Actions>
+      </Modal>
     );
   };
 }

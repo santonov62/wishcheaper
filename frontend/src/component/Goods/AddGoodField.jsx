@@ -67,7 +67,15 @@ class AddGoodField extends React.Component {
                 loading={isLoading}
                 value={value}
                 name='value'
-                icon={<Icon name='add' link onClick={this.addByUrl}/>}
+                icon={<Icon name='add' link inverted circular onClick={this.addByUrl} style={{
+                    marginTop: 4
+                }}/>}
+                //    action={{
+                //      color: 'teal',
+                //      labelPosition: 'right',
+                //      icon: 'copy',
+                //      // content: 'Copy',
+                //    }}
                 placeholder='Назавание для поиска или url для отслеживания...'
                 onChange={this.handleChange}
             />

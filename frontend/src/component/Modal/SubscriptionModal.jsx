@@ -64,7 +64,7 @@ class SubscriptionModalTemplate extends React.Component {
         <Modal dimmer='inverted' size='mini'
                trigger={trigger}
                onOpen={() => this.onOpen()}
-               closeIcon>
+               closeIcon style={{color: '#ccc'}}>
           
           {isLoading &&
           <Loader size='large' active content='Loading'/>
