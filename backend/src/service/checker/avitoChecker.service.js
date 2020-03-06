@@ -60,7 +60,8 @@ const parse = async (url, attempts = 0) => {
       const inactive = await Promise.all([
           page.evaluate(() => !!document.querySelector('.b-404')),
           page.evaluate(() => !!document.querySelector('[data-marker="search-title/counter"]')),
-          page.evaluate(() => !!document.querySelector('[data-marker="not-found"]'))
+          page.evaluate(() => !!document.querySelector('[data-marker="not-found"]')),
+          page.evaluate(() => !!document.querySelector('[data-marker="item-closed/cloasing-reason"]'))
       ]);
       if (inactive.includes(true))
         inactive_at = new Date();
@@ -90,7 +91,7 @@ const parse = async (url, attempts = 0) => {
     log(`logo`);
     try {
       // logo = await page.$eval('.gallery-img-frame img', node => node.getAttribute('src').replace(/\/\//, 'https://'));
-      logo = await page.$eval('.lazy-load-image-background img', node => node.src);
+      logo = await page.$eval('[data-marker="image-gallery"] img', node => node.src);
     } catch (e) { }
     log(`done`);
 
