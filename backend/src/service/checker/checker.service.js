@@ -67,7 +67,7 @@ const parse = async (url) => {
 
 const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old_price, autobuy_price, min_price}) => {
   console.group(`[checker.service] -> [refresh] url: ${url}`);
-  let good;
+  let result;
   try {
     if (!id)
       throw new Error(`Good id required.`);
@@ -92,7 +92,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
 
       const minPrice = !min_price || newPrice < min_price ? newPrice : min_price;
 
-      good = await goodsService.update({
+      result = await goodsService.update({
         ...parsedGood,
         min_price: minPrice,
         prev_price,
@@ -107,9 +107,9 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
         const isDiscountedProductBecameAvailable = !!inactive_at && !parsedGood.inactive_at && (newPriceWithShifting < old_price || newPriceWithShifting < prev_price);
         const isProductBecameCheaper = newPriceWithShifting < price;
         if (isProductBecameCheaper || isDiscountedProductBecameAvailable) {
-          const notifySubscriptions = await subscriptionService.requireNotification({...good});
+          const notifySubscriptions = await subscriptionService.requireNotification({...result});
           vkService.notifyGoodBecameCheaper({
-            good: {...good, prev_price, isDiscountedProductBecameAvailable},
+            good: {...result, prev_price, isDiscountedProductBecameAvailable},
             subscriptions: notifySubscriptions
           });
           // const buySubscriptions = await subscriptionService.requireBuy({...good});
@@ -119,15 +119,17 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
         }
       }
     } else if (!!parsedGood.inactive_at) {
-      good = await goodsService.inactive({id});
+      result = await goodsService.inactive({id});
     }
-    log(`[refresh] done`, good);
+    log(`[refresh] done`, result);
+    return result;
   } catch (e) {
     log(`[refresh] ERROR`, e.message);
+    return result;
   } finally {
     console.groupEnd();
   }
-  return good;
+  return result;
 };
 
 const ADDITIONAL_GOOD_DATA = `SELECT
