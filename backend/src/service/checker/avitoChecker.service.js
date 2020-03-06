@@ -59,7 +59,8 @@ const parse = async (url, attempts = 0) => {
     try {
       const inactive = await Promise.all([
           page.evaluate(() => !!document.querySelector('.b-404')),
-          page.evaluate(() => !!document.querySelector('[data-marker="search-title/counter"]'))
+          page.evaluate(() => !!document.querySelector('[data-marker="search-title/counter"]')),
+          page.evaluate(() => !!document.querySelector('[data-marker="not-found"]'))
       ]);
       if (inactive.includes(true))
         inactive_at = new Date();
