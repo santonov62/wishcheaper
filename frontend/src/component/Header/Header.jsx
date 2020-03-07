@@ -20,8 +20,8 @@ class Header extends React.Component {
     const { activeItem, value, isLoading } = this.state;
 
     return (
-        <Fragment>
-          <div style={{height: 50}} />
+      <Fragment>
+        <div className="headerBackground" />
           <Menu fixed='top' inverted className='headerMenu'>
 
             {/*<Menu.Item*/}
@@ -57,7 +57,7 @@ class Header extends React.Component {
             </Menu.Menu>
 
           </Menu>
-        </Fragment>
+      </Fragment>
     )
   }
 }
