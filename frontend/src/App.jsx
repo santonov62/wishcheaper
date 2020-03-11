@@ -67,7 +67,7 @@ const App = () => {
                     {/*<AuthRoute withoutRedirect path="/" component={Header}/>*/}
                     <Route exact path="/" component={MainPage}/>
                     <Route path="/login" component={LoginPage}/>
-                    <AuthRoute exact path="/unsubscribe" component={UnsubscribePage}/>
+                    <AuthRoute exact path="/u" component={UnsubscribePage}/>
                     <AuthRoute exact path="/my">
                       <Header />
                       <GoodsPage/>
