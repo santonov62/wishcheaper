@@ -56,16 +56,14 @@ const parse = async (url, attempts = 0) => {
     let title, currentPrice, logo, oldPrice, inactive_at;
 
     log(`inactive_at`);
-    try {
-      const inactive = await Promise.all([
-          page.evaluate(() => !!document.querySelector('.b-404')),
-          page.evaluate(() => !!document.querySelector('[data-marker="search-title/counter"]')),
-          page.evaluate(() => !!document.querySelector('[data-marker="not-found"]')),
-          page.evaluate(() => !!document.querySelector('[data-marker="item-closed/cloasing-reason"]'))
-      ]);
-      if (inactive.includes(true))
-        inactive_at = new Date();
-    } catch (e) { }
+    const invalid = await Promise.all([
+        page.evaluate(() => !!document.querySelector('.b-404')),
+        page.evaluate(() => !!document.querySelector('[data-marker="search-title/counter"]')),
+        page.evaluate(() => !!document.querySelector('[data-marker="not-found"]')),
+        page.evaluate(() => !!document.querySelector('[data-marker="item-closed/cloasing-reason"]'))
+    ]);
+    if (invalid.includes(true))
+      throw new Error(`Invalid ad`);
 
     log(`$eval title`);
     try {
