@@ -42,7 +42,7 @@ const parse = async (url) => {
     // log(`done`);
 
     let inactive_at;
-    const payButton = await page.$('***********************');
+    const payButton = await page.$('$$$$$$$$$$$$$$$$');
     if (!!payButton) {
       inactive_at = new Date();
     }
@@ -50,22 +50,22 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
-      title = await page.$eval('***********************', node => node.innerText);
+      title = await page.$eval('$$$$$$$$$$$$$$$$', node => node.innerText);
     } catch (e) { }
 
     log(`price`);
     try {
-      currentPrice = await page.$eval('***********************', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
+      currentPrice = await page.$eval('$$$$$$$$$$$$$$$$', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
     } catch (e) { }
 
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('***********************', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
+      oldPrice = await page.$eval('$$$$$$$$$$$$$$$$', node => parseInt(node.innerText.replace(/[^0-9,]/g, '')));
     } catch (e) { }
 
     log(`logo`);
     try {
-      logo = await page.$eval('***********************', node => node.getAttribute('src'))
+      logo = await page.$eval('$$$$$$$$$$$$$$$$', node => node.getAttribute('src'))
     } catch (e) { }
 
     const parsedData = {
