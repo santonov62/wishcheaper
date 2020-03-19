@@ -22,6 +22,7 @@ const leroymerlinChecker = require('./leroymerlinChecker.service');
 const citilinkChecker = require('./citilinkChecker.service');
 const computeruniverseChecker = require('./computeruniverseChecker.service');
 const playstationStoreChecker = require('./playstationStoreChecker.service');
+const eldoradoChecker = require('./eldoradoChecker.service');
 const moment = require('moment');
 
 const checkerList = [
@@ -43,6 +44,7 @@ const checkerList = [
   wildberriesChecker,
   citilinkChecker,
   playstationStoreChecker,
+  eldoradoChecker,
   computeruniverseChecker
 ];
 
