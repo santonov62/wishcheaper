@@ -69,7 +69,7 @@ const parse = async (url) => {
 
 const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old_price, autobuy_price, min_price}) => {
   console.group(`[checker.service] -> [refresh] url: ${url}`);
-  let result;
+  let result = {id, url};
   try {
     if (!id)
       throw new Error(`Good id required.`);
