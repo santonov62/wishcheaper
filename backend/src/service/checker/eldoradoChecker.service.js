@@ -1,9 +1,10 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'eldorado.ru';
 const SHOP_TITLE = 'Эльдорадо';
+const proxyHolder = require('../../module/proxyHolder');
+const HEADLESS = !!process.env.HEADLESS;
 
 const log = (text, params = '') => {
   console.log(`[eldoradoChecker.service] -> ${text}`, params);
@@ -29,10 +30,12 @@ const parse = async (url) => {
     throw new Error(`Url required.`);
 
   let launchParams = { args: [ `--no-sandbox` ], headless: true };
-  if (isDebugMode)
-    launchParams = { ...launchParams, headless: false };
+  const proxy = await proxyHolder.pullProxy(url);
+  if (!!proxy && !!proxy.ip) {
+    launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
+  }
 
-  const browser = await puppeteer.launch(launchParams);
+  const browser = await puppeteer.launch({ ...launchParams, headless: HEADLESS });
 
   try {
     const page = await browser.newPage();
