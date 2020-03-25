@@ -23,6 +23,7 @@ const citilinkChecker = require('./citilinkChecker.service');
 const computeruniverseChecker = require('./computeruniverseChecker.service');
 const playstationStoreChecker = require('./playstationStoreChecker.service');
 const eldoradoChecker = require('./eldoradoChecker.service');
+const iherbChecker = require('./iherbChecker.service');
 const moment = require('moment');
 
 const checkerList = [
@@ -45,7 +46,8 @@ const checkerList = [
   citilinkChecker,
   playstationStoreChecker,
   eldoradoChecker,
-  computeruniverseChecker
+  computeruniverseChecker,
+  iherbChecker
 ];
 
 const getCheckerForUrl = (url) => {
