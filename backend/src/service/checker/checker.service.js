@@ -106,7 +106,7 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
       const isCorrectProduct = !!parsedGood.url && !!parsedGood.title && !!parsedGood.price && !parsedGood.inactive_at;
 
       if (isCorrectProduct) {
-        const priceShift = !!parsedGood.currency ? 1 : newPrice * 0.005; // 0,5%
+        const priceShift = !!parsedGood.currency ? 1 : newPrice * 0.01; // 1%
         const newPriceWithShifting = newPrice + priceShift;
         const isDiscountedProductBecameAvailable = !!inactive_at && !parsedGood.inactive_at && (newPriceWithShifting < old_price || newPriceWithShifting < prev_price);
         const isProductBecameCheaper = newPriceWithShifting < price;
