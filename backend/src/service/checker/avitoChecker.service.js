@@ -62,8 +62,12 @@ const parse = async (url, attempts = 0) => {
         page.evaluate(() => !!document.querySelector('[data-marker="not-found"]')),
         page.evaluate(() => !!document.querySelector('[data-marker="item-closed/cloasing-reason"]'))
     ]);
-    if (invalid.includes(true))
-      throw new Error(`Invalid ad`);
+    if (invalid.includes(true)) {
+      return {
+        inactive_at: new Date()
+      };
+      // throw new Error(`Invalid ad`);
+    }
 
     log(`$eval title`);
     try {
