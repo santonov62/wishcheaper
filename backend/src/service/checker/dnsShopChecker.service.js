@@ -45,13 +45,14 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
+      await page.waitFor('.price-item-title', { visible: true});
       title = await page.$eval('.price-item-title', node => node.innerText);
     } catch (e) {
       console.error(e);
     }
     log(`price`);
     try {
-      await page.waitFor('.product-card-price__current', { visible: true});
+      // await page.waitFor('.product-card-price__current', { visible: true});
       currentPrice = await page.$eval('.product-card-price__current', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) {
       console.error(e);
