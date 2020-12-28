@@ -1,6 +1,5 @@
 import React, {Fragment} from 'react';
-import {Image, Form, Dropdown, Icon, Button} from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import {Container, Header} from 'semantic-ui-react';
 import './mainPage.css';
 import {connect} from 'react-redux';
 import SignInWithVkButton from '../component/SignInWithVkButton';
@@ -42,12 +41,23 @@ class MainPage extends React.Component{
           }
           {!user || !user.id &&
           <div className='mainPage'>
+
+            <div className='title'>Покупайте любимые товары дешевле</div>
+
+            <Container text className="about">
+              <Header as='h3' style={{ fontSize: '2em' }}>
+                Как это работает
+              </Header>
+              <ol type="1">
+                <li>Вы добавляете интересующие вас товары к себе в список отслеживаемых</li>
+                <li>Мы следим за изменениями цены на товар и как только она снижается уведомляем вас сообщением</li>
+                <li>Вы один из первых узнаете о снижении цены без необходимости лично следить за ней</li>
+              </ol>
+            </Container>
+
+            <SignInWithVkButton size='massive' text='Авторизироваться'/>
+
             <div className='statistic'>
-  
-              {/*{!user.id &&*/}
-              {/*}*/}
-              <div className='title'>Покупайте любимые товары дешевле</div>
-              <SignInWithVkButton size='massive' text='Авторизироваться'/>
               <br />
               <br />
               <br />

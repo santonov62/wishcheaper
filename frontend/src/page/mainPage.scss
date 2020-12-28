@@ -59,6 +59,24 @@
   .addPromo {
     background-color: #f9f9f9;
   }
+  .title {
+    font-size: 50px;
+    line-height: 80px;
+    margin-top: 60px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .about {
+    padding: 4em 0;
+    text-align: center;
+    ol {
+      display: flex;
+      li {
+        padding-right: 30px;
+      }
+    }
+  }
   .statistic {
     max-width: 800px;
     //background-color: #f9f9f9;
@@ -74,15 +92,6 @@
       line-height: 1.4;
       text-transform: uppercase;
       text-align: center;
-    }
-    .title {
-      font-size: 50px;
-      /* width: 60%; */
-      line-height: 80px;
-      padding: 60px 20px;
-      text-align: center;
-      text-transform: uppercase;
-      font-weight: bold;
     }
     .stats {
       display: flex;

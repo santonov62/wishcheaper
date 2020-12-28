@@ -29,7 +29,7 @@ class GoodsPage extends React.Component {
     return (
         <div className='goodsPage'>
           <Loader size='large' active={isLoading} content='Loading'/>
-          <Header as='h1'>Мои товары</Header>
+          <Header as='h1'>Отслеживаемые товары</Header>
           {goodsElements.length > 0 &&
               <Fragment>
                 <GoodsSearchToolbar />
@@ -42,13 +42,15 @@ class GoodsPage extends React.Component {
           {!isLoading && goodsElements.length === 0 &&
           <Segment style={{ padding: '4em 0em' }} vertical>
             <Container text>
+
               <Header as='h3' style={{ fontSize: '2em' }}>
                 Что бы добавить товар в отслеживаемые
               </Header>
               {/*<p style={{ fontSize: '1.33em' }}>*/}
                 <ul>
-                  <li>Откройте вкладку с товаром и скопируйте ссылку на товар</li>
-                  <li>Вставьте ссылку на товар в поле добавления и нажмите "+"</li>
+                  <li>Скопируйте ссылку на товар в буфер обмена</li>
+                  <li>Вставьте скопированную ссылку в поле сверху и нажмите "+"</li>
+                  <li>Мы извлечем данные о товаре и будем следить за изменением цены</li>
                 </ul>
               {/*</p>*/}
               <Divider
@@ -60,14 +62,14 @@ class GoodsPage extends React.Component {
                 Или
               </Divider>
               <Header as='h3' style={{ fontSize: '2em' }}>
-                Что бы доавить товар в отслеживаемые через расширение браузера Chrome
+                Что бы добавить товар в отслеживаемые через расширение браузера Chrome
               </Header>
               {/*<p style={{ fontSize: '1.33em' }}>*/}
                 <ul>
                   <li>Установите расширение для браузера Chrome</li>
                   <li>Откройте вкладку с товаром</li>
-                  <li>Нажмите на иконку расширения и авторизиркйтес если понадобится</li>
-                  <li>Товар будет автоматически добавлен</li>
+                  <li>Нажмите на иконку расширения (авторизируйтесь если понадобится)</li>
+                  <li>Товар будет автоматически добавлен в отслеживаемые</li>
                 </ul>
               <Button>Скачать расширение Chrome</Button>
               {/*</p>*/}
