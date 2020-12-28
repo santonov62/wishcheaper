@@ -76,7 +76,7 @@ class AddGoodField extends React.Component {
                 //      icon: 'copy',
                 //      // content: 'Copy',
                 //    }}
-                placeholder='Назавание для поиска или url для отслеживания...'
+                placeholder='Ссылка на товар или название для поиска'
                 onChange={this.handleChange}
             />
         )
