@@ -1,9 +1,9 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'mvideo.ru';
 const SHOP_TITLE = 'Мвидео';
+const iPhone = puppeteer.devices['iPhone 6'];
 
 const log = (text, params = '') => {
   console.log(`[mvideoChecker.service] -> ${text}`, params);
@@ -28,14 +28,13 @@ const parse = async (url) => {
   if (!url)
     throw new Error(`Url required.`);
 
-  let launchParams = { args: [ `--no-sandbox` ], headless: true };
-  if (isDebugMode)
-    launchParams = { ...launchParams, headless: false };
+  let launchParams = { args: [ `--no-sandbox` ], headless: !process.env.PUPPETEER_DEV };
 
   const browser = await puppeteer.launch(launchParams);
 
   try {
     const page = await browser.newPage();
+    await page.emulate(iPhone);
 
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
@@ -51,13 +50,13 @@ const parse = async (url) => {
     //TITLE
     log(`$eval title`);
     try {
-      title = await page.$eval('.sel-product-title', node => node.innerText);
+      title = await page.$eval('.o-pdp-topic__title', node => node.innerText);
     } catch (e) { }
     
     //PRICE
     log(`$eval price`);
     try {
-      currentPrice = await page.$eval('.sel-product-tile-price', node => parseInt(node.innerText.replace(/\s+/g, '')));
+      currentPrice = await page.$eval('.fl-pdp-price__current', node => parseInt(node.innerText.replace(/\s+/g, '')));
     } catch (e) {
       inactive_at = new Date();
     }
@@ -65,7 +64,7 @@ const parse = async (url) => {
     //OLD PRICE
     log(`$eval oldPrice`);
     try {
-      oldPrice = await page.$eval('.c-pdp-price__old', node => parseInt(node.innerText.replace(/\s+/g, '')));
+      oldPrice = await page.$eval('.fl-pdp-price__old', node => parseInt(node.innerText.replace(/\s+/g, '')));
     } catch (e) { }
     
     log(`$eval .photo[data-img]`);
@@ -89,7 +88,7 @@ const parse = async (url) => {
   } catch (e) {
     throw new Error(e);
   } finally {
-    if (!isDebugMode)
+    if (!process.env.PUPPETEER_KEEP_OPENED)
       await browser.close();
   }
 };
