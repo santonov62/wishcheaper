@@ -21,7 +21,8 @@ const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_nam
   const shortGoodItemsProps = {id, url, title, logo, price, old_price, shop_id, shop_name,
     updated_at, created_at, inactive_at, prev_price, subscription_id,
     price_discount, percent_discount, autobuy_price, min_price, currency};
-  
+  const isNewGood = created_at === updated_at && !title;
+
   return (
     <div className='goodItemContainer'>
       {/*<GoodMenu {...goodMenuProps}/>*/}
@@ -30,7 +31,7 @@ const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_nam
         if (isAccepted)
           removeGood(id);
       }}/>
-      {!!isRefreshing &&
+      {(!!isRefreshing || isNewGood) &&
       <Dimmer active inverted style={{borderRadius: '15px', backgroundColor: 'transparent'}}>
         <Loader>Loading</Loader>
       </Dimmer>

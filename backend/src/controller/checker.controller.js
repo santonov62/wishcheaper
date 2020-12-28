@@ -81,7 +81,7 @@ const add = async (req, res) => {
     checkerService.refresh(good)
       .then(async good => {
         if (!!good) {
-          const additionalData = await checkerService.additionalGoodData({...good, user_vk: user.vk});
+          const additionalData = await checkerService.additionalGoodData({id: good.id, user_vk: user.vk});
           good = {
             ...good,
             ...additionalData
