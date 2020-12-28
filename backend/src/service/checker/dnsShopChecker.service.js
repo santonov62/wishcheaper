@@ -4,6 +4,7 @@ const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'dns-shop.ru';
 const SHOP_TITLE = 'DNS';
+const iPhone = puppeteer.devices['iPhone 6'];
 
 const log = (text, params = '') => {
   console.log(`[dnsShopChecker.service] -> ${text}`, params);
@@ -28,46 +29,55 @@ const parse = async (url) => {
   if (!url)
     throw new Error(`Url required.`);
 
-  let launchParams = { args: [ `--no-sandbox` ], headless: true };
-  if (isDebugMode)
-    launchParams = { ...launchParams, headless: false };
+  let launchParams = { args: [ `--no-sandbox` ], headless: !process.env.PUPPETEER_DEV };
 
   const browser = await puppeteer.launch(launchParams);
 
   try {
     const page = await browser.newPage();
+    await page.emulate(iPhone);
 
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
-    // log(`done`);
-  
+
     let inactive_at;
-    const payButton = await page.$('.btn-price-item-alert');
-    if (!!payButton) {
-      inactive_at = new Date();
-    }
     
     let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
       title = await page.$eval('.price-item-title', node => node.innerText);
-    } catch (e) { }
-    
+    } catch (e) {
+      console.error(e);
+    }
     log(`price`);
     try {
-      currentPrice = await page.$eval('.current-price-value', node => parseInt(node.innerText.replace(/\s/g, '')));
-    } catch (e) { }
-  
+      await page.waitFor('.product-card-price__current', { visible: true});
+      currentPrice = await page.$eval('.product-card-price__current', node => parseInt(node.innerText.replace(/\s/g, '')));
+    } catch (e) {
+      console.error(e);
+    }
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('.prev-price-total', node => parseInt(node.innerText.replace(/\s/g, '')));
-    } catch (e) { }
-    
+      oldPrice = await page.$eval('.product-card-price__previous', node => parseInt(node.innerText.replace(/\s/g, '')));
+    } catch (e) {
+      console.error(e);
+    }
     log(`logo`);
     try {
-      logo = await page.$eval('.owl-item img', node => node.getAttribute('src'))
-    } catch (e) { }
-    
+      logo = await page.$eval('img.product-images-slider__img', node => node.getAttribute('src'))
+    } catch (e) {
+      console.error(e);
+    }
+
+    try {
+      const payButton = await page.$('.notify-btn');
+      if (!!payButton) {
+        inactive_at = new Date();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
     const parsedData = {
         url,
         title,
@@ -84,7 +94,8 @@ const parse = async (url) => {
   } catch (e) {
     throw new Error(e);
   } finally {
-    await browser.close();
+    if (!process.env.PUPPETEER_KEEP_OPENED)
+      await browser.close();
   }
 };
 

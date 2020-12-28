@@ -51,8 +51,9 @@ const parse = async (url) => {
     log(`$eval title`);
     try {
       title = await page.$eval('.o-pdp-topic__title', node => node.innerText);
-    } catch (e) { }
-    
+    } catch (e) {
+      console.error(e);
+    }
     //PRICE
     log(`$eval price`);
     try {
@@ -65,13 +66,15 @@ const parse = async (url) => {
     log(`$eval oldPrice`);
     try {
       oldPrice = await page.$eval('.fl-pdp-price__old', node => parseInt(node.innerText.replace(/\s+/g, '')));
-    } catch (e) { }
-    
+    } catch (e) {
+      console.error(e);
+    }
     log(`$eval .photo[data-img]`);
     try {
       logo = await page.$eval('.c-media-container__image-wrapper img', node => node.getAttribute('src').replace(/\/\//, 'https://'));
-    } catch (e) { }
-    
+    } catch (e) {
+      console.error(e);
+    }
     const parsedData = {
         url,
         title,
