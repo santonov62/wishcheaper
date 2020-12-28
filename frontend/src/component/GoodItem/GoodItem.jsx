@@ -32,8 +32,9 @@ const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_nam
           removeGood(id);
       }}/>
       {(!!isRefreshing || isNewGood) &&
-      <Dimmer active inverted style={{borderRadius: '15px', backgroundColor: 'transparent'}}>
-        <Loader>Loading</Loader>
+      <Dimmer active inverted style={{borderRadius: '15px', backgroundColor: 'transparent', zIndex: 1}}>
+          {isRefreshing && <Loader>Loading</Loader>}
+          {isNewGood && <Icon size='massive' name='clock outline' style={{color: 'grey', opacity: 0.7}}/>}
       </Dimmer>
       }
       {isInvalidValid &&
