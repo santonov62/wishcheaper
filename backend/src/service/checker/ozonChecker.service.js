@@ -86,15 +86,12 @@ const parse = async (url) => {
 
     try {
       const innactive = await page.$('[data-widget="webOutOfStock"]');
-      if (!!innactive) {
+      if (!!innactive || !currentPrice) {
         inactive_at = new Date();
       }
     } catch (e) {
       console.error(e);
     }
-    // if (!currentPrice) {
-    //   inactive_at = new Date();
-    // }
     
     const parsedData = {
         url,
