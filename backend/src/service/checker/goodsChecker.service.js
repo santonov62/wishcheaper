@@ -65,7 +65,7 @@ const parse = async (url) => {
 
     let inactive_at;
     try {
-      const unavailableButton = await page.$('.components_unavailableProductSubscriptionButton__button_0');
+      const unavailableButton = await page.$('.components_unavailableProductSubscriptionButton__button_0, .unavailableBlock');
       if (!!unavailableButton) {
         inactive_at = new Date();
       }
