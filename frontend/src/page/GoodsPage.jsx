@@ -25,7 +25,7 @@ class GoodsPage extends React.Component {
   }
   render() {
     const {isLoading, goods = []} = this.props;
-    const goodsElements = goods.map((good, index) => <GoodItem key={index} {...good}/>);
+    const goodsElements = goods.map((good, index) => <GoodItem key={good.id} {...good}/>);
     return (
         <div className='goodsPage'>
           <Loader size='large' active={isLoading} content='Loading'/>
