@@ -108,5 +108,6 @@ const notifyGoodBecameCheaperAll = async ({good, subscriptions}) => {
 
 module.exports = {
   notifyGoodBecameCheaper: notifyGoodBecameCheaperAll,
-  notifyAutobuySuccess
+  notifyAutobuySuccess,
+  sendVk
 };

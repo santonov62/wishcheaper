@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const usersService = require('../service/users.service');
+const vkService = require('../service/vk.service');
+const checkerService = require('../service/checker/checker.service');
 
 const log = (text, params) => {
   console.log(`[vk.controller] -> ${text}`, params);
@@ -31,17 +34,35 @@ const callbackApi = async (req, res) => {
         res.send(process.env.VK_CALLBACK_API_CONFIRMATION);
         return;
     }
-    const {object: { body, user_id }} = req.body;
+    const {object: { body, user_id: vk }} = req.body;
     if (type === "message_new") {
-
+      const good = await addByUrlFromText({body, vk});
     }
-    res.send('ok');
   } catch (e) {
-    res.status(500).json({error: e.message});
+    res.status(500).send(e.message);
   } finally {
+    res.status(200).send('ok');
     console.groupEnd();
   }
 };
+
+async function addByUrlFromText({body, vk}) {
+  const urls = body.match(/\bhttps?:\/\/\S+/gi);
+  if (urls.length === 0)
+    throw new Error(`There are no urls exists in text`);
+
+  const url = urls[0];
+  const user = await usersService.search({vk});
+  const good = await checkerService.add({url, user});
+  vkService.sendVk({
+    message: `
+    Product added
+    ${process.env.DOMAIN_URL ? `${process.env.DOMAIN_URL}/my?id=${good.id}` : ''}
+    `,
+    usersVk: vk
+  });
+  return good;
+}
 
 app.post('/', callbackApi);
 

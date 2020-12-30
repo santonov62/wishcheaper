@@ -1,6 +1,5 @@
 const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
-const autobuyService = require('../autobuy/autobuy.service');
 const db = require('../db.service');
 const subscriptionService = require('../subscriptions.service');
 const shopsService = require('../shops.service');
@@ -25,6 +24,7 @@ const playstationStoreChecker = require('./playstationStoreChecker.service');
 const eldoradoChecker = require('./eldoradoChecker.service');
 const iherbChecker = require('./iherbChecker.service');
 const moment = require('moment');
+const socketService = require('../socket.service');
 
 const checkerList = [
   pandaoChecker,
@@ -154,6 +154,53 @@ const additionalGoodData = async ({id, user_vk}) => {
   return result.rows && result.rows[0];
 };
 
+const add = async ({url, user}) => {
+  console.group(`[checker.service] -> [add]`);
+  try {
+    url = getClippedUrl(url);
+    if (!url) {
+      throw new Error(`incorrect url`)
+    }
+
+    let good = (await goodsService.search({url}))[0];
+    if (!good) {
+      good = await addByUrl(url);
+    }
+
+    if (good) {
+      let subscriptions = await subscriptionService.search({
+        good_id: good.id,
+        user_vk: user.vk
+      });
+      if (subscriptions.length === 0)
+        await subscriptionService.add({
+          good_id: good.id,
+          user_id: user.id,
+          user_vk: user.vk
+        });
+    }
+
+    good.isRefreshing = 1;
+    refresh(good).then(good => uiRefreshCallback({good, user}));
+
+    return good;
+  } finally {
+    console.groupEnd();
+  }
+};
+
+const uiRefreshCallback = async ({good, user}) => {
+  if (!!good) {
+    const additionalData = await additionalGoodData({id: good.id, user_vk: user.vk});
+    good = {
+      ...good,
+      ...additionalData
+    };
+    socketService.emitAll(`good`, good);
+    return good;
+  }
+}
+
 const addByUrl = async (url) => {
 
   if (!url)
@@ -183,6 +230,7 @@ const getClippedUrl = (url) => {
 };
 
 module.exports = {
+  add,
   addByUrl,
   additionalGoodData,
   getClippedUrl,

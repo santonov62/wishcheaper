@@ -42,54 +42,12 @@ const status = async (req, res) => {
   }
 };
 
-
-const getClippedUrl = (url) => {
-  const match = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#//=]*)/g);
-  return match && match[0];
-};
-
 const add = async (req, res) => {
   console.group(`[checker.controller] -> [add]`);
   try {
-    let {url} = req.body;
-    
-    url = checkerService.getClippedUrl(url);
-    if (!url) {
-      throw new Error(`incorrect url`)
-    }
-    
+    const {url} = req.body;
     const {user} = req;
-    let good = (await goodsService.search({url}))[0];
-    if (!good) {
-      good = await checkerService.addByUrl(url);
-    }
-    
-    if (good) {
-      let subscriptions = await subscriptionService.search({
-        good_id: good.id,
-        user_vk: user.vk
-      });
-      if (subscriptions.length === 0)
-        await subscriptionService.add({
-          good_id: good.id,
-          user_id: user.id,
-          user_vk: user.vk
-        });
-    }
-
-    good.isRefreshing = 1;
-    checkerService.refresh(good)
-      .then(async good => {
-        if (!!good) {
-          const additionalData = await checkerService.additionalGoodData({id: good.id, user_vk: user.vk});
-          good = {
-            ...good,
-            ...additionalData
-          };
-          socketService.emitAll(`good`, good);
-        }
-      });
-    
+    const good = await checkerService.add({url, user});
     res.json(good);
   } catch (e) {
     res.status(500).json({error: e.message});
