@@ -4,7 +4,6 @@ const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'eldorado.ru';
 const SHOP_TITLE = 'Эльдорадо';
 const proxyHolder = require('../../module/proxyHolder');
-const HEADLESS = !!process.env.HEADLESS;
 
 const log = (text, params = '') => {
   console.log(`[eldoradoChecker.service] -> ${text}`, params);
@@ -35,7 +34,7 @@ const parse = async (url) => {
     launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
   }
 
-  const browser = await puppeteer.launch({ ...launchParams, headless: HEADLESS });
+  const browser = await puppeteer.launch({ ...launchParams, headless: !process.env.PUPPETEER_DEV });
 
   try {
     const page = await browser.newPage();
