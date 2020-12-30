@@ -1,7 +1,5 @@
 const express = require('express');
 const app = express();
-const subscriptionsService = require('../service/subscriptions.service');
-const authMiddleware = require('../middleware/auth.middleware');
 
 const log = (text, params) => {
   console.log(`[vk.controller] -> ${text}`, params);
@@ -10,9 +8,13 @@ const log = (text, params) => {
 const callbackApi = async (req, res) => {
   console.group(`[vk.controller] [callbackApi]`);
   try {
-    const {id, price_discount, percent_discount, autobuy_price} = req.body;
     log(req.body);
-    res.json('242a39f8');
+    // { "type": "confirmation", "group_id": 183983399 }
+    const { type, group_id } = req.body;
+    if (type === 'confirmation') {
+        res.json('b8660ca3');
+    }
+    res.json('ok');
   } catch (e) {
     res.status(500).json({error: e.message});
   } finally {

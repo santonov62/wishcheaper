@@ -8,6 +8,7 @@ const subscriptionsController = require('./controller/subscriptions.controller')
 const goodsController = require('./controller/goods.controller');
 const shopsController = require('./controller/shops.controller');
 const authContoller = require('./controller/auth.controller');
+const vkController = require('./controller/vk.controller');
 const authMiddleware = require('./middleware/auth.middleware');
 const sslRedirect = require('heroku-ssl-redirect');
 
@@ -23,6 +24,7 @@ app.use('/goods', goodsController);
 app.use('/subscriptions', authMiddleware.authRequired, subscriptionsController);
 app.use('/shops', shopsController);
 app.use('/auth', authContoller);
+app.use('/vk', vkController);
 // app.use('/pay', payContoller);
 
 app.use(routes.app.frontend, express.static(routes.fs.frontend));
