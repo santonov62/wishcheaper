@@ -26,11 +26,13 @@ const callbackApi = async (req, res) => {
     //     "event_id": "03eeb977e94bd1604533b79a77751db6b8798527",
     //     "secret": "mNrFM3EPU9nmqA4g8UQs"
     // }
-    const { type, group_id, secret, object: { body, user_id } } = req.body;
+    const { type, secret } = req.body;
     if (type === 'confirmation') {
-        res.send('b8660ca3');
+        res.send(process.env.VK_CALLBACK_API_CONFIRMATION);
         return;
-    } else if (type === "message_new") {
+    }
+    const {object: { body, user_id }} = req.body;
+    if (type === "message_new") {
 
     }
     res.send('ok');
