@@ -23,30 +23,31 @@ const computeruniverseChecker = require('./computeruniverseChecker.service');
 const playstationStoreChecker = require('./playstationStoreChecker.service');
 const eldoradoChecker = require('./eldoradoChecker.service');
 const iherbChecker = require('./iherbChecker.service');
+const metroChecker = require('./metroChecker.service');
 const moment = require('moment');
 const socketService = require('../socket.service');
 
 const checkerList = [
-  pandaoChecker,
-  avitoChecker,
-  mvideoChecker,
+  asosChecker,
   aliexpressChecker,
-  tmallAliexpressChecker,
+  avitoChecker,
+  beruChecker,
+  computeruniverseChecker,
+  citilinkChecker,
   dnsShopChecker,
+  pandaoChecker,
+  mvideoChecker,
+  metroChecker,
+  tmallAliexpressChecker,
   ozoneChecker,
   techportChecker,
-  beruChecker,
   goodsChecker,
-  lamodaChecker,
   jdChecker,
-  asosChecker,
-  wildberriesChecker,
   leroymerlinChecker,
+  lamodaChecker,
   wildberriesChecker,
-  citilinkChecker,
   playstationStoreChecker,
   eldoradoChecker,
-  computeruniverseChecker,
   iherbChecker
 ];
 

@@ -50,6 +50,7 @@ const add = async (req, res) => {
     const good = await checkerService.add({url, user});
     res.json(good);
   } catch (e) {
+    console.error(e);
     res.status(500).json({error: e.message});
   } finally {
     console.groupEnd();

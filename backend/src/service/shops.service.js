@@ -37,9 +37,14 @@ const SHOP_BY_URL = `SELECT * FROM shops WHERE url LIKE $1`;
 const getShopByUrl = async (url) => {
   const regexp = /^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/gm
   const [shopUrl, name] = regexp.exec(url);
-  const result = await db.query(SHOP_BY_URL, [`%${name}%`]);
+  const result = await db.query(SHOP_BY_URL, [`%${getDomainName(name)}%`]);
   return result.rows[0];
 };
+
+function getDomainName(name) {
+  const chunks = name.split('.');
+  return `${chunks[chunks.length-2]}.${chunks[chunks.length-1]}`;
+}
 
 const MY_SHOPS = `
 SELECT sh.id, sh.title, sh.name,
