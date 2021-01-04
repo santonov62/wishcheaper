@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
 const proxyHolder = require('../../module/proxyHolder');
-const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'avito.ru';
 const SHOP_TITLE = 'Avito';
