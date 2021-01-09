@@ -10,6 +10,10 @@ const log = (text, params) => {
 
 const callbackApi = async (req, res) => {
   console.group(`[vk.controller] [callbackApi]`);
+  const { type, secret, object = {} } = req.body;
+  const { body, user_id: vk } = object;
+  // const {object: { body, user_id: vk }} = req.body;
+
   try {
     log(req.body);
     // { "type": "confirmation", "group_id": 183983399 }
@@ -29,16 +33,21 @@ const callbackApi = async (req, res) => {
     //     "event_id": "03eeb977e94bd1604533b79a77751db6b8798527",
     //     "secret": "mNrFM3EPU9nmqA4g8UQs"
     // }
-    const { type, secret } = req.body;
+    // const { type, secret } = req.body;
     if (type === 'confirmation') {
         res.send(process.env.VK_CALLBACK_API_CONFIRMATION);
         return;
     }
-    const {object: { body, user_id: vk }} = req.body;
+    // const {object: { body, user_id: vk }} = req.body;
     if (type === "message_new") {
       const good = await addByUrlFromText({body, vk});
     }
   } catch (e) {
+    vkService.sendVk({
+      message: `
+      Error: ${e.message}`,
+      usersVk: vk
+    });
     res.status(500).send(e.message);
   } finally {
     res.status(200).send('ok');
