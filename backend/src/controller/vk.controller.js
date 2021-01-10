@@ -48,7 +48,7 @@ const callbackApi = async (req, res) => {
       Error: ${e.message}`,
       usersVk: vk
     });
-    res.status(500).send(e.message);
+    // res.status(500).send(e.message);
   } finally {
     res.status(200).send('ok');
     console.groupEnd();

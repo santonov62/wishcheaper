@@ -31,10 +31,11 @@ const GoodItemTmpl = ({id, url, title, logo, price, old_price, shop_id, shop_nam
         if (isAccepted)
           removeGood(id);
       }}/>
-      {(!!isRefreshing || isNewGood) &&
+      {!!isRefreshing &&
       <Dimmer active inverted style={{borderRadius: '15px', backgroundColor: 'transparent', zIndex: 1}}>
-          {isRefreshing && <Loader>Loading</Loader>}
-          {!isRefreshing && isNewGood && <Icon size='massive' name='clock outline' style={{color: 'grey', opacity: 0.7}}/>}
+          <Loader>Loading</Loader>
+          {/*{isRefreshing && <Loader>Loading</Loader>}*/}
+          {/*{!isRefreshing && isNewGood && <Icon size='massive' name='clock outline' style={{color: 'grey', opacity: 0.7}}/>}*/}
       </Dimmer>
       }
       {isInvalidValid &&

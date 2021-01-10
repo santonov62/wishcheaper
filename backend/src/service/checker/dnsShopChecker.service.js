@@ -38,7 +38,7 @@ const parse = async (url) => {
     await page.emulate(iPhone);
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
+    await page.goto(url, {waitUntil: 'networkidle2', timeout: TIMEOUT_DELAY});
 
     let inactive_at;
     
