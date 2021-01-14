@@ -24,25 +24,33 @@ const init = async () => {
 
 init();
 
-const parse = async (url) => {
-
+const parse = async (url, attempts = 0) => {
+  attempts++;
   if (!url)
     throw new Error(`Url required.`);
 
   let launchParams = { args: [ `--no-sandbox` ] };
-  // const proxy = await proxyHolder.pullProxy(url);
-  // if (!!proxy && !!proxy.ip) {
-  //   launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
-  // }
+  const proxy = await proxyHolder.pullProxy(url);
+  if (!!proxy && !!proxy.ip) {
+    launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
+  }
 
   const browser = await puppeteer.launch({ ...launchParams, headless: !process.env.PUPPETEER_DEV });
 
   try {
     const page = await browser.newPage();
-    await page.emulate(iPhone);
 
-    log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
+    try {
+      await page.emulate(iPhone);
+      await page.goto(url, {waitUntil: 'domcontentloaded'});
+    } catch (e) {
+      browser.close();
+      if (attempts < 5)
+        return await parse(url, attempts);
+    }
+
+    // log(`goto: `, url);
+    // await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
     // log(`done`);
 
     let title, currentPrice, logo, oldPrice;
