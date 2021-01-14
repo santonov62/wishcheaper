@@ -69,7 +69,7 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
   const isImportant = !!roundedPercentDiscount && !!min_price && price < min_price + min_price * 0.015;
 
   return (
-      <Card className={`goodItem ${isInactive ? 'inactive' : ''} ${isImportant ? 'important' : ''}`}>
+      <Card className={`goodItem ${isInactive ? 'inactive' : ''}`}>
         <div className='logo'>
           {!!logo ? <Image src={logo} /> : <Icon size='huge' name='image' style={{margin: 30}} /> }
           <div className='floating'>
@@ -123,6 +123,12 @@ const ShortGoodItem = ({id: good_id, url, title, logo, price, old_price, shop_id
                   </div>
 
                   <div>
+                    {!!isImportant &&
+                    <Label color="green" size='small' title="Сейчас самая низкая цена">
+                      <Icon name='thumbs up' />Выгодно
+                    </Label>
+                    }
+
                     {!!min_price && min_price < price &&
                     <Label size='small' title="Самая низкая цена">
                       <Icon name='area chart' />{min_price} {currency}
