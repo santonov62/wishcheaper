@@ -43,7 +43,6 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);
     try {
-      await page.waitForSelector('.product-page__tablet-title', { visible: true });
       title = await page.$eval('.product-page__tablet-title', node => node.textContent);
     } catch (e) {
       console.error(e);
