@@ -91,6 +91,9 @@ const parse = async (url, attempts = 0) => {
 
     log(`[parse] done`, parsedData);
 
+    if (!!title) {
+      proxyHolder.unshiftProxy(proxy);
+    }
     return parsedData;
 
   } catch (e) {
