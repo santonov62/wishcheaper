@@ -38,12 +38,12 @@ const parse = async (url) => {
     await page.emulate(iPhone);
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
+    await page.goto(url, {waitUntil: 'networkidle2', timeout: TIMEOUT_DELAY});
     
     let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);
     try {
-      await page.waitForSelector('[data-widget="webProductHeading"]', { visible: true });
+      // await page.waitForSelector('[data-widget="webProductHeading"]', { visible: true });
       title = await page.$eval('[data-widget="webProductHeading"]', node => node.textContent);
     } catch (e) {
       console.error(e);
@@ -52,7 +52,7 @@ const parse = async (url) => {
     log(`prices`);
     let prices;
     try {
-      await page.waitForSelector('[data-widget="webPrice"]', { visible: true });
+      // await page.waitForSelector('[data-widget="webPrice"]', { visible: true });
       prices = await page.$eval('[data-widget="webPrice"]', node => {
         const text = node.innerText.split('\n');
         console.log(text)
