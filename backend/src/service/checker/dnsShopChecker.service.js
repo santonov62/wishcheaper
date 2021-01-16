@@ -1,28 +1,11 @@
 const puppeteer = require('puppeteer');
-const shopService = require('../shops.service');
-const isDebugMode = false;
-const TIMEOUT_DELAY = 30000;
+const iPhone = puppeteer.devices['iPhone 6'];
 const SHOP_NAME = 'dns-shop.ru';
 const SHOP_TITLE = 'DNS';
-const iPhone = puppeteer.devices['iPhone 6'];
 
 const log = (text, params = '') => {
   console.log(`[dnsShopChecker.service] -> ${text}`, params);
 };
-
-const init = async () => {
-  const shop = await shopService.getShopByUrl(SHOP_NAME);
-  if (!shop) {
-    const addedShop = await shopService.save({
-      title: SHOP_TITLE,
-      url: `https://${SHOP_NAME}`,
-      name: SHOP_NAME,
-      scan_interval: 720})
-    log(`[init] added shop`, addedShop);
-  }
-};
-
-init();
 
 const parse = async (url, launchParams) => {
   
@@ -33,7 +16,7 @@ const parse = async (url, launchParams) => {
     await page.emulate(iPhone);
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'networkidle2', timeout: TIMEOUT_DELAY});
+    await page.goto(url, {waitUntil: 'networkidle2'});
 
     let inactive_at;
     
@@ -101,5 +84,7 @@ module.exports = {
   parse,
   isMyUrl,
   getShopUrl: () => SHOP_NAME,
-  withProxy: true
+  withProxy: true,
+  SHOP_TITLE,
+  SHOP_NAME
 };
