@@ -91,7 +91,7 @@ const parse = async (url) => {
   let parsedGood;
   let launchParams = { args: [ `--no-sandbox` ], headless: !process.env.PUPPETEER_DEV };
   if (checkerInstance.withProxy) {
-    for (let attempts = 0; attempts < 5; attempts++) {
+    for (let attempts = 0; (!parsedGood || !parsedGood.title) && attempts < 5; attempts++) {
       try {
         parsedGood = await parseWithProxy(url, launchParams, checkerInstance);
       } catch (e) {
