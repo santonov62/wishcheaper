@@ -24,34 +24,13 @@ const init = async () => {
 
 init();
 
-const parse = async (url, attempts = 0) => {
-  attempts++;
-  if (!url)
-    throw new Error(`Url required.`);
-
-  let launchParams = { args: [ `--no-sandbox` ] };
-  const proxy = await proxyHolder.pullProxy(url);
-  if (!!proxy && !!proxy.ip) {
-    launchParams = {args: [`--proxy-server=${proxy.ip}`, `--no-sandbox`]};
-  }
+const parse = async (url, launchParams ) => {
 
   const browser = await puppeteer.launch({ ...launchParams, headless: !process.env.PUPPETEER_DEV });
-
   try {
     const page = await browser.newPage();
-
-    try {
-      await page.emulate(iPhone);
-      await page.goto(url, {waitUntil: 'domcontentloaded'});
-    } catch (e) {
-      browser.close();
-      if (attempts < 5)
-        return await parse(url, attempts);
-    }
-
-    // log(`goto: `, url);
-    // await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
-    // log(`done`);
+    await page.emulate(iPhone);
+    await page.goto(url, {waitUntil: 'domcontentloaded'});
 
     let title, currentPrice, logo, oldPrice;
     log(`title`);
@@ -90,10 +69,6 @@ const parse = async (url, attempts = 0) => {
     };
 
     log(`[parse] done`, parsedData);
-
-    if (!!title) {
-      proxyHolder.unshiftProxy(proxy);
-    }
     return parsedData;
 
   } catch (e) {
@@ -111,5 +86,6 @@ const isMyUrl = (url) => {
 module.exports = {
   parse,
   isMyUrl,
-  getShopUrl: () => SHOP_NAME
+  getShopUrl: () => SHOP_NAME,
+  withProxy: true
 };

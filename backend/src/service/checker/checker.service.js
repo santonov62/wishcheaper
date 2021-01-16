@@ -26,6 +26,7 @@ const iherbChecker = require('./iherbChecker.service');
 const metroChecker = require('./metroChecker.service');
 const moment = require('moment');
 const socketService = require('../socket.service');
+const proxyHolder = require('../../module/proxyHolder');
 
 const checkerList = [
   asosChecker,
@@ -61,14 +62,43 @@ const isShopSupported = (url) => {
 
 const parse = async (url) => {
   // console.group(`[checker.service] -> [parse]`);
+
+  if (!url)
+    throw new Error(`Url required.`);
+
   if (!isShopSupported(url))
     throw new Error(`Shop doesn't supported.`);
+
   const checkerInstance = getCheckerForUrl(url);
-  const parsedGood = await checkerInstance.parse(url);
+  let parsedGood;
+  let launchParams = { args: [ `--no-sandbox` ], headless: !process.env.PUPPETEER_DEV };
+  if (checkerInstance.withProxy) {
+    for (let attempts = 0; attempts < 5; attempts++) {
+      try {
+        parsedGood = await parseWithProxy(url, launchParams, checkerInstance);
+      } catch (e) {
+        log(e.message);
+      }
+    }
+  } else {
+    parsedGood = await checkerInstance.parse(url, launchParams);
+  }
   log(`[parse] done`, parsedGood);
   // console.groupEnd();
-  return parsedGood
+  return parsedGood;
 };
+
+const parseWithProxy = async (url, launchParams, checkerInstance) => {
+  const proxy = await proxyHolder.pullProxy(url);
+  if (proxy)
+    launchParams.args.push(`--proxy-server=${proxy.ip}`);
+
+  const parsedGood = await checkerInstance.parse(url, launchParams);
+  if (proxy && parsedGood && parsedGood.title) {
+    proxyHolder.unshiftProxy(proxy);
+  }
+  return parsedGood;
+}
 
 const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old_price, autobuy_price, min_price}) => {
   console.group(`[checker.service] -> [refresh] url: ${url}`);
@@ -88,6 +118,9 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
       throw new Error(`Good url required.`);
 
     const parsedGood = await parse(url);
+
+    if (!parsedGood)
+      throw new Error(`ERROR: There is no parsedGood!`);
 
     if (!!parsedGood.title) {
 

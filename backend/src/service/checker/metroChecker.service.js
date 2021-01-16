@@ -24,15 +24,9 @@ const init = async () => {
 
 init();
 
-const parse = async (url) => {
-  
-  if (!url)
-    throw new Error(`Url required.`);
-
-  let launchParams = { args: [ `--no-sandbox` ], headless: !process.env.PUPPETEER_DEV };
+const parse = async (url, launchParams) => {
 
   const browser = await puppeteer.launch(launchParams);
-
   try {
     const page = await browser.newPage();
     await page.emulate(iPhone);

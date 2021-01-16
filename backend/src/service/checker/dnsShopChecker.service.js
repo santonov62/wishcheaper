@@ -24,13 +24,8 @@ const init = async () => {
 
 init();
 
-const parse = async (url) => {
+const parse = async (url, launchParams) => {
   
-  if (!url)
-    throw new Error(`Url required.`);
-
-  let launchParams = { args: [ `--no-sandbox` ], headless: !process.env.PUPPETEER_DEV };
-
   const browser = await puppeteer.launch(launchParams);
 
   try {
@@ -45,14 +40,12 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice;
     log(`title`);
     try {
-      await page.waitForSelector('.price-item-title');
       title = await page.$eval('.price-item-title', node => node.innerText);
     } catch (e) {
       console.error(e);
     }
     log(`price`);
     try {
-      await page.waitFor('.product-card-price__current');
       currentPrice = await page.$eval('.product-card-price__current', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) {
       console.error(e);
@@ -107,5 +100,6 @@ const isMyUrl = (url) => {
 module.exports = {
   parse,
   isMyUrl,
-  getShopUrl: () => SHOP_NAME
+  getShopUrl: () => SHOP_NAME,
+  withProxy: true
 };
