@@ -1,6 +1,5 @@
 const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
-const db = require('../db.service');
 const subscriptionService = require('../subscriptions.service');
 const shopsService = require('../shops.service');
 const pandaoChecker = require('./pandaoChecker.service');
@@ -189,24 +188,6 @@ const refresh = async ({url, id, price, prev_price, inactive_at, updated_at, old
   return result;
 };
 
-const ADDITIONAL_GOOD_DATA = `SELECT
-  g.id as good_id,
-  su.id as subscription_id,
-  su.price_discount,
-  su.percent_discount,
-  su.price_discount,
-  su.percent_discount,
-  sh.name as shop_name
-FROM goods g
-       LEFT JOIN subscriptions as su ON su.good_id = g.id AND su.user_vk = $2
-       LEFT JOIN shops as sh ON sh.id = g.shop_id
-WHERE
-    g.id = $1`;
-const additionalGoodData = async ({id, user_vk}) => {
-  const result = await db.query(ADDITIONAL_GOOD_DATA, [id, user_vk]);
-  return result.rows && result.rows[0];
-};
-
 const add = async ({url, user}) => {
   console.group(`[checker.service] -> [add]`);
   try {
@@ -244,7 +225,7 @@ const add = async ({url, user}) => {
 
 const uiRefreshCallback = async ({good, user}) => {
   if (!!good) {
-    const additionalData = await additionalGoodData({id: good.id, user_vk: user.vk});
+    const additionalData = await goodsService.additionalGoodData({id: good.id, user_vk: user.vk});
     good = {
       ...good,
       ...additionalData
@@ -285,7 +266,6 @@ const getClippedUrl = (url) => {
 module.exports = {
   add,
   addByUrl,
-  additionalGoodData,
   getClippedUrl,
   refresh
 };
