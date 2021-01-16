@@ -24,6 +24,7 @@ const playstationStoreChecker = require('./playstationStoreChecker.service');
 const eldoradoChecker = require('./eldoradoChecker.service');
 const iherbChecker = require('./iherbChecker.service');
 const metroChecker = require('./metroChecker.service');
+const yandexMarketChecker = require('./yandexMarketChecker.service');
 const moment = require('moment');
 const socketService = require('../socket.service');
 const proxyHolder = require('../../module/proxyHolder');
@@ -49,7 +50,8 @@ const checkerList = [
   wildberriesChecker,
   playstationStoreChecker,
   eldoradoChecker,
-  iherbChecker
+  iherbChecker,
+  yandexMarketChecker,
 ];
 
 const getCheckerForUrl = (url) => {
