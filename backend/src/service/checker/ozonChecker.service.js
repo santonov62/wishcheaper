@@ -1,28 +1,11 @@
 const puppeteer = require('puppeteer');
-const shopService = require('../shops.service');
-const TIMEOUT_DELAY = 30000;
+const iPhone = puppeteer.devices['iPhone 6'];
 const SHOP_NAME = 'ozon.ru';
 const SHOP_TITLE = 'Ozone';
-const iPhone = puppeteer.devices['iPhone 6'];
-const SCAN_INTERVAL_MINUTES = 720;
 
 const log = (text, params = '') => {
   console.log(`[ozonChecker.service] -> ${text}`, params);
 };
-
-const init = async () => {
-  const shop = await shopService.getShopByUrl(SHOP_NAME);
-  if (!shop) {
-    const addedShop = await shopService.save({
-      title: SHOP_TITLE,
-      url: `https://${SHOP_NAME}`,
-      name: SHOP_NAME,
-      scan_interval: SCAN_INTERVAL_MINUTES});
-    log(`[init] added shop`, addedShop);
-  }
-};
-
-init();
 
 const parse = async (url) => {
   
@@ -38,12 +21,11 @@ const parse = async (url) => {
     await page.emulate(iPhone);
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'networkidle2', timeout: TIMEOUT_DELAY});
+    await page.goto(url, {waitUntil: 'networkidle2'});
     
     let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);
     try {
-      // await page.waitForSelector('[data-widget="webProductHeading"]', { visible: true });
       title = await page.$eval('[data-widget="webProductHeading"]', node => node.textContent);
     } catch (e) {
       console.error(e);
@@ -52,7 +34,6 @@ const parse = async (url) => {
     log(`prices`);
     let prices;
     try {
-      // await page.waitForSelector('[data-widget="webPrice"]', { visible: true });
       prices = await page.$eval('[data-widget="webPrice"]', node => {
         const text = node.innerText.split('\n');
         console.log(text)
@@ -60,28 +41,28 @@ const parse = async (url) => {
         return pricesBox.replace(/\s/g, '').split('₽');
       });
     } catch (e) {
-      console.error(e);
+      // console.error(e);
     }
 
     log(`price`);
     try {
       currentPrice = parseInt(prices[0]);
     } catch (e) {
-      console.error(e);
+      // console.error(e);
     }
   
     log(`oldPrice`);
     try {
       oldPrice = parseInt(prices[1]);
     } catch (e) {
-      console.error(e);
+      // console.error(e);
     }
 
     log(`logo`);
     try {
       logo = await page.$eval('[data-widget="webMobGallery"] img', node => node.getAttribute('src'));
     } catch (e) {
-      console.error(e);
+      // console.error(e);
     }
 
     try {
@@ -92,7 +73,7 @@ const parse = async (url) => {
         inactive_at = new Date();
       }
     } catch (e) {
-      console.error(e);
+      // console.error(e);
     }
     
     const parsedData = {
@@ -123,5 +104,7 @@ const isMyUrl = (url) => {
 module.exports = {
   parse,
   isMyUrl,
-  getShopUrl: () => SHOP_NAME
+  getShopUrl: () => SHOP_NAME,
+  SHOP_NAME,
+  SHOP_TITLE,
 };
