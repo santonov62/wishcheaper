@@ -1,27 +1,12 @@
 const puppeteer = require('puppeteer');
-const shopService = require('../shops.service');
+const iPhone = puppeteer.devices['iPhone 6'];
 const SHOP_NAME = 'market.yandex.ru';
 const SHOP_TITLE = 'Яндекс Маркет';
-const iPhone = puppeteer.devices['iPhone 6'];
 const SCAN_INTERVAL_MINUTES = 180;
 
 const log = (text, params = '') => {
   console.log(`[yandexMarket.service] -> ${text}`, params);
 };
-
-const init = async () => {
-  const shop = await shopService.getShopByUrl(SHOP_NAME);
-  if (!shop) {
-    const addedShop = await shopService.save({
-      title: SHOP_TITLE,
-      url: `https://${SHOP_NAME}`,
-      name: SHOP_NAME,
-      scan_interval: SCAN_INTERVAL_MINUTES});
-    log(`[init] added shop`, addedShop);
-  }
-};
-
-init();
 
 const parse = async (url, launchParams) => {
 
@@ -101,5 +86,8 @@ const isMyUrl = (url) => {
 module.exports = {
   parse,
   isMyUrl,
-  getShopUrl: () => SHOP_NAME
+  getShopUrl: () => SHOP_NAME,
+  SHOP_NAME,
+  SHOP_TITLE,
+  SCAN_INTERVAL_MINUTES
 };

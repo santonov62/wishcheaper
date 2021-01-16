@@ -54,6 +54,23 @@ const checkerList = [
   yandexMarketChecker,
 ];
 
+const initShops = () => {
+  checkerList.forEach(async ({SHOP_NAME, SHOP_TITLE, SCAN_INTERVAL_MINUTES = 12 * 60}) => {
+    if (!SHOP_NAME)
+      return;
+    const shop = await shopsService.getShopByUrl(SHOP_NAME);
+    if (!shop) {
+      const addedShop = await shopsService.save({
+        title: SHOP_TITLE,
+        url: `https://${SHOP_NAME}`,
+        name: SHOP_NAME,
+        scan_interval: SCAN_INTERVAL_MINUTES});
+      log(`[initShops] added shop`, addedShop);
+    }
+  });
+}
+initShops();
+
 const getCheckerForUrl = (url) => {
   return checkerList.find(checker => checker.isMyUrl(url));
 };
