@@ -1,28 +1,11 @@
 const puppeteer = require('puppeteer');
-const shopService = require('../shops.service');
-const TIMEOUT_DELAY = 30000;
+const iPhone = puppeteer.devices['iPhone 6'];
 const SHOP_NAME = 'metro-cc.ru';
 const SHOP_TITLE = 'Metro';
-const iPhone = puppeteer.devices['iPhone 6'];
-const SCAN_INTERVAL_MINUTES = 720;
 
 const log = (text, params = '') => {
   console.log(`[metroChecker.service] -> ${text}`, params);
 };
-
-const init = async () => {
-  const shop = await shopService.getShopByUrl(SHOP_NAME);
-  if (!shop) {
-    const addedShop = await shopService.save({
-      title: SHOP_TITLE,
-      url: `https://${SHOP_NAME}`,
-      name: SHOP_NAME,
-      scan_interval: SCAN_INTERVAL_MINUTES});
-    log(`[init] added shop`, addedShop);
-  }
-};
-
-init();
 
 const parse = async (url, launchParams) => {
 
@@ -32,7 +15,7 @@ const parse = async (url, launchParams) => {
     await page.emulate(iPhone);
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'networkidle2', timeout: TIMEOUT_DELAY});
+    await page.goto(url, {waitUntil: 'networkidle2'});
     
     let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);
@@ -94,5 +77,7 @@ const isMyUrl = (url) => {
 module.exports = {
   parse,
   isMyUrl,
-  getShopUrl: () => SHOP_NAME
+  getShopUrl: () => SHOP_NAME,
+  SHOP_NAME,
+  SHOP_TITLE,
 };

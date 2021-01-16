@@ -89,5 +89,5 @@ module.exports = {
   getShopUrl: () => SHOP_NAME,
   SHOP_NAME,
   SHOP_TITLE,
-  SCAN_INTERVAL_MINUTES
+  SCAN_INTERVAL_MINUTES,
 };
