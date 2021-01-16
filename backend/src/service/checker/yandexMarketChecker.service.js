@@ -87,6 +87,7 @@ module.exports = {
   parse,
   isMyUrl,
   getShopUrl: () => SHOP_NAME,
+  withProxy: true,
   SHOP_NAME,
   SHOP_TITLE,
   SCAN_INTERVAL_MINUTES,
