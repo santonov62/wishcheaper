@@ -29,7 +29,8 @@ const parse = async (url, launchParams) => {
     //PRICE
     log(`price`);
     try {
-      currentPrice = await page.$eval('#priceblock_ourprice', node => parseInt(node.innerText.replace(/\s|\$+/g, '')));
+      currentPrice = await page.$eval(`#priceblock_ourprice, 
+          #newPitchPriceWrapper_feature_div span span:nth-of-type(2)`, node => parseInt(node.innerText.replace(/\s|\$+/g, '')));
     } catch (e) {
       inactive_at = new Date();
     }
@@ -37,7 +38,8 @@ const parse = async (url, launchParams) => {
     //OLD PRICE
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('.priceBlockStrikePriceString', node => parseInt(node.innerText.replace(/\s|\$+/g, '')));
+      oldPrice = await page.$eval(`.priceBlockStrikePriceString, 
+          #newPitchPriceWrapper_feature_div .a-section .a-section:nth-of-type(2)`, node => parseInt(node.innerText.replace(/\s|\$+/g, '')));
     } catch (e) {
       // console.error(e);
     }
