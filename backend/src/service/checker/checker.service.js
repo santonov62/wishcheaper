@@ -2,6 +2,7 @@ const goodsService = require('../goods.service');
 const vkService = require('../vk.service');
 const subscriptionService = require('../subscriptions.service');
 const shopsService = require('../shops.service');
+const amazonChecker = require('./amazonChecker.service');
 const pandaoChecker = require('./pandaoChecker.service');
 const avitoChecker = require('./avitoChecker.service');
 const mvideoChecker = require('./mvideoChecker.service');
@@ -29,6 +30,7 @@ const socketService = require('../socket.service');
 const proxyHolder = require('../../module/proxyHolder');
 
 const checkerList = [
+  amazonChecker,
   asosChecker,
   aliexpressChecker,
   avitoChecker,

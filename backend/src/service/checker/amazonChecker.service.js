@@ -1,11 +1,11 @@
 const puppeteer = require('puppeteer');
 const iPhone = puppeteer.devices['iPhone 6'];
-const SHOP_NAME = 'market.yandex.ru';
-const SHOP_TITLE = 'Яндекс Маркет';
-const SCAN_INTERVAL_MINUTES = 180;
+const SHOP_NAME = 'amazon.com';
+const SHOP_TITLE = 'Amazon';
+const SCAN_INTERVAL_MINUTES = 2 * 60;
 
 const log = (text, params = '') => {
-  console.log(`[yandexMarketChecker.service] -> ${text}`, params);
+  console.log(`[amazonChecker.service] -> ${text}`, params);
 };
 
 const parse = async (url, launchParams) => {
@@ -16,12 +16,12 @@ const parse = async (url, launchParams) => {
     await page.emulate(iPhone);
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'networkidle2'});
+    await page.goto(url, {waitUntil: 'domcontentloaded'});
 
     let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);
     try {
-      title = await page.$eval('[data-zone-name="summary"] h1', node => node.textContent);
+      title = await page.$eval('#title', node => node.textContent);
     } catch (e) {
       console.error(e);
     }
@@ -29,7 +29,7 @@ const parse = async (url, launchParams) => {
     //PRICE
     log(`price`);
     try {
-      currentPrice = await page.$eval('[data-auto="price"]', node => parseInt(node.innerText.replace(/\s+/g, '')));
+      currentPrice = await page.$eval('#priceblock_ourprice', node => parseInt(node.innerText.replace(/\s|\$+/g, '')));
     } catch (e) {
       inactive_at = new Date();
     }
@@ -37,21 +37,21 @@ const parse = async (url, launchParams) => {
     //OLD PRICE
     log(`oldPrice`);
     try {
-      oldPrice = await page.$eval('[data-auto="old-price"]', node => parseInt(node.innerText.replace(/\s+/g, '')));
+      oldPrice = await page.$eval('.priceBlockStrikePriceString', node => parseInt(node.innerText.replace(/\s|\$+/g, '')));
     } catch (e) {
       // console.error(e);
     }
 
     log(`logo`);
     try {
-      logo = await page.$eval('picture img', node => node.getAttribute('src'));
+      logo = await page.$eval('#main-image', node => node.getAttribute('src'));
     } catch (e) {
       // console.error(e);
     }
 
     // inactive
     try {
-      const payButton = await page.$('[data-zone-name="cartButton"] button');
+      const payButton = await page.$('#exportsUndeliverableMobile-cart-announce, #add-to-cart-button, #buy-now-button');
       if (!payButton)
         inactive_at = new Date();
     } catch (e) {
@@ -87,7 +87,6 @@ module.exports = {
   parse,
   isMyUrl,
   getShopUrl: () => SHOP_NAME,
-  withProxy: true,
   SHOP_NAME,
   SHOP_TITLE,
   SCAN_INTERVAL_MINUTES,
