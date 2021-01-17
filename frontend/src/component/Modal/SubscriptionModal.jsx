@@ -57,6 +57,13 @@ class SubscriptionModalTemplate extends React.Component {
       this.setState({success: true});
   };
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
+  getCurrencyIcon = () => {
+    const {currency} = this.props;
+    if (currency === "$")
+      return 'dollar sign';
+    else
+      return 'ruble sign';
+  }
   render() {
     const {trigger} = this.props;
     const {mode, priceDiscount, percentDiscount, isLoading, success, autobuy, autobuyPrice} = this.state;
@@ -108,7 +115,7 @@ class SubscriptionModalTemplate extends React.Component {
                     label='Ниже суммы'
                     name="priceDiscount"
                     value={priceDiscount}
-                    icon='ruble sign'
+                    icon={this.getCurrencyIcon()}
                     control={Input}
                     onChange={this.handleChange}
                 />

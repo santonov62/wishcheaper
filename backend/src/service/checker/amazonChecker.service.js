@@ -66,7 +66,8 @@ const parse = async (url, launchParams) => {
       price: currentPrice,
       old_price: oldPrice,
       logo,
-      inactive_at
+      inactive_at,
+      currency: '$'
     };
 
     log(`[parse] done`, parsedData);
