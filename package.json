@@ -1,7 +1,7 @@
 {
   "name": "promo",
   "version": "1.0.0",
-  "description": "Share promocodes",
+  "description": "",
   "engines": {
     "node": "9.2.x"
   },
