@@ -12,7 +12,8 @@
     "background-proxy-checker-start": "cd backend && npm run background-proxy-checker-start",
     "start": "cd backend && npm start",
     "postinstall": "cd frontend && npm install && cd ../backend && npm install && npm run db-latest",
-    "heroku-postbuild": "cd frontend && npm run build"
+    "heroku-postbuild": "cd frontend && npm run build",
+    "merge-dev-to-master": "git checkout master && git merge dev && git push && git checkout dev"
   },
   "cacheDirectories": [
     "backend/node_modules",
