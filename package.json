@@ -13,7 +13,7 @@
     "start": "cd backend && npm start",
     "postinstall": "cd frontend && npm install && cd ../backend && npm install && npm run db-latest",
     "heroku-postbuild": "cd frontend && npm run build",
-    "merge-dev-to-master": "git checkout master && git merge dev && git push && git checkout dev",
+    "merge-dev-to-master": "git checkout master && git merge dev && git push && git checkout -",
     "deploy-heroku-dev": "git push heroku dev:master && heroku logs --tail"
   },
   "cacheDirectories": [
