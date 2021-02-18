@@ -4,6 +4,7 @@ const isDebugMode = false;
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'computeruniverse.net';
 const SHOP_TITLE = 'Computeruniverse';
+const iPhone = puppeteer.devices['iPhone 6'];
 
 const log = (text, params = '') => {
   console.log(`[computeruniverseChecker.service] -> ${text}`, params);
@@ -28,14 +29,13 @@ const parse = async (url) => {
   if (!url)
     throw new Error(`Url required.`);
 
-  let launchParams = { args: [ `--no-sandbox` ], headless: true };
-  if (isDebugMode)
-    launchParams = { ...launchParams, headless: false };
+  let launchParams = { args: [ `--no-sandbox` ], headless: !process.env.PUPPETEER_DEV };
 
   const browser = await puppeteer.launch(launchParams);
 
   try {
     const page = await browser.newPage();
+    // await page.emulate(iPhone);
 
     log(`goto: `, url);
     await page.goto(url, {waitUntil: 'domcontentloaded', timeout: TIMEOUT_DELAY});
@@ -50,7 +50,7 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice, currency;
     log(`title`);
     try {
-      title = await page.$eval('.product-name', node => node.innerText);
+      title = await page.$eval('.at__productheadline', node => node.innerText);
     } catch (e) { }
 
     log(`currency`);
@@ -90,7 +90,8 @@ const parse = async (url) => {
   } catch (e) {
     throw new Error(e);
   } finally {
-    await browser.close();
+    if (!process.env.PUPPETEER_KEEP_OPENED)
+      await browser.close();
   }
 };
 
