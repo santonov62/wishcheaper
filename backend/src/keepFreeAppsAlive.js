@@ -3,7 +3,7 @@ const urls = [
     `https://donpedrobot.herokuapp.com/`,
     `https://findpromo-ru.herokuapp.com/`
 ];
-const MINUTES_INTERVAL = 10;
+const MINUTES_INTERVAL = 20;
 
 makeAlive();
 setInterval(makeAlive, MINUTES_INTERVAL * 60000);
