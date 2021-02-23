@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const urls = [
     `https://donpedrobot.herokuapp.com/`,
-    `https://findpromo-ru.herokuapp.com/`
+    // `https://findpromo-ru.herokuapp.com/`
 ];
 const MINUTES_INTERVAL = 20;
 
