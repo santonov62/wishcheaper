@@ -26,19 +26,23 @@ class ProxyHolder {
       await page.goto(url, {waitUntil: 'networkidle0'});
       log(`done`);
 
-      const selector = '#proxylist_table tr';
-      log(`waitFor: `, selector);
-      await page.waitForFunction(selector => document.querySelectorAll(selector).length > 1, {}, selector);
+      // const selector = '#proxylist_table tr';
+      const trsSelector = 'table .spy1xx, table .spy1x';
+      log(`waitFor: `, trsSelector);
+      await page.waitForFunction(selector => document.querySelectorAll(selector).length > 1, {}, trsSelector);
 
-      log(`eval`, '.proxylist_table tbody tr');
-      proxies = await page.$$eval(selector, (trs) => {
+      log('parse proxies');
+      proxies = await page.$$eval(trsSelector, (trs) => {
         const ips = [];
         trs.forEach(tr => {
-          const ip = tr.querySelector('td:first-child:not([colspan])').textContent.trim();
-          if (!!ip) {
-            const pingSpan = tr.querySelector('.proxy-ping-span');
-            const ping = pingSpan && pingSpan.getAttribute('style').match(/(?:)(\d+)(?=%)/g)[0];
-            ips.push({ip: ip, ping});
+          const data = tr.querySelector('td:nth-child(1)').innerText;
+          const match = data.match(/([\d|\.]+):(\d+)/);
+          if (match) {
+            const ip = match[1];
+            const ping = match[2];
+            if (!!ip) {
+              ips.push({ip, ping});
+            }
           }
         });
         return ips;
