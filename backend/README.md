@@ -8,7 +8,7 @@ brew install postgresql
 createdb wishcheaper
 
 # or with docker
-docker run --name promo-postgres -p 5432:5432 -e POSTGRES_USER=$USER -e POSTGRES_DB=wishcheaper -d postgres:10
+docker run --name promo-postgres -p 5432:5432 -e POSTGRES_USER=$USER -e POSTGRES_DB=wishcheaper -e POSTGRES_PASSWORD=postgres -d postgres:10
 ```
 
 * Apply database migrations
