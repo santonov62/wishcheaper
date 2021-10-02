@@ -1,3 +1,2 @@
 web: node src/index.js
 parser: node src/backgroundParser.js
-alive: node src/keepFreeAppsAlive.js
