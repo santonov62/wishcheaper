@@ -2,6 +2,8 @@ P R O M O
 ---------
 
 # Technologies used
+!nodejs 9.x.x
+
 Frontend:
 * react
 * react-router 4
@@ -64,17 +66,18 @@ DATABASE_URL="postgresql://localhost:5432/wishcheaper"
 PORT=4000
 NODE_ENV=dev
 JWT_SECRET=secret_key
-VK_SECRET_KEY=zNrFM3EPU9nmqA4g8UQs vk application secret key
-VK_COMMUNITY_KEY=zdf809d2adf809d2adf809d243ad936aa1aadf8adf809d2f0ef7a04987feb44c538a699 vk community access tocken(key)
+VK_SECRET_KEY=zNrFM3EPU9nmqA4g8UQs
+VK_COMMUNITY_KEY=zdf809d2adf809d2adf809d243ad936aa1aadf8adf809d2f0ef7a04987feb44c538a699
 VK_API_VERSION=5.87
 
 ```
 * /frontend/.env.local
 ```
 PORT=3000
-REACT_APP_VK_APP_ID=6744839 vk application id
-REACT_APP_VK_SERVICE_KEY=z2e719f452e719f452e719f4a45281f2f3552e752e719f409043dc7bf0b78278e870f6b vk application service key
+REACT_APP_VK_APP_ID=7037811
+REACT_APP_VK_SERVICE_KEY=adf809d2adf809d2adf809d243ad936aa1aadf8adf809d2f0ef7a04987feb44c538a699
 REACT_APP_VK_API_VERSION=5.87
+REACT_APP_VK_COMMUNITY_ID=183947186
 ```
 
 * have fun?

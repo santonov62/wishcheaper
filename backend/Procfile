@@ -1,2 +1,2 @@
-web: node src/index.js
+backend: node src/index.js
 parser: node src/backgroundParser.js
