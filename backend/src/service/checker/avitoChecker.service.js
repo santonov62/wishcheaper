@@ -4,7 +4,7 @@ const proxyHolder = require('../../module/proxyHolder');
 const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'avito.ru';
 const SHOP_TITLE = 'Avito';
-const devices = require('puppeteer/DeviceDescriptors');
+const devices = puppeteer.devices;
 const iPhone = devices['iPhone 6'];
 
 const log = (text, params = '') => {

@@ -6,8 +6,8 @@
     "node": "9.2.x"
   },
   "scripts": {
-    "dev-backend-start": "cd backend && npm run dev",
-    "dev-frontend-start": "cd frontend && npm start",
+    "dev-backend": "cd backend && npm run dev",
+    "dev-frontend": "cd frontend && npm start",
     "background-parser-start": "cd backend && npm run background-parser-start",
     "background-proxy-checker-start": "cd backend && npm run background-proxy-checker-start",
     "start": "cd backend && npm start",

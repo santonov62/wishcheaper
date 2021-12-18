@@ -1,1 +1,1 @@
-web: node_modules/.bin/nodemon --inspect src/index.js
+backend: node_modules/.bin/nodemon --inspect src/index.js
