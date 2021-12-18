@@ -27,13 +27,13 @@ const parse = async (url, launchParams) => {
     }
 
     //PRICE
-    log(`price`);
     try {
       currentPrice = await page.$eval(`#priceblock_ourprice, 
           #newPitchPriceWrapper_feature_div span span:nth-of-type(2)`, node => parseInt(node.innerText.replace(/\s|\$+/g, '')));
     } catch (e) {
       inactive_at = new Date();
     }
+    log(`currentPrice`, currentPrice);
 
     //OLD PRICE
     log(`oldPrice`);
@@ -44,12 +44,12 @@ const parse = async (url, launchParams) => {
       // console.error(e);
     }
 
-    log(`logo`);
     try {
       logo = await page.$eval('#main-image', node => node.getAttribute('src'));
     } catch (e) {
       // console.error(e);
     }
+    log(`logo`, logo);
 
     // inactive
     try {

@@ -23,14 +23,8 @@ const init = async () => {
 
 init();
 
-const parse = async (url) => {
-  
-  if (!url)
-    throw new Error(`Url required.`);
 
-  let launchParams = { args: [ `--no-sandbox` ], headless: true };
-  if (isDebugMode)
-    launchParams = { ...launchParams, headless: false };
+const parse = async (url, launchParams) => {
 
   const browser = await puppeteer.launch(launchParams);
 
@@ -43,12 +37,12 @@ const parse = async (url) => {
     let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);
     try {
-      title = await page.$eval('.brand-and-name.j-product-title', node => node.innerText);
+      title = await page.$eval('.same-part-kt__header', node => node.innerText);
     } catch (e) { }
     
     log(`price`);
     try {
-      currentPrice = await page.$eval('.final-cost', node => parseInt(node.innerText.replace(/\s/g, '')));
+      currentPrice = await page.$eval('.price-block__final-price', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) {
       inactive_at = new Date();
     }
@@ -56,12 +50,12 @@ const parse = async (url) => {
     log(`oldPrice`);
     try {
       // oldPrice = await page.$eval('.top-sale-block div div div div div', node => parseInt(node.innerText.replace(/\s/g, '')));
-      oldPrice = await page.$eval('.old-price', node => parseInt(node.innerText.replace(/\s/g, '')));
+      oldPrice = await page.$eval('.price-block__old-price', node => parseInt(node.innerText.replace(/\s/g, '')));
     } catch (e) { }
     
     log(`logo`);
     try {
-      logo = await page.$eval('img.preview-photo', node => node.getAttribute('src'))
+      logo = await page.$eval('.slide__content.img-plug img', node => node.getAttribute('src'))
     } catch (e) { }
 
     if (!currentPrice) {
@@ -84,7 +78,8 @@ const parse = async (url) => {
   } catch (e) {
     throw new Error(e);
   } finally {
-    await browser.close();
+    if (!process.env.PUPPETEER_KEEP_OPENED)
+      await browser.close();
   }
 };
 
