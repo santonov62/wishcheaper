@@ -1,29 +1,12 @@
 const puppeteer = require('puppeteer');
 const shopService = require('../shops.service');
-const TIMEOUT_DELAY = 30000;
 const SHOP_NAME = 'eldorado.ru';
 const SHOP_TITLE = 'Эльдорадо';
-const proxyHolder = require('../../module/proxyHolder');
 const iPhone = puppeteer.devices['iPhone 6'];
 
 const log = (text, params = '') => {
   console.log(`[eldoradoChecker.service] -> ${text}`, params);
 };
-
-const init = async () => {
-  const shop = await shopService.getShopByUrl(SHOP_NAME);
-  if (!shop) {
-    const addedShop = await shopService.save({
-      title: SHOP_TITLE,
-      url: `https://${SHOP_NAME}`,
-      name: SHOP_NAME,
-      scan_interval: 240});
-    log(`[init] added shop`, addedShop);
-  }
-};
-
-init();
-
 const parse = async (url, launchParams ) => {
 
   const browser = await puppeteer.launch({ ...launchParams, headless: !process.env.PUPPETEER_DEV });
@@ -78,6 +61,21 @@ const parse = async (url, launchParams ) => {
       await browser.close();
   }
 };
+
+
+const init = async () => {
+  const shop = await shopService.getShopByUrl(SHOP_NAME);
+  if (!shop) {
+    const addedShop = await shopService.save({
+      title: SHOP_TITLE,
+      url: `https://${SHOP_NAME}`,
+      name: SHOP_NAME,
+      scan_interval: 240});
+    log(`[init] added shop`, addedShop);
+  }
+};
+
+init();
 
 const isMyUrl = (url) => {
   return url.indexOf(SHOP_NAME) !== -1;

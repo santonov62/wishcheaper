@@ -16,7 +16,7 @@ const parse = async (url, launchParams) => {
     await page.emulate(iPhone);
 
     log(`goto: `, url);
-    await page.goto(url, {waitUntil: 'domcontentloaded'});
+    await page.goto(url, {waitUntil: 'networkidle2'});
 
     let title, currentPrice, logo, oldPrice, inactive_at;
     log(`title`);

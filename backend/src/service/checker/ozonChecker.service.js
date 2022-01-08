@@ -67,9 +67,10 @@ const parse = async (url) => {
 
     try {
       const inactive = await page.$('[data-widget="webOutOfStock"]');
+      const error = await page.$('[data-widget="error"]');
       const addToCardText = await page.$eval('[data-widget="webAddToCart"]', node => node.textContent);
       const notifyAvailable = addToCardText && addToCardText.indexOf('поступлении') > 0;
-      if (!!inactive || notifyAvailable || !currentPrice) {
+      if (!!inactive || !!error || notifyAvailable || !currentPrice) {
         inactive_at = new Date();
       }
     } catch (e) {
