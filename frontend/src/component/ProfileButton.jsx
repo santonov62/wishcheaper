@@ -14,16 +14,27 @@ class ProfileButton extends React.Component {
     }
   }
   initVkWidget = () => {
-    const vk = window.VK;
-    const vk_community_id = import.meta.env.VITE_VK_COMMUNITY_ID;
-    vk.Widgets.AllowMessagesFromCommunity("vk_allow_messages_from_community", {height: 30}, vk_community_id);
-    this.setState({isVkWidgetInited: true});
+    const { isApiInited, id } = this.props;
+    if (isApiInited && id && !this.state.isVkWidgetInited) {
+      const vk = window.VK;
+      if (vk && vk.Widgets && vk.Widgets.AllowMessagesFromCommunity) {
+        const vk_community_id = import.meta.env.VITE_VK_COMMUNITY_ID;
+        vk.Widgets.AllowMessagesFromCommunity("vk_allow_messages_from_community", {height: 30}, vk_community_id);
+        this.setState({isVkWidgetInited: true});
+      }
+    }
   };
+
+  componentDidMount() {
+    this.initVkWidget();
+  }
+
+  componentDidUpdate() {
+    this.initVkWidget();
+  }
+
   render() {
-    const { id, name, photo, signInHandler, signOutHandler, isAdmin, isApiInited } = this.props;
-    const { isVkWidgetInited } = this.state;
-    if (isApiInited && !isVkWidgetInited)
-      this.initVkWidget();
+    const { id, name, photo, signInHandler, signOutHandler, isAdmin } = this.props;
     if (!id) {
       return (
         <Dropdown item icon='sign in' simple>
