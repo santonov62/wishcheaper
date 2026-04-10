@@ -11,8 +11,8 @@ moment.updateLocale('ru', ru);
 console.log(moment.locale());
 
 // let host = window.location.origin.replace(/^http/, 'ws');
-// if (!!process.env.REACT_APP_DEV_SOCKET_PORT)
-//   host = host.replace(/:3000/, `:${process.env.REACT_APP_DEV_SOCKET_PORT}`);
+// if (!!import.meta.env.VITE_DEV_SOCKET_PORT)
+//   host = host.replace(/:3000/, `:${import.meta.env.VITE_DEV_SOCKET_PORT}`);
 //
 // window.ws = io(host);
 

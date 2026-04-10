@@ -18,7 +18,7 @@ const authByVk = async (session) => {
 
 const loadVkSession = () => {
   return new Promise((resolve, reject) => {
-    const vk_api = process.env.REACT_APP_VK_API_VERSION;
+    const vk_api = import.meta.env.VITE_VK_API_VERSION;
     const vk = window.VK;
     vk.Auth.login(({ session }) => {
       if (session) {

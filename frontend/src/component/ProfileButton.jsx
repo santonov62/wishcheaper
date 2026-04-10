@@ -15,7 +15,7 @@ class ProfileButton extends React.Component {
   }
   initVkWidget = () => {
     const vk = window.VK;
-    const vk_community_id = process.env.REACT_APP_VK_COMMUNITY_ID;
+    const vk_community_id = import.meta.env.VITE_VK_COMMUNITY_ID;
     vk.Widgets.AllowMessagesFromCommunity("vk_allow_messages_from_community", {height: 30}, vk_community_id);
     this.setState({isVkWidgetInited: true});
   };

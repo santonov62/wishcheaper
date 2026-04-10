@@ -16,9 +16,9 @@ const processError = (message, dispatch) => {
 
 export const apiInit = () => dispatch => {
     try {
-        const apiId = process.env.REACT_APP_VK_APP_ID;
+        const apiId = import.meta.env.VITE_VK_APP_ID;
         if (!apiId) {
-            throw new Error('Setup REACT_APP_VK_APP_ID env variable');
+            throw new Error('Setup VITE_VK_APP_ID env variable');
         }
         const vk = window.VK;
         vk.init({apiId});
