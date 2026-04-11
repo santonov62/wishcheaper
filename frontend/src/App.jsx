@@ -3,15 +3,13 @@ import Helmet from 'react-helmet';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import reducers from './reducer/index.reducer';
 import Header from './component/Header/Header';
-import Footer from './component/Footer/Footer';
 import AppLoader from './component/AppLoader';
 import LoadingTracking from './component/LoadingTracking/LoadingTracking';
-import ErrorsTracking from './component/ErrorsTracking/ErrorsTracking';
 import VkCommunity from './component/VkCommunity';
 import SocketCommunity from './component/SocketCommunity';
 import LoginPage from './page/LoginPage';
@@ -23,6 +21,7 @@ import UnsubscribePage from './page/UnsubscribePage';
 import AuthRoute from './component/AuthRoute';
 import UserContextProvider from './component/UserContextProvider';
 import { loadUser } from './storage/user.storage';
+import ErrorsTracking from './component/ErrorsTracking/ErrorsTracking';
 
 const App = () => {
   const persistedState = loadUser();
@@ -40,54 +39,60 @@ const App = () => {
   );
 
   return (
-        <Provider store={store}>
-          <Fragment>
-            <Helmet
-              defaultTitle='Единый список желаний'
-              titleTemplate='%s - Единый список желаний'
-              meta={[
-                {
-                  "name": "description",
-                  "content": "Единый список желаний"
-                }, {
-                  'name': 'og:type',
-                  'content': 'website'
-                }
-              ]}
-            />
-            <LoadingTracking/>
-            <VkCommunity/>
-            <SocketCommunity/>
-            <AppLoader>
-              <Router>
-                <Fragment>
-                  <UserContextProvider>
-                    <Route path="/" component={ErrorsTracking}/>
-                    {/*<Route path="/" component={VkCommunity}/>*/}
-                    {/*<AuthRoute withoutRedirect path="/" component={Header}/>*/}
-                    <Route exact path="/" component={MainPage}/>
-                    <Route path="/login" component={LoginPage}/>
-                    <AuthRoute exact path="/u" component={UnsubscribePage}/>
-                    <AuthRoute exact path="/my">
+    <Provider store={store}>
+      <Fragment>
+        <Helmet
+          defaultTitle='Единый список желаний'
+          titleTemplate='%s - Единый список желаний'
+          meta={[
+            {
+              name: 'description',
+              content: 'Единый список желаний'
+            },
+            {
+              name: 'og:type',
+              content: 'website'
+            }
+          ]}
+        />
+        <LoadingTracking />
+        <VkCommunity />
+        <SocketCommunity />
+        <ErrorsTracking />
+        <AppLoader>
+          <Router>
+            <Fragment>
+              <UserContextProvider>
+                <Routes>
+                  <Route exact path="/" element={<MainPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/u" element={<AuthRoute><UnsubscribePage /></AuthRoute>} />
+                  <Route path="/my" element={
+                    <AuthRoute>
                       <Header />
-                      <GoodsPage/>
+                      <GoodsPage />
                     </AuthRoute>
-                    <AuthRoute adminRequired path="/scanner">
+                  } />
+                  <Route path="/scanner" element={
+                    <AuthRoute adminRequired>
                       <Header />
-                      <ScannerPage/>
+                      <ScannerPage />
                     </AuthRoute>
-                    <AuthRoute adminRequired path="/manageShops">
+                  } />
+                  <Route path="/manageShops" element={
+                    <AuthRoute adminRequired>
                       <Header />
                       <ShopsPage />
                     </AuthRoute>
-                    {/*<Route path="/" component={Footer}/>*/}
-                  </UserContextProvider>
-                </Fragment>
-              </Router>
-            </AppLoader>
-          </Fragment>
-        </Provider>
-  )
+                  } />
+                </Routes>
+              </UserContextProvider>
+            </Fragment>
+          </Router>
+        </AppLoader>
+      </Fragment>
+    </Provider>
+  );
 };
 
 export default App;

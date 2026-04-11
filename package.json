@@ -20,11 +20,12 @@
     "backend/node_modules",
     "frontend/node_modules"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "react-redux": "^9.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/santonov62/promo"
   },
-  "license": "MIT",
-  "devDependencies": {}
+  "license": "MIT"
 }

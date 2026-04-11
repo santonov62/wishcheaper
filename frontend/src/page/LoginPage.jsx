@@ -3,11 +3,11 @@ import { Header } from 'semantic-ui-react';
 import SignInWithVkButton from '../component/SignInWithVkButton';
 import './loginPage.css';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const LoginPage = ({ signedIn, signInHandler }) => {
   if (signedIn) {
-    return <Redirect to={{ pathname: '/' }}/>;
+    return <Navigate to='/' replace />;
   }
 
   return (

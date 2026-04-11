@@ -1,47 +1,48 @@
-import React, {Fragment} from 'react';
-import {Container, Header} from 'semantic-ui-react';
+import React, { Fragment } from 'react';
+import { Container, Header } from 'semantic-ui-react';
 import './mainPage.css';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import SignInWithVkButton from '../component/SignInWithVkButton';
-import {authWithVk, signOut} from "../actionCreators/user.actionCreators";
-import { Redirect } from 'react-router-dom';
+import { authWithVk, signOut } from '../actionCreators/user.actionCreators';
+import { Navigate, useLocation } from 'react-router-dom';
 
-
-class MainPage extends React.Component{
+class MainPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       goods_count: '--',
       week_goods_count: '--',
       users_count: '--'
-    }
+    };
   }
+
   componentDidMount() {
     fetch(`/goods/statistic`)
       .then(res => res.json())
-      .then(statistic => this.setState({...statistic}));
+      .then(statistic => this.setState({ ...statistic }));
   }
-  render() {
-    const {user, location: {state}} = this.props;
-    const {goods_count, week_goods_count, users_count} = this.state;
-    const from = state && state.from;
-    return (
-        <Fragment>
-          {!!user && user.id &&
-            <Fragment>
-              {!!from ?
-                <Redirect to={{
-                  pathname: from.pathname,
-                  search: from.search
-                }}/>
-                :
-                <Redirect to={{pathname: '/my'}}/>
-              }
-            </Fragment>
-          }
-          {!user || !user.id &&
-          <div className='mainPage'>
 
+  render() {
+    const { user, locationState } = this.props;
+    const { goods_count, week_goods_count, users_count } = this.state;
+    const from = locationState && locationState.from;
+
+    return (
+      <Fragment>
+        {!!user && user.id && (
+          <Fragment>
+            {!!from ?
+              <Navigate to={{
+                pathname: from.pathname,
+                search: from.search
+              }} replace />
+              :
+              <Navigate to='/my' replace />
+            }
+          </Fragment>
+        )}
+        {(!user || !user.id) &&
+          <div className='mainPage'>
             <div className='title'>Покупайте любимые товары дешевле</div>
 
             <Container text className="about">
@@ -55,7 +56,7 @@ class MainPage extends React.Component{
               </ol>
             </Container>
 
-            <SignInWithVkButton size='massive' text='Авторизироваться'/>
+            <SignInWithVkButton size='massive' text='Авторизироваться' />
 
             <div className='statistic'>
               <br />
@@ -78,17 +79,19 @@ class MainPage extends React.Component{
               </div>
             </div>
           </div>
-          }
-        </Fragment>
+        }
+      </Fragment>
     );
   }
 }
 
-export default connect(
-  state => ({
-    user: state.user
-  }),
-  dispatch => ({
-    signInHandler: (session) => dispatch(authWithVk(session)),
-    signOutHandler: () => dispatch(signOut()),
-  }))(MainPage);
+const MainPageWrapper = (props) => {
+  const location = useLocation();
+  return <MainPage {...props} locationState={location.state} />;
+};
+
+const mapState = (state) => ({
+  user: state.user
+});
+
+export default connect(mapState)(MainPageWrapper);
