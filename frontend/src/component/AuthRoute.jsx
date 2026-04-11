@@ -16,7 +16,7 @@ const AuthRoute = ({ children, adminRequired }) => {
           return children;
         }
 
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/" replace />;
       }}
     </UserContext.Consumer>
   );
