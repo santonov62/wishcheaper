@@ -28,8 +28,7 @@ const parse = async (url, launchParams) => {
 
     //PRICE
     try {
-      currentPrice = await page.$eval(`#priceblock_ourprice, 
-          #newPitchPriceWrapper_feature_div span span:nth-of-type(2)`, node => parseInt(node.innerText.replace(/\s|\$+/g, '')));
+      currentPrice = await page.$eval(`#tp_price_block_total_price_ww`, node => parseInt(node.innerText.replace(/\s|\$+/g, '')));
     } catch (e) {
       inactive_at = new Date();
     }
