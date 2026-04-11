@@ -67,12 +67,12 @@ export const authWithVk = () => async (dispatch, getState) => {
     });
     return Promise.resolve(user);
 
-  } catch (ex) {
+  } catch (message) {
     dispatch({type: Actions.USER_FAILURE});
     dispatch({
       type: ADD_ERROR,
       payload: {
-        message: `[auth user] ${ex.message}`
+        message: `[auth user] ${message}`
       }
     });
   }

@@ -1,10 +1,8 @@
-import React, { Fragment } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 import UserContext from '../context/UserContext';
 
 const AuthRoute = ({ children, adminRequired }) => {
-  const location = useLocation();
-
   return (
     <UserContext.Consumer>
       {user => {
