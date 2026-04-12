@@ -29,7 +29,7 @@
   "scripts": {
     "background-parser-start": "node --env-file=.env src/backgroundParser.js",
     "background-proxy-checker-start": "node --env-file=.env src/backgroundProxyChecker.js",
-    "start": "node --env-file=.env src/index.js",
+    "start": "cross-env ROOT_PATH=../../ node --env-file=.env src/index.js",
     "dev": "nodemon --inspect src/index.js",
     "test": "node_modules/.bin/mocha && exit 1",
     "db-rollback": "node --env-file=.env node_modules/.bin/knex migrate:rollback",
