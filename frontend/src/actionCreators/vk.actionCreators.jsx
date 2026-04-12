@@ -1,7 +1,6 @@
 import * as Actions from "../actions/vk.actions";
 import * as UserActions from '../actions/user.actions';
 import {ADD_ERROR} from "../actions/errors.actions";
-import {authWithVk, signOut} from "../actionCreators/user.actionCreators";
 import {clearUser} from "../storage/user.storage";
 
 const processError = (message, dispatch) => {
